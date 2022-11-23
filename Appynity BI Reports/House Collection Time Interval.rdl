@@ -1,0 +1,786 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report MustUnderstand="df" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns:df="http://schemas.microsoft.com/sqlserver/reporting/2016/01/reportdefinition/defaultfontfamily">
+  <df:DefaultFontFamily>Segoe UI</df:DefaultFontFamily>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource1">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+      </ConnectionProperties>
+      <rd:SecurityType>DataBase</rd:SecurityType>
+      <rd:DataSourceID>d2b3a5e4-8389-4b95-a606-e9687a0d8d2a</rd:DataSourceID>
+    </DataSource>
+    <DataSource Name="Appconnection">
+      <ConnectionProperties>
+        <DataProvider>SQL</DataProvider>
+        <ConnectString>Data Source=114.143.244.133;Initial Catalog=LIVEAdvanceDevSwachhBharatMain</ConnectString>
+      </ConnectionProperties>
+      <rd:SecurityType>DataBase</rd:SecurityType>
+      <rd:DataSourceID>10eed1ac-d5a7-4294-8f4c-1756710224ec</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="AppName">
+      <Query>
+        <DataSourceName>Appconnection</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@appid">
+            <Value>=Parameters!appid.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>SELECT  [AppId]
+      ,[AppName]
+      ,[AppName_mar]      
+  FROM [LIVEAdvanceDevSwachhBharatMain].[dbo].[AppDetails]
+where appid=@appid</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="AppId">
+          <DataField>AppId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="AppName">
+          <DataField>AppName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AppName_mar">
+          <DataField>AppName_mar</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="UserDetails">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <CommandText>SELECT USERID,USERNAME FROM UserMaster WHERE EmployeeType is null</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="userId">
+          <DataField>USERID</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="username">
+          <DataField>USERNAME</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="DBname_list">
+      <Query>
+        <DataSourceName>Appconnection</DataSourceName>
+        <CommandText>select appid,datasource,InitialCatalog from appconnection</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="appid">
+          <DataField>appid</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="datasource">
+          <DataField>datasource</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="InitialCatalog">
+          <DataField>InitialCatalog</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+    <DataSet Name="DataSet1">
+      <Query>
+        <DataSourceName>DataSource1</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@from">
+            <Value>=Parameters!from.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@to">
+            <Value>=Parameters!to.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandText>
+--DECLARE @from datetime
+--DECLARE @to datetime
+DECLARE @userid int = null;
+
+Set @from = @from +' 00:00:00'
+set @to =@to + '23:59:59'
+
+select * INTO #tempHouseColl  from(
+select DISTINCT u.userName userName,  
+ u.userId userId,
+(select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u                 
+   where gc.gctype=1                 
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
+   ) Totalhousecollection,
+   (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u                 
+   where gc.gctype=1  and garbageType=0               
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
+   ) TotalMixed,
+   (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u                 
+   where gc.gctype=1  and garbageType=-1               
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
+   ) TotalNotSpecified,
+   (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u                 
+   where gc.gctype=1  and garbageType=1               
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
+   ) TotalSeg,
+   (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u                 
+   where gc.gctype=1  and garbageType=2               
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
+   ) TotalNotColl,
+   (select min(gcDate) from GarbageCollectionDetails gc,usermaster u                  
+   where gc.gctype=1                   
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId 
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
+   ) StartTime,
+   (select max(gcDate) from GarbageCollectionDetails gc,usermaster u                  
+   where gc.gctype=1                   
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
+   ) EndTime,
+   a.gcDate DumpTime,
+   ISNULL(DATEDIFF(MINUTE,(select min(gcDate) from GarbageCollectionDetails gc,usermaster u                  
+   where gc.gctype=1                   
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId 
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from))
+   ,(select max(gcDate) from GarbageCollectionDetails gc,usermaster u                  
+   where gc.gctype=1                   
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
+   )),0) ScannedTimeHouse
+   from 
+    UserMaster u left outer  join                  
+        GarbageCollectionDetails g on g.userId=u.userId                  
+  and u.userId = isnull(@userid,u.userId)
+  left outer join
+(select userId,LAG(gcDate,1) OVER(PARTITION BY userId ORDER BY gcDate) previousgcDate,gcDate from GarbageCollectionDetails where gcType=3 and CAST(gcDate as date) between @from and @to
+UNION
+select userId,gcDate,LEAD(gcDate,1) OVER(PARTITION BY userId ORDER BY gcDate) previousgcDate from GarbageCollectionDetails where gcType=3 and CAST(gcDate as date) between @from and @to
+) as a
+on g.userId=a.userId) AS B
+
+ORDER BY userName,StartTime
+
+select *,LEAD(StartTime,1) OVER(PARTITION BY userId ORDER BY IIF(StartTime IS NULL, 1, 0),StartTime) AS NextStartTime INTO #tempHouseColl1 from #tempHouseColl order by userName,IIF(StartTime IS NULL, 1, 0),StartTime
+
+select *, ISNULL(DATEDIFF(MINUTE,EndTime,DumpTime),0) +  ISNULL(DATEDIFF(MINUTE,DumpTime,NextStartTime),0) AS ScannedTimeDy INTO #tempHouseColl2 from #tempHouseColl1
+select userId,userName,SUM(ScannedTimeHouse) TotalHouseScanTime,SUM(Totalhousecollection) Totalhousecollection,SUM(TotalMixed) TotalMixed,SUM(TotalNotSpecified) TotalNotSpecified,SUM(TotalSeg) TotalSeg,SUM(TotalNotColl) TotalNotColl,Count(DumpTime) TotalDump, SUM(ScannedTimeDy) TotalDumpScanTime INTO #tempHouseColl3 from  #tempHouseColl2 where Totalhousecollection &gt; 0 GROUP BY userId,userName 
+
+select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime % 1440) / 60 ))) + convert(varchar(2), (TotalHouseScanTime % 1440) / 60 )
+
+ + 'hh:' + REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime % 60)))) + convert(varchar(2), (TotalHouseScanTime % 60))+'mm' as TotalHouseScanTimeHours
+ ,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalDumpScanTime % 1440) / 60 ))) + convert(varchar(2), (TotalDumpScanTime % 1440) / 60 )
+
+ + 'hh:' + REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalDumpScanTime % 60)))) + convert(varchar(2), (TotalDumpScanTime % 60))+'mm' as TotalDumpScanTimeHours from #tempHouseColl3</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="userId">
+          <DataField>userId</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="userName">
+          <DataField>userName</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="TotalHouseScanTime">
+          <DataField>TotalHouseScanTime</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="Totalhousecollection">
+          <DataField>Totalhousecollection</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="TotalMixed">
+          <DataField>TotalMixed</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="TotalNotSpecified">
+          <DataField>TotalNotSpecified</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="TotalSeg">
+          <DataField>TotalSeg</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="TotalNotColl">
+          <DataField>TotalNotColl</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="TotalDump">
+          <DataField>TotalDump</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="TotalDumpScanTime">
+          <DataField>TotalDumpScanTime</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="TotalHouseScanTimeHours">
+          <DataField>TotalHouseScanTimeHours</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="TotalDumpScanTimeHours">
+          <DataField>TotalDumpScanTimeHours</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="ID">
+          <DataField />
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+      </Fields>
+      <Filters>
+        <Filter>
+          <FilterExpression>=Fields!ID.Value</FilterExpression>
+          <Operator>NotEqual</Operator>
+          <FilterValues>
+            <FilterValue>NoName</FilterValue>
+          </FilterValues>
+        </Filter>
+      </Filters>
+    </DataSet>
+  </DataSets>
+  <ReportSections>
+    <ReportSection>
+      <Body>
+        <ReportItems>
+          <Textbox Name="Textbox46">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox44</rd:DefaultName>
+            <Top>0.07792in</Top>
+            <Left>7.91692in</Left>
+            <Height>0.25705in</Height>
+            <Width>3.37847in</Width>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>1pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox47">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value> House Collection Time Duration                                                       </Value>
+                    <Style>
+                      <FontSize>12pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox44</rd:DefaultName>
+            <Top>0.07792in</Top>
+            <Left>0.0441in</Left>
+            <Height>0.28264in</Height>
+            <Width>3.18826in</Width>
+            <ZIndex>1</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>1pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
+          <Chart Name="Chart1">
+            <ChartCategoryHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Group Name="Chart1_CategoryGroup">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!userName.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!userName.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
+                  <Label>=Fields!userName.Value</Label>
+                </ChartMember>
+              </ChartMembers>
+            </ChartCategoryHierarchy>
+            <ChartSeriesHierarchy>
+              <ChartMembers>
+                <ChartMember>
+                  <Label>Total House Scan Time</Label>
+                </ChartMember>
+              </ChartMembers>
+            </ChartSeriesHierarchy>
+            <ChartData>
+              <ChartSeriesCollection>
+                <ChartSeries Name="TotalHouseScanTime">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(Fields!TotalHouseScanTime.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style />
+                        <UseValueAsLabel>true</UseValueAsLabel>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ToolTip>="Name Of Employee - " &amp; Fields!userName.Value  &amp; VbCrLf &amp; 
+"Total Garbage Collection - "  &amp; (Fields!Totalhousecollection.Value) &amp; VbCrLf &amp; 
+"Total House Collection Time -  "  &amp; (Fields!TotalHouseScanTimeHours.Value) &amp; VbCrLf &amp;
+"Total Dump -  "  &amp; (Fields!TotalDump.Value) &amp; VbCrLf &amp;
+"Total Dump Trip Time - "&amp; (Fields!TotalDumpScanTimeHours.Value) &amp; VbCrLf</ToolTip>
+                      <Style />
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Bar</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+              </ChartSeriesCollection>
+            </ChartData>
+            <ChartAreas>
+              <ChartArea Name="Default">
+                <ChartCategoryAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Color>DimGray</Color>
+                        <Style>Solid</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption>Employee Name</Caption>
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <Interval>1</Interval>
+                    <ChartMajorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Enabled>False</Enabled>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartCategoryAxes>
+                <ChartValueAxes>
+                  <ChartAxis Name="Primary">
+                    <Style>
+                      <Border>
+                        <Color>DimGray</Color>
+                        <Style>Solid</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption>Total Time In Minutes</Caption>
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>DimGray</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Enabled>True</Enabled>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                  <ChartAxis Name="Secondary">
+                    <Style>
+                      <Border>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
+                      </Border>
+                      <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
+                    </Style>
+                    <ChartAxisTitle>
+                      <Caption />
+                      <Style>
+                        <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
+                      </Style>
+                    </ChartAxisTitle>
+                    <ChartMajorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                    </ChartMajorGridLines>
+                    <ChartMinorGridLines>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>Dotted</Style>
+                        </Border>
+                      </Style>
+                    </ChartMinorGridLines>
+                    <ChartMajorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
+                        </Border>
+                      </Style>
+                    </ChartMajorTickMarks>
+                    <ChartMinorTickMarks>
+                      <Style>
+                        <Border>
+                          <Color>Gainsboro</Color>
+                        </Border>
+                      </Style>
+                      <Length>0.5</Length>
+                    </ChartMinorTickMarks>
+                    <CrossAt>NaN</CrossAt>
+                    <Location>Opposite</Location>
+                    <Minimum>NaN</Minimum>
+                    <Maximum>NaN</Maximum>
+                    <ChartAxisScaleBreak>
+                      <Style />
+                    </ChartAxisScaleBreak>
+                  </ChartAxis>
+                </ChartValueAxes>
+                <ChartThreeDProperties>
+                  <Rotation>10</Rotation>
+                  <Inclination>10</Inclination>
+                  <WallThickness>0</WallThickness>
+                </ChartThreeDProperties>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <BackgroundGradientEndColor>LimeGreen</BackgroundGradientEndColor>
+                </Style>
+              </ChartArea>
+            </ChartAreas>
+            <ChartLegends>
+              <ChartLegend Name="Legend1">
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <FontSize>8pt</FontSize>
+                </Style>
+                <ChartLegendTitle>
+                  <Caption />
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                    <TextAlign>Center</TextAlign>
+                  </Style>
+                </ChartLegendTitle>
+                <HeaderSeparatorColor>Black</HeaderSeparatorColor>
+                <ColumnSeparatorColor>Black</ColumnSeparatorColor>
+              </ChartLegend>
+            </ChartLegends>
+            <Palette>Pacific</Palette>
+            <ChartBorderSkin>
+              <Style>
+                <BackgroundColor>Gray</BackgroundColor>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <Color>White</Color>
+              </Style>
+            </ChartBorderSkin>
+            <ChartNoDataMessage Name="NoDataMessage">
+              <Caption>No Data Available</Caption>
+              <Style>
+                <BackgroundGradientType>None</BackgroundGradientType>
+                <FontWeight>Bold</FontWeight>
+                <TextAlign>General</TextAlign>
+                <VerticalAlign>Top</VerticalAlign>
+              </Style>
+            </ChartNoDataMessage>
+            <DataSetName>DataSet1</DataSetName>
+            <Top>0.43in</Top>
+            <Left>0.0441in</Left>
+            <Height>5.11041in</Height>
+            <Width>11.25129in</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Color>LightGrey</Color>
+                <Style>None</Style>
+              </Border>
+              <BackgroundColor>White</BackgroundColor>
+              <BackgroundGradientType>None</BackgroundGradientType>
+            </Style>
+          </Chart>
+        </ReportItems>
+        <Height>5.54042in</Height>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Body>
+      <Width>11.34249in</Width>
+      <Page>
+        <PageFooter>
+          <Height>0.01042in</Height>
+          <PrintOnFirstPage>true</PrintOnFirstPage>
+          <PrintOnLastPage>true</PrintOnLastPage>
+          <Style>
+            <Border>
+              <Style>None</Style>
+            </Border>
+          </Style>
+        </PageFooter>
+        <PageWidth>12.5in</PageWidth>
+        <LeftMargin>0.5in</LeftMargin>
+        <RightMargin>0.5in</RightMargin>
+        <TopMargin>0.25in</TopMargin>
+        <BottomMargin>0.25in</BottomMargin>
+        <ColumnSpacing>0.05118in</ColumnSpacing>
+        <Style />
+      </Page>
+    </ReportSection>
+  </ReportSections>
+  <ReportParameters>
+    <ReportParameter Name="appid">
+      <DataType>String</DataType>
+      <Prompt>appid</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DBName">
+      <DataType>String</DataType>
+      <Prompt>DBName</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="from">
+      <DataType>DateTime</DataType>
+      <Prompt>from</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="to">
+      <DataType>DateTime</DataType>
+      <Prompt>to</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DBSource">
+      <DataType>String</DataType>
+      <Prompt>DBSource</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <ReportParametersLayout>
+    <GridLayoutDefinition>
+      <NumberOfColumns>4</NumberOfColumns>
+      <NumberOfRows>2</NumberOfRows>
+      <CellDefinitions>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>appid</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>1</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>DBName</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>2</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>from</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>3</ColumnIndex>
+          <RowIndex>0</RowIndex>
+          <ParameterName>to</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>0</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>DBSource</ParameterName>
+        </CellDefinition>
+      </CellDefinitions>
+    </GridLayoutDefinition>
+  </ReportParametersLayout>
+  <rd:ReportUnitType>Inch</rd:ReportUnitType>
+  <rd:ReportServerUrl>http://comp-7/ReportServer</rd:ReportServerUrl>
+  <rd:ReportID>ee21990f-dd6b-4862-b035-ace6c5b7277a</rd:ReportID>
+</Report>
