@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>Data Source=202.65.157.253;Initial Catalog=LIVEAdvanceAppynittyGhantaGadi</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource2:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>2894d829-b7ed-4d1c-bcbc-62fbb9a96cb4</rd:DataSourceID>

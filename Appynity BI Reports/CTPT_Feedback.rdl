@@ -1434,7 +1434,6 @@ From Sauchalay_feedback Where AppId= @appid  And Cast(Date As Date) between @fro
             </TablixRowHierarchy>
             <DataSetName>DataSet1</DataSetName>
             <Top>3.89875in</Top>
-            <Left>0in</Left>
             <Height>0.43in</Height>
             <Width>14.33258in</Width>
             <ZIndex>1</ZIndex>
@@ -1571,7 +1570,6 @@ From Sauchalay_feedback Where AppId= @appid  And Cast(Date As Date) between @fro
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.99701in</Top>
-            <Left>0in</Left>
             <Height>1.50139in</Height>
             <Width>5.70834in</Width>
             <ZIndex>3</ZIndex>
