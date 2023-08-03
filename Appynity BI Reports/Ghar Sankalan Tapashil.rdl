@@ -555,7 +555,7 @@ OPTION(RECOMPILE)</CommandText>
                       <CellContents>
                         <Image Name="Image2">
                           <Source>Embedded</Source>
-                          <Value>=switch(Fields!GCType.Value=0,"mixed",Fields!GCType.Value=1,"segregated",Fields!GCType.Value=2,"notrecievied",Fields!GCType.Value=-1,"notspecified",Fields!GCType.Value=4,"icn_con_demo",Fields!GCType.Value=5,"icn_horticulture",Fields!GCType.Value=6,"icn_wet_waste",Fields!GCType.Value=7,"icn_dry_waste",Fields!GCType.Value=8,"icn_domestic_hazardous",Fields!GCType.Value=9,"icn_sanitary")</Value>
+                          <Value>=switch(Fields!GCType.Value=0,"mixed",Fields!GCType.Value=1,"segregated",Fields!GCType.Value=2,"notrecievied",Fields!GCType.Value=3,"notspecified",Fields!GCType.Value=-1,"notspecified",Fields!GCType.Value=4,"icn_con_demo",Fields!GCType.Value=5,"icn_horticulture",Fields!GCType.Value=6,"icn_wet_waste",Fields!GCType.Value=7,"icn_dry_waste",Fields!GCType.Value=8,"icn_domestic_hazardous",Fields!GCType.Value=9,"icn_sanitary")</Value>
                           <ToolTip>=SWITCH(
     Fields!GCType.Value= 0 , "Mixed Garbage"
     , Fields!GCType.Value= 1, "Segregated Garbage"
@@ -590,6 +590,7 @@ OPTION(RECOMPILE)</CommandText>
                             <PaddingBottom>5pt</PaddingBottom>
                           </Style>
                         </Image>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>

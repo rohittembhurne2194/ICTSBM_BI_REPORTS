@@ -52,12 +52,14 @@
     <Report Include="Areawise Garbage Collection.rdl" />
     <Report Include="Areawise Garbage Type Collection.rdl" />
     <Report Include="Citywise Garbage Report.rdl" />
+    <Report Include="Copy of Employee_Performance_Report.rdl" />
     <Report Include="CTPT_Details.rdl" />
     <Report Include="CTPT_Feedback.rdl" />
     <Report Include="Dashboard_1.rdl" />
     <Report Include="Daywise Collection.rdl" />
     <Report Include="Dumpyard_Employeeswise.rdl" />
     <Report Include="Dumpyard_Summary.rdl" />
+    <Report Include="DumpYard_Supervisor_Performance_Report.rdl" />
     <Report Include="Employee Collection Summary.rdl" />
     <Report Include="Employee Garbage Collection Count.rdl" />
     <Report Include="Employee_Attendance.rdl" />

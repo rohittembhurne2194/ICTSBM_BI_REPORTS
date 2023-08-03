@@ -50,22 +50,6 @@ where appid=@appid</CommandText>
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="UserDetails">
-      <Query>
-        <DataSourceName>DataSource1</DataSourceName>
-        <CommandText>SELECT USERID,USERNAME FROM UserMaster WHERE EmployeeType is null</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="userId">
-          <DataField>USERID</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="username">
-          <DataField>USERNAME</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
     <DataSet Name="DBname_list">
       <Query>
         <DataSourceName>Appconnection</DataSourceName>
@@ -86,332 +70,81 @@ where appid=@appid</CommandText>
         </Field>
       </Fields>
     </DataSet>
-    <DataSet Name="Ward_Rank">
+    <DataSet Name="DSUP_PER_REPORT">
       <Query>
         <DataSourceName>DataSource1</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@from">
             <Value>=Parameters!from.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
           <QueryParameter Name="@to">
             <Value>=Parameters!to.Value</Value>
+            <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='01/01/2022' set @to ='02/23/2022' 
+        <CommandText>
 
-select  wardno,wardname,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,ConAndDemo,Horticulture,Wet,Dry,Domestic,Sanitary,No_Entry 
-from(
+--declare @from datetime,@to datetime
+--set @from ='2023-07-27'set @to='2023-07-27'
 
-select    hm.wardno wardno,w.WardNo wardname,         
-		 count(gc.gcId)  TotalCollected,
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=0
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) Mixed_Garbage,
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=1
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) Bifurcate_Garbage,
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=2
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) NotReceived_Garbage,
 
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=-1
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) Not_Specified,
-
-		  (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=4
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) ConAndDemo,
-
-		  (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=5
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) Horticulture,
-
-		  (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=6
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) Wet,
-
-		  (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=7
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) Dry,
-
-		  (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=8
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) Domestic,
-
-		  (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=9
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		  and hm.WardNo=h.WardNo		  
-		 ) Sanitary,
-
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		   		   				 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType is null	
-		  and g.houseId &lt;&gt;0            
-		  and hm.WardNo=h.WardNo		  
-		 ) No_Entry
-		 	 
-from GarbageCollectionDetails gc,
-     HouseMaster hm,
-	 WardNumber w 
-where gc.houseId=hm.houseId
--- and    cast(hm.wardno as varchar(100))=cast(w.wardno as varchar(100))
-and hm.WardNo=w.id
-and cast(gc.gcDate as date) between @from and @to
-and gc.houseId &lt;&gt;0
-and gc.garbageType is not null
-group by hm.WardNo
-  ,w.wardno
-) x
-order by TotalCollected desc
-
-</CommandText>
+select distinct(vm.VehicalNumber),
+(select Dy.ReferanceId from DumpYardDetails Dy where Dy.dyId=gc.dyid) As DumpYardID,
+(select isnull(SUM(g.totalGcWeight),0)from GarbageCollectionDetails g 
+Where cast(g.gcDate as date) between @from and @to and  g.EmployeeType is null and
+g.dyId is not null and g.vehicleNumber=vm.VehicalNumber and g.dyId=gc.dyId) as EmpTotalGcWeight,
+(select isnull(SUM(g.totalDryWeight),0)from GarbageCollectionDetails g 
+Where cast(g.gcDate as date) between @from and @to and  g.EmployeeType is null and
+g.dyId is not null and g.vehicleNumber=vm.VehicalNumber and g.dyId=gc.dyId) as EmpTotalDryWeight,
+(select isnull(SUM(g.totalWetWeight),0)from GarbageCollectionDetails g 
+Where cast(g.gcDate as date) between @from and @to and  g.EmployeeType is null and
+g.dyId is not null and g.vehicleNumber=vm.VehicalNumber and g.dyId=gc.dyId) as EmpTotalWetWeight,
+(select isnull(SUM(gcd.totalGcWeight),0)from GarbageCollectionDetails gcd
+where cast(gcd.gcDate as date) between @from and @to and  gcd.EmployeeType ='D' and
+gcd.vqrid is not null and gcd.vqrid=vm.vqrId and gcd.dyId=gc.dyId and gc.dyId is not null) As DumpEmpTotalGcWeight,
+(select isnull(SUM(gcd.totalDryWeight),0)from GarbageCollectionDetails gcd
+where cast(gcd.gcDate as date) between @from and @to and  gcd.EmployeeType ='D' and
+gcd.vqrid is not null and gcd.vqrid=vm.vqrId and gcd.dyId=gc.dyId and gc.dyId is not null) As DumpEmpTotalDryWeight,
+(select isnull(SUM(gcd.totalWetWeight),0)from GarbageCollectionDetails gcd
+where cast(gcd.gcDate as date) between @from and @to and  gcd.EmployeeType ='D' and
+gcd.vqrid is not null and gcd.vqrid=vm.vqrId and gcd.dyId=gc.dyId and gc.dyId is not null) As DumpEmpTotalWetWeight
+from Vehical_QR_Master vm , GarbageCollectionDetails gc where
+(gc.vqrid=vm.vqrId OR gc.vehicleNumber=vm.VehicalNumber)
+and LEN(vm.VehicalNumber) &gt; 1 And Cast(gc.gcDate As Date) between @from and @to and gc.dyId is not null</CommandText>
       </Query>
       <Fields>
-        <Field Name="wardno">
-          <DataField>wardno</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="VehicalNumber">
+          <DataField>VehicalNumber</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
-        <Field Name="wardname">
-          <DataField>wardname</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
+        <Field Name="DumpYardID">
+          <DataField>DumpYardID</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
-        <Field Name="TotalCollected">
-          <DataField>TotalCollected</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="EmpTotalGcWeight">
+          <DataField>EmpTotalGcWeight</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
-        <Field Name="Mixed_Garbage">
-          <DataField>Mixed_Garbage</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="EmpTotalDryWeight">
+          <DataField>EmpTotalDryWeight</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
-        <Field Name="Bifurcate_Garbage">
-          <DataField>Bifurcate_Garbage</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="EmpTotalWetWeight">
+          <DataField>EmpTotalWetWeight</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
-        <Field Name="NotReceived_Garbage">
-          <DataField>NotReceived_Garbage</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="DumpEmpTotalGcWeight">
+          <DataField>DumpEmpTotalGcWeight</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
-        <Field Name="Not_Specified">
-          <DataField>Not_Specified</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="DumpEmpTotalDryWeight">
+          <DataField>DumpEmpTotalDryWeight</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
-        <Field Name="ConAndDemo">
-          <DataField>ConAndDemo</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="No_Entry">
-          <DataField>No_Entry</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Horticulture">
-          <DataField>Horticulture</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Wet">
-          <DataField>Wet</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Dry">
-          <DataField>Dry</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Domestic">
-          <DataField>Domestic</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Sanitary">
-          <DataField>Sanitary</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-      </Fields>
-    </DataSet>
-    <DataSet Name="DataSet1">
-      <Query>
-        <DataSourceName>DataSource1</DataSourceName>
-        <QueryParameters>
-          <QueryParameter Name="@from">
-            <Value>=Parameters!from.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@to">
-            <Value>=Parameters!to.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='01/01/2022' set @to ='02/24/2022' 
-
-select  wardno,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Null_Entry,NotSpecified,Wet,Dry
-from(
-
-select    count(gc.gcId)  TotalCollected,
-          hm.wardno wardno,		 
-
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=0		  
-		  and hm.WardNo=h.WardNo
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		 ) Mixed_Garbage,
-
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=1		  
-		  and hm.WardNo=h.WardNo
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		 ) Bifurcate_Garbage,
-
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=2		  
-		  and hm.WardNo=h.WardNo
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		 ) NotReceived_Garbage,
-
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType is null		  
-		  and hm.WardNo=h.WardNo
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		 ) Null_Entry,
-
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=-1		  
-		  and hm.WardNo=h.WardNo
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		 ) NotSpecified,
-
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=6		  
-		  and hm.WardNo=h.WardNo
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		 ) Wet,
-
-		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
-		  where g.houseId=h.houseId 		 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=7		  
-		  and hm.WardNo=h.WardNo
-		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
-		 ) Dry
-
-		 	 
-from GarbageCollectionDetails gc ,
-     HouseMaster hm,
-	 WardNumber  wn     
-where cast(gc.gcDate as date) between @from and @to
-and   gc.houseId=hm.houseId 
-and hm.WardNo=wn.id 
---and   cast(hm.wardno as varchar(50))=cast(wn.wardno as varchar(50))
---and   cast(hm.wardno as int) =cast(wn.wardno as int)
-and gc.houseId &lt;&gt;0 
-and gc.garbageType is not null
-group by hm.WardNo
-) x
-
-
-</CommandText>
-      </Query>
-      <Fields>
-        <Field Name="wardno">
-          <DataField>wardno</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="TotalCollected">
-          <DataField>TotalCollected</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Mixed_Garbage">
-          <DataField>Mixed_Garbage</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Bifurcate_Garbage">
-          <DataField>Bifurcate_Garbage</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="NotReceived_Garbage">
-          <DataField>NotReceived_Garbage</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Null_Entry">
-          <DataField>Null_Entry</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="NotSpecified">
-          <DataField>NotSpecified</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Wet">
-          <DataField>Wet</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="Dry">
-          <DataField>Dry</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
+        <Field Name="DumpEmpTotalWetWeight">
+          <DataField>DumpEmpTotalWetWeight</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
       </Fields>
     </DataSet>
@@ -420,38 +153,6 @@ group by hm.WardNo
     <ReportSection>
       <Body>
         <ReportItems>
-          <Textbox Name="Textbox46">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
-                    <Style />
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Right</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.07792in</Top>
-            <Left>7.81851in</Left>
-            <Height>0.25705in</Height>
-            <Width>3.37847in</Width>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>1pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
           <Textbox Name="Textbox47">
             <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
@@ -459,23 +160,24 @@ group by hm.WardNo
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>  City Wise House Garbage Report</Value>
+                    <Value>DumpYard Supervisor Performance Report</Value>
                     <Style>
-                      <FontSize>12pt</FontSize>
+                      <FontSize>14pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                      <Color>#1c4e80</Color>
                     </Style>
                   </TextRun>
                 </TextRuns>
                 <Style>
-                  <TextAlign>Center</TextAlign>
+                  <TextAlign>Left</TextAlign>
                 </Style>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.57792in</Top>
-            <Left>0.07069in</Left>
-            <Height>0.28264in</Height>
-            <Width>5.07767in</Width>
-            <ZIndex>1</ZIndex>
+            <Top>0.0875in</Top>
+            <Left>3.00286in</Left>
+            <Height>0.44455in</Height>
+            <Width>4.31597in</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -487,63 +189,70 @@ group by hm.WardNo
               <PaddingBottom>2pt</PaddingBottom>
             </Style>
           </Textbox>
-          <Chart Name="Chart1">
+          <Chart Name="Chart2">
             <ChartCategoryHierarchy>
               <ChartMembers>
                 <ChartMember>
-                  <Label />
+                  <Group Name="Chart2_CategoryGroup">
+                    <GroupExpressions>
+                      <GroupExpression>=Fields!VehicalNumber.Value</GroupExpression>
+                    </GroupExpressions>
+                  </Group>
+                  <SortExpressions>
+                    <SortExpression>
+                      <Value>=Fields!VehicalNumber.Value</Value>
+                    </SortExpression>
+                  </SortExpressions>
+                  <ChartMembers>
+                    <ChartMember>
+                      <Group Name="Chart2_CategoryGroup1">
+                        <GroupExpressions>
+                          <GroupExpression>=Fields!DumpYardID.Value</GroupExpression>
+                        </GroupExpressions>
+                      </Group>
+                      <SortExpressions>
+                        <SortExpression>
+                          <Value>=Fields!DumpYardID.Value</Value>
+                        </SortExpression>
+                      </SortExpressions>
+                      <Label>=Fields!DumpYardID.Value</Label>
+                    </ChartMember>
+                  </ChartMembers>
+                  <Label>=Fields!VehicalNumber.Value</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartCategoryHierarchy>
             <ChartSeriesHierarchy>
               <ChartMembers>
                 <ChartMember>
-                  <Label>Bifurcate Garbage</Label>
+                  <Label>Emp Total Gc Weight</Label>
                 </ChartMember>
                 <ChartMember>
-                  <Label>Not Received Garbage</Label>
-                </ChartMember>
-                <ChartMember>
-                  <Label>Wet</Label>
-                </ChartMember>
-                <ChartMember>
-                  <Label>Dry</Label>
-                </ChartMember>
-                <ChartMember>
-                  <Label>Not Specified</Label>
-                </ChartMember>
-                <ChartMember>
-                  <Label>Mixed Garbage</Label>
+                  <Label>Dump Emp Total Gc Weight</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
             <ChartData>
               <ChartSeriesCollection>
-                <ChartSeries Name="Bifurcate_Garbage">
+                <ChartSeries Name="EmpTotalGcWeight">
                   <ChartDataPoints>
                     <ChartDataPoint>
                       <ChartDataPointValues>
-                        <Y>=Sum(Fields!Bifurcate_Garbage.Value)</Y>
+                        <Y>=Sum(Fields!EmpTotalGcWeight.Value)</Y>
                       </ChartDataPointValues>
                       <ChartDataLabel>
-                        <Style>
-                          <FontWeight>Bold</FontWeight>
-                          <Color>White</Color>
-                        </Style>
-                        <Label>#PERCENT</Label>
+                        <Style />
+                        <UseValueAsLabel>true</UseValueAsLabel>
                         <Visible>true</Visible>
                       </ChartDataLabel>
-                      <ToolTip>="Bifurcate Garbage - " &amp; Sum(Fields!Bifurcate_Garbage.Value)</ToolTip>
-                      <Style>
-                        <Color>#01b7a9</Color>
-                      </Style>
+                      <ToolTip>="Employee Collections "&amp; VbCrLf &amp; "DumpYard Id -"&amp; Fields!DumpYardID.Value  &amp; VbCrLf &amp; "Total Collections - "  &amp; Fields!EmpTotalGcWeight.Value</ToolTip>
+                      <Style />
                       <ChartMarker>
                         <Style />
                       </ChartMarker>
                       <DataElementOutput>Output</DataElementOutput>
                     </ChartDataPoint>
                   </ChartDataPoints>
-                  <Type>Shape</Type>
                   <Style />
                   <ChartEmptyPoints>
                     <Style />
@@ -554,6 +263,9 @@ group by hm.WardNo
                       <Style />
                     </ChartDataLabel>
                   </ChartEmptyPoints>
+                  <ChartItemInLegend>
+                    <LegendText>Employee  Collection</LegendText>
+                  </ChartItemInLegend>
                   <ValueAxisName>Primary</ValueAxisName>
                   <CategoryAxisName>Primary</CategoryAxisName>
                   <ChartSmartLabel>
@@ -561,28 +273,25 @@ group by hm.WardNo
                     <MinMovingDistance>0pt</MinMovingDistance>
                   </ChartSmartLabel>
                 </ChartSeries>
-                <ChartSeries Name="NotReceived_Garbage">
+                <ChartSeries Name="DumpEmpTotalGcWeight">
                   <ChartDataPoints>
                     <ChartDataPoint>
                       <ChartDataPointValues>
-                        <Y>=Sum(Fields!NotReceived_Garbage.Value)</Y>
+                        <Y>=Sum(Fields!DumpEmpTotalGcWeight.Value)</Y>
                       </ChartDataPointValues>
                       <ChartDataLabel>
                         <Style />
-                        <Label>#PERCENT</Label>
+                        <UseValueAsLabel>true</UseValueAsLabel>
                         <Visible>true</Visible>
                       </ChartDataLabel>
-                      <ToolTip>="NotReceived Garbage - " &amp; Sum(Fields!NotReceived_Garbage.Value)</ToolTip>
-                      <Style>
-                        <Color>#fe9436</Color>
-                      </Style>
+                      <ToolTip>="DumpYard Supervisor Collections "&amp; VbCrLf &amp; "DumpYard Id -"&amp; Fields!DumpYardID.Value  &amp; VbCrLf &amp; "Total Collections - "  &amp; Fields!DumpEmpTotalGcWeight.Value</ToolTip>
+                      <Style />
                       <ChartMarker>
                         <Style />
                       </ChartMarker>
                       <DataElementOutput>Output</DataElementOutput>
                     </ChartDataPoint>
                   </ChartDataPoints>
-                  <Type>Shape</Type>
                   <Style />
                   <ChartEmptyPoints>
                     <Style />
@@ -593,173 +302,9 @@ group by hm.WardNo
                       <Style />
                     </ChartDataLabel>
                   </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="Wet">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Wet.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                        <Label>#PERCENT</Label>
-                      </ChartDataLabel>
-                      <ToolTip>="Wet Garbage - " &amp; Sum(Fields!Wet.Value)</ToolTip>
-                      <Style>
-                        <Color>#186634</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                      <ChartItemInLegend>
-                        <Hidden>=iif(Sum(Fields!Wet.Value, "DataSet1")&lt;=0,true,false)</Hidden>
-                      </ChartItemInLegend>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Type>Shape</Type>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="Dry">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Dry.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                        <Label>#PERCENT</Label>
-                      </ChartDataLabel>
-                      <ToolTip>="Dry Garbage - " &amp; Sum(Fields!Dry.Value)</ToolTip>
-                      <Style>
-                        <Color>#66a2d5</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                      <ChartItemInLegend>
-                        <Hidden>=iif(Sum(Fields!Dry.Value, "DataSet1")&lt;=0,true,false)</Hidden>
-                      </ChartItemInLegend>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Type>Shape</Type>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="NotSpecified">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!NotSpecified.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                        <Label>#PERCENT</Label>
-                        <Visible>true</Visible>
-                      </ChartDataLabel>
-                      <ToolTip>="Not Specified Garbage " &amp; Sum(Fields!NotSpecified.Value)</ToolTip>
-                      <Style>
-                        <Color>#0086c3</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                      <ChartItemInLegend>
-                        <Hidden>=iif(Sum(Fields!NotSpecified.Value, "DataSet1")&lt;=0,true,false)</Hidden>
-                      </ChartItemInLegend>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Type>Shape</Type>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="Mixed_Garbage">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Mixed_Garbage.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                        <Label>#PERCENT</Label>
-                        <Visible>true</Visible>
-                      </ChartDataLabel>
-                      <ToolTip>="Mixed Garbage - " &amp; Sum(Fields!Mixed_Garbage.Value)</ToolTip>
-                      <Style>
-                        <Color>#f44336</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                      <ChartItemInLegend>
-                        <Hidden>=iif(Sum(Fields!Mixed_Garbage.Value, "DataSet1")&lt;=0,true,false)</Hidden>
-                      </ChartItemInLegend>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Type>Shape</Type>
-                  <Subtype>Doughnut</Subtype>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
+                  <ChartItemInLegend>
+                    <LegendText>DumpYard Supervisor Collection</LegendText>
+                  </ChartItemInLegend>
                   <ValueAxisName>Primary</ValueAxisName>
                   <CategoryAxisName>Primary</CategoryAxisName>
                   <ChartSmartLabel>
@@ -775,18 +320,19 @@ group by hm.WardNo
                   <ChartAxis Name="Primary">
                     <Style>
                       <Border>
-                        <Color>DimGray</Color>
-                        <Style>Solid</Style>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
                       </Border>
                       <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Area Name</Caption>
+                      <Caption />
                       <Style>
                         <FontSize>9pt</FontSize>
+                        <Color>#5c5c5c</Color>
                       </Style>
                     </ChartAxisTitle>
-                    <Interval>1</Interval>
                     <ChartMajorGridLines>
                       <Enabled>False</Enabled>
                       <Style>
@@ -887,26 +433,24 @@ group by hm.WardNo
                   <ChartAxis Name="Primary">
                     <Style>
                       <Border>
-                        <Color>DimGray</Color>
-                        <Style>Solid</Style>
+                        <Color>Gainsboro</Color>
+                        <Style>None</Style>
                       </Border>
                       <FontSize>8pt</FontSize>
+                      <Color>#5c5c5c</Color>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption>Total House Collected</Caption>
-                      <Style>
-                        <FontSize>9pt</FontSize>
-                      </Style>
+                      <Caption>Garbage Weight In Tons</Caption>
+                      <Style />
                     </ChartAxisTitle>
                     <ChartMajorGridLines>
                       <Style>
                         <Border>
-                          <Color>LightSteelBlue</Color>
+                          <Color>Gainsboro</Color>
                         </Border>
                       </Style>
                     </ChartMajorGridLines>
                     <ChartMinorGridLines>
-                      <Enabled>False</Enabled>
                       <Style>
                         <Border>
                           <Color>Gainsboro</Color>
@@ -917,12 +461,12 @@ group by hm.WardNo
                     <ChartMajorTickMarks>
                       <Style>
                         <Border>
-                          <Color>LightGrey</Color>
+                          <Color>Gainsboro</Color>
+                          <Style>None</Style>
                         </Border>
                       </Style>
                     </ChartMajorTickMarks>
                     <ChartMinorTickMarks>
-                      <Enabled>True</Enabled>
                       <Style>
                         <Border>
                           <Color>Gainsboro</Color>
@@ -931,11 +475,8 @@ group by hm.WardNo
                       <Length>0.5</Length>
                     </ChartMinorTickMarks>
                     <CrossAt>NaN</CrossAt>
-                    <InterlacedColor>Silver</InterlacedColor>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
-                    <LogScale>true</LogScale>
-                    <LogBase>2</LogBase>
                     <ChartAxisScaleBreak>
                       <Style />
                     </ChartAxisScaleBreak>
@@ -996,27 +537,19 @@ group by hm.WardNo
                     </ChartAxisScaleBreak>
                   </ChartAxis>
                 </ChartValueAxes>
-                <ChartThreeDProperties>
-                  <Enabled>true</Enabled>
-                  <Rotation>65</Rotation>
-                  <Inclination>58</Inclination>
-                </ChartThreeDProperties>
                 <Style>
-                  <BackgroundColor>LightGrey</BackgroundColor>
+                  <BackgroundColor>#00ffffff</BackgroundColor>
                   <BackgroundGradientType>None</BackgroundGradientType>
                 </Style>
               </ChartArea>
             </ChartAreas>
             <ChartLegends>
-              <ChartLegend Name="Legend1">
+              <ChartLegend Name="Default">
                 <Style>
-                  <BackgroundColor>White</BackgroundColor>
                   <BackgroundGradientType>None</BackgroundGradientType>
                   <FontSize>8pt</FontSize>
-                  <ShadowOffset>2pt</ShadowOffset>
                 </Style>
                 <Position>TopLeft</Position>
-                <DockOutsideChartArea>true</DockOutsideChartArea>
                 <ChartLegendTitle>
                   <Caption />
                   <Style>
@@ -1029,6 +562,20 @@ group by hm.WardNo
                 <ColumnSeparatorColor>Black</ColumnSeparatorColor>
               </ChartLegend>
             </ChartLegends>
+            <ChartTitles>
+              <ChartTitle Name="Default">
+                <Caption>Chart Title</Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <FontSize>9pt</FontSize>
+                  <FontWeight>Normal</FontWeight>
+                  <TextAlign>Left</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                  <Color>#a6a6a6</Color>
+                </Style>
+                <Position>TopLeft</Position>
+              </ChartTitle>
+            </ChartTitles>
             <Palette>Pacific</Palette>
             <ChartBorderSkin>
               <Style>
@@ -1046,239 +593,113 @@ group by hm.WardNo
                 <VerticalAlign>Top</VerticalAlign>
               </Style>
             </ChartNoDataMessage>
-            <DataSetName>DataSet1</DataSetName>
-            <Top>1.055in</Top>
-            <Left>0.17955cm</Left>
-            <Height>3.19374in</Height>
-            <Width>5.09947in</Width>
-            <ZIndex>2</ZIndex>
+            <DataSetName>DSUP_PER_REPORT</DataSetName>
+            <Top>0.73833in</Top>
+            <Left>0.38417in</Left>
+            <Height>4.44792in</Height>
+            <Width>10.87372in</Width>
+            <ZIndex>1</ZIndex>
             <Style>
               <Border>
                 <Color>LightGrey</Color>
                 <Style>None</Style>
               </Border>
-              <BackgroundColor>LightGrey</BackgroundColor>
+              <BackgroundColor>White</BackgroundColor>
               <BackgroundGradientType>None</BackgroundGradientType>
             </Style>
           </Chart>
+          <Textbox Name="Textbox46">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
+                    <Style />
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Right</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox44</rd:DefaultName>
+            <Top>0.0875in</Top>
+            <Left>7.87942in</Left>
+            <Height>0.25705in</Height>
+            <Width>3.37847in</Width>
+            <ZIndex>2</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Middle</VerticalAlign>
+              <PaddingLeft>2pt</PaddingLeft>
+              <PaddingRight>2pt</PaddingRight>
+              <PaddingTop>1pt</PaddingTop>
+              <PaddingBottom>2pt</PaddingBottom>
+            </Style>
+          </Textbox>
           <Tablix Name="Tablix1">
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.6973in</Width>
+                  <Width>0.54167in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.77449in</Width>
+                  <Width>1.30323in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.02425in</Width>
+                  <Width>1.17823in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.80606in</Width>
+                  <Width>1.01156in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.84772in</Width>
+                  <Width>1.23031in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.84916in</Width>
+                  <Width>1.24073in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.7165in</Width>
+                  <Width>0.93864in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.6891in</Width>
+                  <Width>1.20948in</Width>
+                </TablixColumn>
+                <TablixColumn>
+                  <Width>1.29281in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>0.5in</Height>
+                  <Height>0.25in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox1">
+                        <Textbox Name="Textbox45">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Ward No.</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox1</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <BackgroundColor>#43ab3c</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox3">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Total</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox3</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <BackgroundColor>#43ab3c</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox5">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Segragated Garbage</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox5</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <BackgroundColor>#43ab3c</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox7">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Mixed</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Garbage</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox7</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <BackgroundColor>#43ab3c</BackgroundColor>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox9">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Not Received </Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
                                   <Value />
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
+                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <rd:DefaultName>Textbox45</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#43ab3c</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1289,42 +710,28 @@ group by hm.WardNo
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox6">
+                        <Textbox Name="Textbox31">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Not </Value>
+                                  <Value />
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Specified</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
+                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox6</rd:DefaultName>
+                          <rd:DefaultName>Textbox31</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#43ab3c</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1335,30 +742,28 @@ group by hm.WardNo
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox29">
+                        <Textbox Name="Textbox32">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Wet</Value>
+                                  <Value />
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
+                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style />
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <rd:DefaultName>Textbox32</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#43ab3c</BackgroundColor>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1376,14 +781,17 @@ group by hm.WardNo
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Dry</Value>
+                                  <Value>Employee Collection</Value>
                                   <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>11pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox33</rd:DefaultName>
@@ -1392,7 +800,373 @@ group by hm.WardNo
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>#43ab3c</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox36">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>DumpYard Supervisor Collection</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox36</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <ColSpan>3</ColSpan>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell />
+                    <TablixCell />
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.25in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox48">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Sr.No</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox48</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox1">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Vehicle Number</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox3">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>DumpYard ID</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox3</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox5">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Total Weight</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox5</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox27">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Total Dry Weight</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox27</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox29">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Total Wet Weight</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox29</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox37">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Total Weight</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox37</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox40">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Total Dry Weight</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox40</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox43">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Total Wet Weight</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox43</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1404,31 +1178,68 @@ group by hm.WardNo
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
-                  <Height>0.26042in</Height>
+                  <Height>0.25in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="wardname">
+                        <Textbox Name="Textbox49">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!wardname.Value</Value>
+                                  <Value>=RowNumber(nothing)</Value>
+                                  <Style>
+                                    <FontFamily>Arial</FontFamily>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox49</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="VehicalNumber">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!VehicalNumber.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>wardname</rd:DefaultName>
+                          <rd:DefaultName>VehicalNumber</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#DEF0DA", "#FFFFFF")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1439,27 +1250,29 @@ group by hm.WardNo
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="TotalCollected">
+                        <Textbox Name="DumpYardID">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TotalCollected.Value</Value>
+                                  <Value>=Fields!DumpYardID.Value</Value>
                                   <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>TotalCollected</rd:DefaultName>
+                          <rd:DefaultName>DumpYardID</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#DEF0DA", "#FFFFFF")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1470,30 +1283,29 @@ group by hm.WardNo
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Bifurcate_Garbage">
+                        <Textbox Name="EmpTotalGcWeight">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Bifurcate_Garbage.Value</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#186634</Color>
-                                  </Style>
+                                  <Value>=Fields!EmpTotalGcWeight.Value</Value>
+                                  <Style />
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Bifurcate_Garbage</rd:DefaultName>
+                          <rd:DefaultName>EmpTotalGcWeight</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#DEF0DA", "#FFFFFF")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1504,30 +1316,31 @@ group by hm.WardNo
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Mixed_Garbage">
+                        <Textbox Name="EmpTotalDryWeight">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Mixed_Garbage.Value</Value>
+                                  <Value>=Fields!EmpTotalDryWeight.Value</Value>
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#f44336</Color>
+                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Mixed_Garbage</rd:DefaultName>
+                          <rd:DefaultName>EmpTotalDryWeight</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#DEF0DA", "#FFFFFF")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1538,30 +1351,31 @@ group by hm.WardNo
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="NotReceived_Garbage">
+                        <Textbox Name="EmpTotalWetWeight">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!NotReceived_Garbage.Value</Value>
+                                  <Value>=Fields!EmpTotalWetWeight.Value</Value>
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#fe9436</Color>
+                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>NotReceived_Garbage</rd:DefaultName>
+                          <rd:DefaultName>EmpTotalWetWeight</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#DEF0DA", "#FFFFFF")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1572,30 +1386,31 @@ group by hm.WardNo
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Not_Specified">
+                        <Textbox Name="DumpEmpTotalGcWeight">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Not_Specified.Value</Value>
+                                  <Value>=Fields!DumpEmpTotalGcWeight.Value</Value>
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#0086c3</Color>
+                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Not_Specified</rd:DefaultName>
+                          <rd:DefaultName>DumpEmpTotalGcWeight</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#DEF0DA", "#FFFFFF")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1606,30 +1421,31 @@ group by hm.WardNo
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Wet">
+                        <Textbox Name="DumpEmpTotalDryWeight">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Wet.Value</Value>
+                                  <Value>=Fields!DumpEmpTotalDryWeight.Value</Value>
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#186634</Color>
+                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Wet</rd:DefaultName>
+                          <rd:DefaultName>DumpEmpTotalDryWeight</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#DEF0DA", "#FFFFFF")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1640,30 +1456,31 @@ group by hm.WardNo
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Dry">
+                        <Textbox Name="DumpEmpTotalWetWeight">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!Dry.Value</Value>
+                                  <Value>=Fields!DumpEmpTotalWetWeight.Value</Value>
                                   <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#66a2d5</Color>
+                                    <FontFamily>Arial</FontFamily>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>Dry</rd:DefaultName>
+                          <rd:DefaultName>DumpEmpTotalWetWeight</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#DEF0DA", "#FFFFFF")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
@@ -1686,6 +1503,7 @@ group by hm.WardNo
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -1694,15 +1512,18 @@ group by hm.WardNo
                   <KeepWithGroup>After</KeepWithGroup>
                 </TablixMember>
                 <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
                   <Group Name="Details" />
                 </TablixMember>
               </TablixMembers>
             </TablixRowHierarchy>
-            <DataSetName>Ward_Rank</DataSetName>
-            <Top>1.055in</Top>
-            <Left>5.60527in</Left>
-            <Height>0.76042in</Height>
-            <Width>6.40458in</Width>
+            <DataSetName>DSUP_PER_REPORT</DataSetName>
+            <Top>5.57167in</Top>
+            <Left>0.38417in</Left>
+            <Height>0.75in</Height>
+            <Width>9.94664in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -1710,50 +1531,16 @@ group by hm.WardNo
               </Border>
             </Style>
           </Tablix>
-          <Textbox Name="Textbox49">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>  Ward Wise House Garbage Report </Value>
-                    <Style>
-                      <FontSize>12pt</FontSize>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Center</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.57792in</Top>
-            <Left>6.36808in</Left>
-            <Height>0.28264in</Height>
-            <Width>5.07767in</Width>
-            <ZIndex>4</ZIndex>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>1pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
         </ReportItems>
-        <Height>6.47792in</Height>
+        <Height>8.23833in</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
+          <BackgroundColor>#eef5f9</BackgroundColor>
         </Style>
       </Body>
-      <Width>12.13485in</Width>
+      <Width>12.44539in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>
@@ -1766,6 +1553,8 @@ group by hm.WardNo
           </Style>
         </PageFooter>
         <PageWidth>12.5in</PageWidth>
+        <InteractiveHeight>0in</InteractiveHeight>
+        <InteractiveWidth>12.5in</InteractiveWidth>
         <LeftMargin>0.5in</LeftMargin>
         <RightMargin>0.5in</RightMargin>
         <TopMargin>0.25in</TopMargin>
@@ -1777,12 +1566,12 @@ group by hm.WardNo
   </ReportSections>
   <ReportParameters>
     <ReportParameter Name="appid">
-      <DataType>String</DataType>
+      <DataType>Integer</DataType>
       <Prompt>appid</Prompt>
     </ReportParameter>
     <ReportParameter Name="DBName">
       <DataType>String</DataType>
-      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
       <Prompt>DBName</Prompt>
     </ReportParameter>
     <ReportParameter Name="from">
