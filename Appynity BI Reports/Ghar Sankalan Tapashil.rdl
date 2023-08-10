@@ -101,7 +101,7 @@ select gc.gcDate cdate,
 	   gc.garbageType GCType,
 	   gc.note Comment,
 	   hm.houseOwner HouseOname,
-	   isnull(hm.houseOwnerMobile,'NA') MobileNo,
+	   isnull(hm.houseOwnerMobile,'') MobileNo,
 	   hm.ReferanceId houseid,
 	   hm.houseAddress HouseAdd
 
@@ -590,7 +590,6 @@ OPTION(RECOMPILE)</CommandText>
                             <PaddingBottom>5pt</PaddingBottom>
                           </Style>
                         </Image>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -603,7 +602,9 @@ OPTION(RECOMPILE)</CommandText>
                               <TextRuns>
                                 <TextRun>
                                   <Value>=Fields!cdate.Value</Value>
-                                  <Style />
+                                  <Style>
+                                    <Format>MM/dd/yyyy hh:mm:ss tt</Format>
+                                  </Style>
                                 </TextRun>
                               </TextRuns>
                               <Style>
@@ -837,6 +838,7 @@ OPTION(RECOMPILE)</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -963,7 +965,7 @@ OPTION(RECOMPILE)</CommandText>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
+                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"MM/dd/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"MM/dd/yyyy")</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>

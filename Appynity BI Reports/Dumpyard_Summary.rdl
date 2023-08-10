@@ -137,9 +137,9 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
  select   um.userName ,
           --isnull(gc.vehiclenumber,'Not Available'),
           count(gc.userId) Trip, 
-		  isnull(sum(cast(GC.totalWetWeight as decimal(10,2))),0)+ isnull(sum(cast(GC.totalDryWeight as decimal(10,2))),0) Total_weight,
-		  sum(cast(gc.totalDryWeight as decimal(10,2))) Dry,
-		  sum(cast(gc.totalWetWeight as decimal(10,2))) Wet
+	  (Select isnull(sum(cast(totalWetWeight as decimal(10,2))),0)+ isnull(sum(cast(totalDryWeight as decimal(10,2))),0) from GarbageCollectionDetails where Convert(date,gcDate) between @from and @to) as Total_weight,
+		  (select sum(cast(totalDryWeight as decimal(10,2))) from GarbageCollectionDetails where Convert(date,gcDate) between @from and @to) as Dry,
+		  (select sum(cast(totalWetWeight as decimal(10,2))) from GarbageCollectionDetails where Convert(date,gcDate) between @from and @to) as Wet
  from GarbageCollectionDetails gc,
       usermaster um
  where gc.totalGcWeight is not null
@@ -208,7 +208,7 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
+                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"MM/dd/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"MM/dd/yyyy")</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>

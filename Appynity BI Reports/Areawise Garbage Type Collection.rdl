@@ -231,7 +231,7 @@ group by gc.AreaId
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
+                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"MM/dd/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"MM/dd/yyyy")</Value>
                     <Style>
                       <FontSize>9pt</FontSize>
                     </Style>
@@ -322,12 +322,6 @@ group by gc.AreaId
                 </ChartMember>
                 <ChartMember>
                   <Label>Not Specified</Label>
-                </ChartMember>
-                <ChartMember>
-                  <Label>Wet</Label>
-                </ChartMember>
-                <ChartMember>
-                  <Label>Dry</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
@@ -485,86 +479,6 @@ group by gc.AreaId
                   </ChartEmptyPoints>
                   <ChartItemInLegend>
                     <LegendText>="Not Specified - " &amp; Sum(Fields!Not_Specified.Value, "DataSet1")</LegendText>
-                  </ChartItemInLegend>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="Wet">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Wet.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                      </ChartDataLabel>
-                      <ToolTip>="Wet Garbage - " &amp; Sum(Fields!Wet.Value)</ToolTip>
-                      <Style>
-                        <Color>#186634</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Subtype>Stacked</Subtype>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ChartItemInLegend>
-                    <LegendText>="Wet - " &amp; Sum(Fields!Wet.Value, "DataSet1")</LegendText>
-                  </ChartItemInLegend>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="Dry">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Dry.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                      </ChartDataLabel>
-                      <ToolTip>="Dry Garbage - " &amp; Sum(Fields!Dry.Value)</ToolTip>
-                      <Style>
-                        <Color>#66a2d5</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Subtype>Stacked</Subtype>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ChartItemInLegend>
-                    <LegendText>="Dry - " &amp; Sum(Fields!Dry.Value, "DataSet1")</LegendText>
                   </ChartItemInLegend>
                   <ValueAxisName>Primary</ValueAxisName>
                   <CategoryAxisName>Primary</CategoryAxisName>

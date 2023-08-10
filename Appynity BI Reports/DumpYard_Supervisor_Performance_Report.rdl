@@ -1523,7 +1523,7 @@ and LEN(vm.VehicalNumber) &gt; 1 And Cast(gc.gcDate As Date) between @from and @
             <Top>5.57167in</Top>
             <Left>0.38417in</Left>
             <Height>0.75in</Height>
-            <Width>9.94664in</Width>
+            <Width>9.94666in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>

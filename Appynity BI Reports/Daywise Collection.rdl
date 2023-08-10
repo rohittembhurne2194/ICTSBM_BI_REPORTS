@@ -85,12 +85,12 @@ where appid=@appid</CommandText>
 --set @from ='01-01-2022'set @to='02-25-2022'
 
 select distinct cast(gc.gcdate as date) Date1,	         
-	   (select count(g.gcId) from GarbageCollectionDetails g where  cast(gc.gcDate as date)=cast(g.gcDate as date) and (g.gctype=1 OR g.gcType=6 OR g.gcType=7) and cast(g.gcDate as date) between @from and @to ) Total_Collection,
+	   (select count(g.gcId) from GarbageCollectionDetails g where  cast(gc.gcDate as date)=cast(g.gcDate as date) and g.gctype=1 and cast(g.gcDate as date) between @from and @to ) Total_Collection,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  cast(gc.gcDate as date)=cast(g.gcDate as date) and g.gctype=9  and cast(g.gcDate as date) between @from and @to ) Total_Com_Collection,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=1 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to ) Segregated,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=0 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) MixedG,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=2 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) NotReceived,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=-1 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) NotSpecified,
+	   (select count(g.gcId) from GarbageCollectionDetails g where  (g.garbageType=-1 OR g.garbageType = 3) and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) NotSpecified,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=6 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) Wet,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=7 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) Dry,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  g.gctype=3 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to ) Total_Trip,
@@ -172,7 +172,7 @@ order by cast(gc.gcDate as date) desc</CommandText>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
+                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"MM/dd/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"MM/dd/yyyy")</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>
@@ -186,43 +186,6 @@ order by cast(gc.gcDate as date) desc</CommandText>
             <Left>7.98054in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
-            <Style>
-              <Border>
-                <Style>None</Style>
-              </Border>
-              <VerticalAlign>Middle</VerticalAlign>
-              <PaddingLeft>2pt</PaddingLeft>
-              <PaddingRight>2pt</PaddingRight>
-              <PaddingTop>1pt</PaddingTop>
-              <PaddingBottom>2pt</PaddingBottom>
-            </Style>
-          </Textbox>
-          <Textbox Name="Textbox47">
-            <CanGrow>true</CanGrow>
-            <KeepTogether>true</KeepTogether>
-            <Paragraphs>
-              <Paragraph>
-                <TextRuns>
-                  <TextRun>
-                    <Value>  Daywise Collection Summary                                                                                   </Value>
-                    <Style>
-                      <FontFamily>Verdana</FontFamily>
-                      <FontSize>12pt</FontSize>
-                      <FontWeight>Bold</FontWeight>
-                    </Style>
-                  </TextRun>
-                </TextRuns>
-                <Style>
-                  <TextAlign>Left</TextAlign>
-                </Style>
-              </Paragraph>
-            </Paragraphs>
-            <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.05233in</Top>
-            <Left>4.06606in</Left>
-            <Height>0.28264in</Height>
-            <Width>3.08289in</Width>
-            <ZIndex>1</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -979,7 +942,7 @@ order by cast(gc.gcDate as date) desc</CommandText>
             <Left>0.10772in</Left>
             <Height>1.125in</Height>
             <Width>5.6181in</Width>
-            <ZIndex>2</ZIndex>
+            <ZIndex>1</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1003,12 +966,6 @@ order by cast(gc.gcDate as date) desc</CommandText>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.12362in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>0.8566in</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>0.75in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.69792in</Width>
@@ -1270,106 +1227,6 @@ order by cast(gc.gcDate as date) desc</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox101">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Wet</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox28</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>#0095ce</Color>
-                              <Style>Solid</Style>
-                              <Width>2pt</Width>
-                            </Border>
-                            <TopBorder>
-                              <Style>None</Style>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Style>None</Style>
-                            </RightBorder>
-                            <BackgroundColor>#003448</BackgroundColor>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox102">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Dry</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox31</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>#0095ce</Color>
-                              <Style>Solid</Style>
-                              <Width>2pt</Width>
-                            </Border>
-                            <TopBorder>
-                              <Style>None</Style>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Style>None</Style>
-                            </RightBorder>
-                            <BackgroundColor>#003448</BackgroundColor>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="Textbox111">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -1432,7 +1289,7 @@ order by cast(gc.gcDate as date) desc</CommandText>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Format(Fields!Date1.Value, "dd/MM/yyyy")</Value>
+                                  <Value>=Format(Fields!Date1.Value, "MM/dd/yyyy")</Value>
                                   <Style>
                                     <Color>White</Color>
                                   </Style>
@@ -1612,90 +1469,6 @@ order by cast(gc.gcDate as date) desc</CommandText>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>NotSpecified</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Style>None</Style>
-                            </RightBorder>
-                            <BackgroundColor>#003448</BackgroundColor>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Wet3">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Wet.Value</Value>
-                                  <Style>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Wet</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Style>None</Style>
-                            </RightBorder>
-                            <BackgroundColor>#003448</BackgroundColor>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Dry3">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Dry.Value</Value>
-                                  <Style>
-                                    <Color>White</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Dry</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1982,92 +1755,6 @@ order by cast(gc.gcDate as date) desc</CommandText>
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="Textbox124">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Sum(Fields!Wet.Value)</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#003448</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox30</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Style>None</Style>
-                            </RightBorder>
-                            <BackgroundColor>White</BackgroundColor>
-                            <VerticalAlign>Bottom</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox125">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Sum(Fields!Dry.Value)</Value>
-                                  <Style>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#003448</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox33</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Style>None</Style>
-                            </RightBorder>
-                            <BackgroundColor>White</BackgroundColor>
-                            <VerticalAlign>Bottom</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
                         <Textbox Name="Textbox134">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -2121,8 +1808,6 @@ order by cast(gc.gcDate as date) desc</CommandText>
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
-                <TablixMember />
-                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -2140,9 +1825,10 @@ order by cast(gc.gcDate as date) desc</CommandText>
             </TablixRowHierarchy>
             <DataSetName>Daywise_Summary</DataSetName>
             <Top>1.04625in</Top>
+            <Left>1.92062in</Left>
             <Height>1.125in</Height>
-            <Width>8.74238in</Width>
-            <ZIndex>3</ZIndex>
+            <Width>7.13578in</Width>
+            <ZIndex>2</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2171,10 +1857,10 @@ order by cast(gc.gcDate as date) desc</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.51361in</Top>
-            <Left>0.10772in</Left>
+            <Left>3.5973in</Left>
             <Height>0.28264in</Height>
-            <Width>5.07368in</Width>
-            <ZIndex>4</ZIndex>
+            <Width>3.76118in</Width>
+            <ZIndex>3</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2210,7 +1896,7 @@ order by cast(gc.gcDate as date) desc</CommandText>
             <Top>4.66013in</Top>
             <Height>0.28264in</Height>
             <Width>5.07368in</Width>
-            <ZIndex>5</ZIndex>
+            <ZIndex>4</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2230,7 +1916,7 @@ order by cast(gc.gcDate as date) desc</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>13.89517in</Width>
+      <Width>11.84309in</Width>
       <Page>
         <PageFooter>
           <Height>2.35417in</Height>

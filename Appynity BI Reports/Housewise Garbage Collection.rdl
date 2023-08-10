@@ -135,7 +135,7 @@ select    gc.houseId House,
 		 (select  count(gcId) from GarbageCollectionDetails 
 		  where houseId=gc.houseId 	  
 		  and cast(gcDate as date) between @from and @to
-		  and garbageType=3
+		  and (garbageType=3 OR garbageType= -1)
 		  and houseId &lt;&gt;0
           and garbageType is not null			 	  
 		 ) NotSpecified_Garbage,
@@ -203,7 +203,7 @@ group by gc.houseId
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
+                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"MM/dd/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"MM/dd/yyyy")</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>

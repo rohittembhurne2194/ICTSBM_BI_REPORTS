@@ -547,7 +547,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
+                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"MM/dd/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"MM/dd/yyyy")</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>
@@ -1107,6 +1107,16 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                 </Style>
                 <Position>TopLeft</Position>
               </ChartTitle>
+              <ChartTitle Name="Title2">
+                <Caption>Employee Name</Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <TextAlign>General</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                </Style>
+                <Position>BottomCenter</Position>
+                <DockOutsideChartArea>true</DockOutsideChartArea>
+              </ChartTitle>
             </ChartTitles>
             <Palette>Pacific</Palette>
             <ChartBorderSkin>
@@ -1128,7 +1138,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <DataSetName>Employee_collection</DataSetName>
             <Top>2.17375in</Top>
             <Left>0.09041in</Left>
-            <Height>4.15625in</Height>
+            <Height>4.13542in</Height>
             <Width>11.15498in</Width>
             <ZIndex>1</ZIndex>
             <ToolTip>="Employee wise collection with Garbage Type..."</ToolTip>
@@ -2535,6 +2545,16 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                 </Style>
                 <Position>TopLeft</Position>
               </ChartTitle>
+              <ChartTitle Name="Title1">
+                <Caption>Employee Name</Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <TextAlign>Left</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                </Style>
+                <Position>BottomCenter</Position>
+                <DockOutsideChartArea>true</DockOutsideChartArea>
+              </ChartTitle>
             </ChartTitles>
             <Palette>Pacific</Palette>
             <ChartBorderSkin>
@@ -2963,6 +2983,15 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                   <Color>#1c4e80</Color>
                 </Style>
                 <Position>TopLeft</Position>
+              </ChartTitle>
+              <ChartTitle Name="Title2">
+                <Caption>Employee Name</Caption>
+                <Style>
+                  <BackgroundGradientType>None</BackgroundGradientType>
+                  <TextAlign>General</TextAlign>
+                  <VerticalAlign>Top</VerticalAlign>
+                </Style>
+                <Position>BottomCenter</Position>
               </ChartTitle>
             </ChartTitles>
             <Palette>Pacific</Palette>

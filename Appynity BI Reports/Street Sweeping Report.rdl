@@ -509,7 +509,7 @@ OPTION(RECOMPILE)</CommandText>
                                 <TextRun>
                                   <Value>=Fields!Date.Value</Value>
                                   <Style>
-                                    <Format>d</Format>
+                                    <Format>MM/dd/yyyy hh:mm:ss tt</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -538,6 +538,7 @@ OPTION(RECOMPILE)</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -863,7 +864,7 @@ OPTION(RECOMPILE)</CommandText>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"dd/MM/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"dd/MM/yyyy")</Value>
+                    <Value>="Report Data From " &amp; FORMAT(Parameters!from.Value,"MM/dd/yyyy") &amp; " To " &amp; FORMAT(parameters!to.Value,"MM/dd/yyyy")</Value>
                     <Style />
                   </TextRun>
                 </TextRuns>
