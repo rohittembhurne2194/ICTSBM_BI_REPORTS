@@ -88,25 +88,24 @@ where appid=@appid</CommandText>
 --declare @from datetime,@to datetime
 --set @from ='2023-07-27'set @to='2023-07-27'
 
-
 select distinct(vm.VehicalNumber),
 (select Dy.ReferanceId from DumpYardDetails Dy where Dy.dyId=gc.dyid) As DumpYardID,
-(select isnull(SUM(g.totalGcWeight),0)from GarbageCollectionDetails g 
+(select isnull(SUM(g.totalGcWeight),NULL)from GarbageCollectionDetails g 
 Where cast(g.gcDate as date) between @from and @to and  g.EmployeeType is null and
 g.dyId is not null and g.vehicleNumber=vm.VehicalNumber and g.dyId=gc.dyId) as EmpTotalGcWeight,
-(select isnull(SUM(g.totalDryWeight),0)from GarbageCollectionDetails g 
+(select isnull(SUM(g.totalDryWeight),NULL)from GarbageCollectionDetails g 
 Where cast(g.gcDate as date) between @from and @to and  g.EmployeeType is null and
 g.dyId is not null and g.vehicleNumber=vm.VehicalNumber and g.dyId=gc.dyId) as EmpTotalDryWeight,
-(select isnull(SUM(g.totalWetWeight),0)from GarbageCollectionDetails g 
+(select isnull(SUM(g.totalWetWeight),NULL)from GarbageCollectionDetails g 
 Where cast(g.gcDate as date) between @from and @to and  g.EmployeeType is null and
 g.dyId is not null and g.vehicleNumber=vm.VehicalNumber and g.dyId=gc.dyId) as EmpTotalWetWeight,
-(select isnull(SUM(gcd.totalGcWeight),0)from GarbageCollectionDetails gcd
+(select isnull(SUM(gcd.totalGcWeight),NULL)from GarbageCollectionDetails gcd
 where cast(gcd.gcDate as date) between @from and @to and  gcd.EmployeeType ='D' and
 gcd.vqrid is not null and gcd.vqrid=vm.vqrId and gcd.dyId=gc.dyId and gc.dyId is not null) As DumpEmpTotalGcWeight,
-(select isnull(SUM(gcd.totalDryWeight),0)from GarbageCollectionDetails gcd
+(select isnull(SUM(gcd.totalDryWeight),NULL)from GarbageCollectionDetails gcd
 where cast(gcd.gcDate as date) between @from and @to and  gcd.EmployeeType ='D' and
 gcd.vqrid is not null and gcd.vqrid=vm.vqrId and gcd.dyId=gc.dyId and gc.dyId is not null) As DumpEmpTotalDryWeight,
-(select isnull(SUM(gcd.totalWetWeight),0)from GarbageCollectionDetails gcd
+(select isnull(SUM(gcd.totalWetWeight),NULL)from GarbageCollectionDetails gcd
 where cast(gcd.gcDate as date) between @from and @to and  gcd.EmployeeType ='D' and
 gcd.vqrid is not null and gcd.vqrid=vm.vqrId and gcd.dyId=gc.dyId and gc.dyId is not null) As DumpEmpTotalWetWeight
 from Vehical_QR_Master vm , GarbageCollectionDetails gc where
