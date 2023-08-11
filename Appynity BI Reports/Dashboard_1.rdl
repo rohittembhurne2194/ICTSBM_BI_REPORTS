@@ -224,7 +224,7 @@ select distinct um.userName NameE,SUBSTRING(um.userName, 1, CHARINDEX(' ', um.us
 	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=1 and gctype=1 and cast(g.gcDate as date) between @from and @to) Segregated,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=0 and gctype=1 and cast(g.gcDate as date) between @from and @to) MixedG,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=2 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotReceived,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=-1 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotSpecified,
+	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and (g.garbageType=-1 OR g.garbageType=3) and gctype=1 and cast(g.gcDate as date) between @from and @to) NotSpecified,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=6 and gctype=1 and cast(g.gcDate as date) between @from and @to) Wet,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=7 and gctype=1 and cast(g.gcDate as date) between @from and @to) Dry,
 	   isnull(um.gcTarget,0) OneDay_HouseTarget,
@@ -604,12 +604,6 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                 <ChartMember>
                   <Label>Not Specified</Label>
                 </ChartMember>
-                <ChartMember>
-                  <Label>Wet</Label>
-                </ChartMember>
-                <ChartMember>
-                  <Label>Dry</Label>
-                </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
             <ChartData>
@@ -740,80 +734,6 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                       <ToolTip>="Not Specified Garbage - " &amp; Sum(Fields!NotSpecified.Value)</ToolTip>
                       <Style>
                         <Color>#0086c3</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Subtype>Stacked</Subtype>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="Wet">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Wet.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                      </ChartDataLabel>
-                      <ToolTip>="Wet Garbage - " &amp; Sum(Fields!Wet.Value)</ToolTip>
-                      <Style>
-                        <Color>#579e69</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Subtype>Stacked</Subtype>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="Dry">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Dry.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                      </ChartDataLabel>
-                      <ToolTip>="Dry Garbage - " &amp; Sum(Fields!Dry.Value)</ToolTip>
-                      <Style>
-                        <Color>#80a6ed</Color>
                       </Style>
                       <ChartMarker>
                         <Style />

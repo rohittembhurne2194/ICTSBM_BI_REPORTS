@@ -133,7 +133,7 @@ select    hm.wardno wardno,w.WardNo wardname,
 		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId 		   		   				 
 		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=-1
+		  and (g.garbageType=-1 OR g.garbageType=3)
 		  and g.houseId &lt;&gt;0
           and g.garbageType is not null		  
 		  and hm.WardNo=h.WardNo		  
@@ -214,7 +214,6 @@ group by hm.WardNo
   ,w.wardno
 ) x
 order by TotalCollected desc
-
 </CommandText>
       </Query>
       <Fields>
@@ -335,7 +334,7 @@ select    count(gc.gcId)  TotalCollected,
 		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId 		 
 		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=-1		  
+		  and (g.garbageType=-1 OR g.garbageType=3)		  
 		  and hm.WardNo=h.WardNo
 		  and g.houseId &lt;&gt;0
           and g.garbageType is not null		  
@@ -372,7 +371,6 @@ and gc.houseId &lt;&gt;0
 and gc.garbageType is not null
 group by hm.WardNo
 ) x
-
 
 </CommandText>
       </Query>
@@ -498,190 +496,21 @@ group by hm.WardNo
             <ChartSeriesHierarchy>
               <ChartMembers>
                 <ChartMember>
-                  <Label>Bifurcate Garbage</Label>
+                  <Label>Not Specified</Label>
                 </ChartMember>
                 <ChartMember>
                   <Label>Not Received Garbage</Label>
                 </ChartMember>
                 <ChartMember>
-                  <Label>Wet</Label>
-                </ChartMember>
-                <ChartMember>
-                  <Label>Dry</Label>
-                </ChartMember>
-                <ChartMember>
-                  <Label>Not Specified</Label>
-                </ChartMember>
-                <ChartMember>
                   <Label>Mixed Garbage</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Bifurcate Garbage</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
             <ChartData>
               <ChartSeriesCollection>
-                <ChartSeries Name="Bifurcate_Garbage">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Bifurcate_Garbage.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style>
-                          <FontWeight>Bold</FontWeight>
-                          <Color>White</Color>
-                        </Style>
-                        <Label>#PERCENT</Label>
-                        <Visible>true</Visible>
-                      </ChartDataLabel>
-                      <ToolTip>="Bifurcate Garbage - " &amp; Sum(Fields!Bifurcate_Garbage.Value)</ToolTip>
-                      <Style>
-                        <Color>#01b7a9</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Type>Shape</Type>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="NotReceived_Garbage">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!NotReceived_Garbage.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                        <Label>#PERCENT</Label>
-                        <Visible>true</Visible>
-                      </ChartDataLabel>
-                      <ToolTip>="NotReceived Garbage - " &amp; Sum(Fields!NotReceived_Garbage.Value)</ToolTip>
-                      <Style>
-                        <Color>#fe9436</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Type>Shape</Type>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="Wet">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Wet.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                        <Label>#PERCENT</Label>
-                      </ChartDataLabel>
-                      <ToolTip>="Wet Garbage - " &amp; Sum(Fields!Wet.Value)</ToolTip>
-                      <Style>
-                        <Color>#186634</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                      <ChartItemInLegend>
-                        <Hidden>=iif(Sum(Fields!Wet.Value, "DataSet1")&lt;=0,true,false)</Hidden>
-                      </ChartItemInLegend>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Type>Shape</Type>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
-                <ChartSeries Name="Dry">
-                  <ChartDataPoints>
-                    <ChartDataPoint>
-                      <ChartDataPointValues>
-                        <Y>=Sum(Fields!Dry.Value)</Y>
-                      </ChartDataPointValues>
-                      <ChartDataLabel>
-                        <Style />
-                        <Label>#PERCENT</Label>
-                      </ChartDataLabel>
-                      <ToolTip>="Dry Garbage - " &amp; Sum(Fields!Dry.Value)</ToolTip>
-                      <Style>
-                        <Color>#66a2d5</Color>
-                      </Style>
-                      <ChartMarker>
-                        <Style />
-                      </ChartMarker>
-                      <DataElementOutput>Output</DataElementOutput>
-                      <ChartItemInLegend>
-                        <Hidden>=iif(Sum(Fields!Dry.Value, "DataSet1")&lt;=0,true,false)</Hidden>
-                      </ChartItemInLegend>
-                    </ChartDataPoint>
-                  </ChartDataPoints>
-                  <Type>Shape</Type>
-                  <Style />
-                  <ChartEmptyPoints>
-                    <Style />
-                    <ChartMarker>
-                      <Style />
-                    </ChartMarker>
-                    <ChartDataLabel>
-                      <Style />
-                    </ChartDataLabel>
-                  </ChartEmptyPoints>
-                  <ValueAxisName>Primary</ValueAxisName>
-                  <CategoryAxisName>Primary</CategoryAxisName>
-                  <ChartSmartLabel>
-                    <CalloutLineColor>Black</CalloutLineColor>
-                    <MinMovingDistance>0pt</MinMovingDistance>
-                  </ChartSmartLabel>
-                </ChartSeries>
                 <ChartSeries Name="NotSpecified">
                   <ChartDataPoints>
                     <ChartDataPoint>
@@ -689,7 +518,10 @@ group by hm.WardNo
                         <Y>=Sum(Fields!NotSpecified.Value)</Y>
                       </ChartDataPointValues>
                       <ChartDataLabel>
-                        <Style />
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                          <Color>White</Color>
+                        </Style>
                         <Label>#PERCENT</Label>
                         <Visible>true</Visible>
                       </ChartDataLabel>
@@ -724,6 +556,48 @@ group by hm.WardNo
                     <MinMovingDistance>0pt</MinMovingDistance>
                   </ChartSmartLabel>
                 </ChartSeries>
+                <ChartSeries Name="NotReceived_Garbage">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(Fields!NotReceived_Garbage.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                          <Color>White</Color>
+                        </Style>
+                        <Label>#PERCENT</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ToolTip>="NotReceived Garbage - " &amp; Sum(Fields!NotReceived_Garbage.Value)</ToolTip>
+                      <Style>
+                        <Color>#fe9436</Color>
+                      </Style>
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
                 <ChartSeries Name="Mixed_Garbage">
                   <ChartDataPoints>
                     <ChartDataPoint>
@@ -731,7 +605,10 @@ group by hm.WardNo
                         <Y>=Sum(Fields!Mixed_Garbage.Value)</Y>
                       </ChartDataPointValues>
                       <ChartDataLabel>
-                        <Style />
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                          <Color>White</Color>
+                        </Style>
                         <Label>#PERCENT</Label>
                         <Visible>true</Visible>
                       </ChartDataLabel>
@@ -749,7 +626,48 @@ group by hm.WardNo
                     </ChartDataPoint>
                   </ChartDataPoints>
                   <Type>Shape</Type>
-                  <Subtype>Doughnut</Subtype>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Bifurcate_Garbage">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(Fields!Bifurcate_Garbage.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                          <Color>White</Color>
+                        </Style>
+                        <Label>#PERCENT</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ToolTip>="Bifurcate Garbage - " &amp; Sum(Fields!Bifurcate_Garbage.Value)</ToolTip>
+                      <Style>
+                        <Color>#01b7a9</Color>
+                      </Style>
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
                   <Style />
                   <ChartEmptyPoints>
                     <Style />

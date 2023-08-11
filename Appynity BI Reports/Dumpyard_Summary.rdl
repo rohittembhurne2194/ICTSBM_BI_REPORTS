@@ -100,10 +100,18 @@ from UserMaster where EmployeeType Is Null</CommandText>
         </QueryParameters>
         <CommandText>--declare @from datetime,@to datetime
 --set @from ='11/27/2019' set @to ='11/27/2019'
-SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select 
- (select isnull(sum(cast(totalWetWeight as decimal(10,2))),0)+ isnull(sum(cast(totalDryWeight as decimal(10,2))),0) from GarbageCollectionDetails where Convert(date,gcDate) between @from and @to) as TotalGcWeightCount,
- (select sum(cast(totalDryWeight as decimal(10,2))) from GarbageCollectionDetails where Convert(date,gcDate) between @from and @to) as TotalDryWeightCount,
- (select sum(cast(totalWetWeight as decimal(10,2))) from GarbageCollectionDetails where Convert(date,gcDate) between @from and @to) as TotalWetWeightCount) X</CommandText>
+
+ select  
+	 isnull(sum(cast(totalWetWeight as decimal(10,2))),0)+ isnull(sum(cast(totalDryWeight as decimal(10,2))),0) TotalGcWeightCount,
+	 isnull(sum(cast(totalDryWeight as decimal(10,2))),0)  TotalDryWeightCount,
+	 isnull(sum(cast(totalWetWeight as decimal(10,2))),0)  TotalWetWeightCount
+ from GarbageCollectionDetails gc,
+      usermaster um
+ where gc.totalGcWeight is not null
+ and gc.userId=um.userId
+ 
+ and Convert(date,gc.gcDate) between @from and @to
+ and gc.gcType=3</CommandText>
       </Query>
       <Fields>
         <Field Name="TotalGcWeightCount">
@@ -137,14 +145,14 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
  select   um.userName ,
           --isnull(gc.vehiclenumber,'Not Available'),
           count(gc.userId) Trip, 
-	  (Select isnull(sum(cast(totalWetWeight as decimal(10,2))),0)+ isnull(sum(cast(totalDryWeight as decimal(10,2))),0) from GarbageCollectionDetails where Convert(date,gcDate) between @from and @to) as Total_weight,
-		  (select sum(cast(totalDryWeight as decimal(10,2))) from GarbageCollectionDetails where Convert(date,gcDate) between @from and @to) as Dry,
-		  (select sum(cast(totalWetWeight as decimal(10,2))) from GarbageCollectionDetails where Convert(date,gcDate) between @from and @to) as Wet
+	 isnull(sum(cast(totalWetWeight as decimal(10,2))),0)+ isnull(sum(cast(totalDryWeight as decimal(10,2))),0) Total_weight,
+		  isnull(sum(cast(totalWetWeight as decimal(10,2))),0) Dry,
+		  isnull(sum(cast(totalDryWeight as decimal(10,2))),0) Wet
  from GarbageCollectionDetails gc,
       usermaster um
  where gc.totalGcWeight is not null
  and gc.userId=um.userId
- and um.EmployeeType Is Null
+ --and um.EmployeeType Is Null
  and Convert(date,gc.gcDate) between @from and @to
  and gc.gcType=3
  group by gc.userId,um.userName
@@ -244,27 +252,27 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
             <ChartSeriesHierarchy>
               <ChartMembers>
                 <ChartMember>
-                  <Label>Total Dry Weight Count</Label>
+                  <Label>Dry</Label>
                 </ChartMember>
                 <ChartMember>
-                  <Label>Total Wet Weight Count</Label>
+                  <Label>Wet</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
             <ChartData>
               <ChartSeriesCollection>
-                <ChartSeries Name="TotalDryWeightCount">
+                <ChartSeries Name="Dry">
                   <ChartDataPoints>
                     <ChartDataPoint>
                       <ChartDataPointValues>
-                        <Y>=Sum(Fields!TotalDryWeightCount.Value)</Y>
+                        <Y>=Sum(Fields!Dry.Value)</Y>
                       </ChartDataPointValues>
                       <ChartDataLabel>
                         <Style />
                         <Label>#PERCENT</Label>
                         <Visible>true</Visible>
                       </ChartDataLabel>
-                      <ToolTip>="Dry Weight  - " &amp; Fields!TotalDryWeightCount.Value &amp; " Ton" &amp; VbCrLf &amp; "Total Weight  - " &amp; Fields!TotalGcWeightCount.Value &amp; " Ton"</ToolTip>
+                      <ToolTip>="Dry Weight  - " &amp; Fields!Dry.Value &amp; " Ton" &amp; VbCrLf &amp; "Total Weight  - " &amp; Fields!Total_weight.Value &amp; " Ton"</ToolTip>
                       <Style>
                         <Color>#0086c3</Color>
                       </Style>
@@ -273,7 +281,7 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                       </ChartMarker>
                       <DataElementOutput>Output</DataElementOutput>
                       <ChartItemInLegend>
-                        <LegendText>="Dry Weight - " &amp; Sum(Fields!TotalDryWeightCount.Value, "Dumpyard_Total_Garbage") &amp; " Ton"</LegendText>
+                        <LegendText>="Dry Weight - " &amp; Sum(Fields!Dry.Value, "Vehiclewise_Garbage_Detail") &amp; " Ton"</LegendText>
                       </ChartItemInLegend>
                     </ChartDataPoint>
                   </ChartDataPoints>
@@ -296,18 +304,18 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                     <MinMovingDistance>0pt</MinMovingDistance>
                   </ChartSmartLabel>
                 </ChartSeries>
-                <ChartSeries Name="TotalWetWeightCount">
+                <ChartSeries Name="Wet">
                   <ChartDataPoints>
                     <ChartDataPoint>
                       <ChartDataPointValues>
-                        <Y>=Sum(Fields!TotalWetWeightCount.Value)</Y>
+                        <Y>=Sum(Fields!Wet.Value)</Y>
                       </ChartDataPointValues>
                       <ChartDataLabel>
                         <Style />
                         <Label>#PERCENT</Label>
                         <Visible>true</Visible>
                       </ChartDataLabel>
-                      <ToolTip>="Wet Weight  - " &amp; Fields!TotalWetWeightCount.Value &amp; " Ton" &amp; VbCrLf &amp; "Total Weight  - " &amp; Fields!TotalGcWeightCount.Value &amp; " Ton"</ToolTip>
+                      <ToolTip>="Wet Weight  - " &amp; Fields!Wet.Value &amp; " Ton" &amp; VbCrLf &amp; "Total Weight  - " &amp; Fields!Total_weight.Value &amp; " Ton"</ToolTip>
                       <Style>
                         <Color>#01ad35</Color>
                       </Style>
@@ -316,7 +324,7 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                       </ChartMarker>
                       <DataElementOutput>Output</DataElementOutput>
                       <ChartItemInLegend>
-                        <LegendText>="Wet Weight - " &amp; Sum(Fields!TotalWetWeightCount.Value, "Dumpyard_Total_Garbage") &amp; " Ton"</LegendText>
+                        <LegendText>="Wet Weight - " &amp; Sum(Fields!Wet.Value, "Vehiclewise_Garbage_Detail") &amp; " Ton"</LegendText>
                       </ChartItemInLegend>
                     </ChartDataPoint>
                   </ChartDataPoints>
@@ -625,7 +633,7 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                 <VerticalAlign>Top</VerticalAlign>
               </Style>
             </ChartNoDataMessage>
-            <DataSetName>Dumpyard_Total_Garbage</DataSetName>
+            <DataSetName>Vehiclewise_Garbage_Detail</DataSetName>
             <Top>2.11333in</Top>
             <Left>0.10083in</Left>
             <Height>4.55208in</Height>
@@ -1408,14 +1416,14 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="TotalGcWeightCount">
+                        <Textbox Name="Textbox10">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TotalGcWeightCount.Value &amp; "  Ton"</Value>
+                                  <Value>=Fields!TotalGcWeightCount.Value</Value>
                                   <Style>
                                     <FontSize>22pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1428,7 +1436,6 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>TotalGcWeightCount</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1553,14 +1560,14 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="TotalGcWeightCount2">
+                        <Textbox Name="Textbox11">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TotalDryWeightCount.Value &amp; "  Ton"</Value>
+                                  <Value>=Fields!TotalDryWeightCount.Value</Value>
                                   <Style>
                                     <FontSize>22pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1573,7 +1580,6 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>TotalGcWeightCount</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1695,14 +1701,14 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
-                        <Textbox Name="TotalGcWeightCount3">
+                        <Textbox Name="Textbox12">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
                           <Paragraphs>
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!TotalWetWeightCount.Value &amp; "  Ton"</Value>
+                                  <Value>=Fields!TotalWetWeightCount.Value</Value>
                                   <Style>
                                     <FontSize>22pt</FontSize>
                                     <FontWeight>Bold</FontWeight>
@@ -1715,7 +1721,6 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                               </Style>
                             </Paragraph>
                           </Paragraphs>
-                          <rd:DefaultName>TotalGcWeightCount</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -1737,6 +1742,7 @@ SELECT  TotalGcWeightCount,TotalDryWeightCount,TotalWetWeightCount from(select
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
