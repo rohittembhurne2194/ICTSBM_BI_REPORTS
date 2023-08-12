@@ -205,7 +205,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>="     Employee Performance  -  " &amp; Parameters!userid.Label</Value>
+                    <Value>=" Employee Total Collections -  " &amp; SUM(Fields!Total_Collection.Value, "Collection_Detail")</Value>
                     <Style>
                       <FontSize>12pt</FontSize>
                     </Style>
@@ -331,7 +331,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
                       <FontSize>8pt</FontSize>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption />
+                      <Caption>Date</Caption>
                       <Style>
                         <FontSize>9pt</FontSize>
                         <Color>#5c5c5c</Color>
@@ -444,7 +444,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
                       <FontSize>8pt</FontSize>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption />
+                      <Caption>Total Liquid Waste Cleaning</Caption>
                       <Style>
                         <FontSize>9pt</FontSize>
                         <Color>#5c5c5c</Color>

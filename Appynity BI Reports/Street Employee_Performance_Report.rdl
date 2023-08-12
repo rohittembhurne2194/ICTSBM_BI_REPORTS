@@ -386,7 +386,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                       <FontSize>8pt</FontSize>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption />
+                      <Caption>Employee Name</Caption>
                       <Style>
                         <FontSize>9pt</FontSize>
                         <Color>#5c5c5c</Color>

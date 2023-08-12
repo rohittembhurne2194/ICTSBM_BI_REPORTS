@@ -252,7 +252,7 @@ order by um.userName
                       <TextDecoration>None</TextDecoration>
                     </Style>
                     <ChartAxisTitle>
-                      <Caption />
+                      <Caption>Employee Name</Caption>
                       <Style>
                         <FontSize>9pt</FontSize>
                         <Color>#5c5c5c</Color>
