@@ -84,11 +84,12 @@ where appid=@appid</CommandText>
         <CommandText>--declare @from datetime,@to datetime
 --set @from ='01/01/2022' set @to ='02/24/2022'
 
-select   Total_Street_collection , Street_Count from(select
+select   Total_Street_collection , Street_Count,Street_Dump_Count from(select
               
 		--(Select count(houseid) from HouseMaster  ) TotalHouse_incity,
-		(Select  Count(gcId) from GarbageCollectionDetails where EmployeeType='S' and Convert(date,gcDate) between @from and @to  ) Total_Street_collection,
-		(Select  Count(gcId) from GarbageCollectionDetails where  gctype=5 and Convert(date,gcDate) between @from and @to ) Street_Count) x
+		(Select  Count(gcId) from GarbageCollectionDetails where EmployeeType='S' and gctype=5 and Convert(date,gcDate) between @from and @to  ) Total_Street_collection,
+		(Select  Count(gcId) from GarbageCollectionDetails where  gctype=5 and EmployeeType='S' and Convert(date,gcDate) between @from and @to ) Street_Count,
+		(Select  Count(gcId) from GarbageCollectionDetails where  gctype=3 and EmployeeType='S' and Convert(date,gcDate) between @from and @to ) Street_Dump_Count) x
 
 		
 
@@ -102,6 +103,10 @@ select   Total_Street_collection , Street_Count from(select
         <Field Name="Street_Count">
           <DataField>Street_Count</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Street_Dump_Count">
+          <DataField>Street_Dump_Count</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
       </Fields>
     </DataSet>
@@ -1239,8 +1244,8 @@ order by um.userName</CommandText>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>Dashboard_Details</DataSetName>
-            <Top>0.59625in</Top>
-            <Left>5.15042in</Left>
+            <Top>0.58625in</Top>
+            <Left>3.60875in</Left>
             <Height>1.31041in</Height>
             <Width>2.66667in</Width>
             <ZIndex>5</ZIndex>
@@ -1680,6 +1685,131 @@ order by um.userName</CommandText>
               <BackgroundGradientType>None</BackgroundGradientType>
             </Style>
           </Chart>
+          <Tablix Name="Tablix3">
+            <TablixBody>
+              <TablixColumns>
+                <TablixColumn>
+                  <Width>1.94792in</Width>
+                </TablixColumn>
+              </TablixColumns>
+              <TablixRows>
+                <TablixRow>
+                  <Height>0.53263in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox5">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Dump Yard Cleaning</Value>
+                                  <Style>
+                                    <FontFamily>Yu Gothic Medium</FontFamily>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>#34a7dd</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#0091d5</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+                <TablixRow>
+                  <Height>0.77778in</Height>
+                  <TablixCells>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Street_Dump_Count.Value</Value>
+                                  <Style>
+                                    <FontSize>22pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>#1c4e80</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>White</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                  </TablixCells>
+                </TablixRow>
+              </TablixRows>
+            </TablixBody>
+            <TablixColumnHierarchy>
+              <TablixMembers>
+                <TablixMember />
+              </TablixMembers>
+            </TablixColumnHierarchy>
+            <TablixRowHierarchy>
+              <TablixMembers>
+                <TablixMember>
+                  <KeepWithGroup>After</KeepWithGroup>
+                </TablixMember>
+                <TablixMember>
+                  <Group Name="Details3" />
+                </TablixMember>
+              </TablixMembers>
+            </TablixRowHierarchy>
+            <DataSetName>Dashboard_Details</DataSetName>
+            <Top>0.58417in</Top>
+            <Left>6.90042in</Left>
+            <Height>1.31041in</Height>
+            <Width>1.94792in</Width>
+            <ZIndex>7</ZIndex>
+            <Style>
+              <Border>
+                <Color>#34a7dd</Color>
+                <Style>Solid</Style>
+              </Border>
+            </Style>
+          </Tablix>
         </ReportItems>
         <Height>10.92583in</Height>
         <Style>

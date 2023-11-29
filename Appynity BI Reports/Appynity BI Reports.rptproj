@@ -52,6 +52,7 @@
     <Report Include="Areawise Garbage Collection.rdl" />
     <Report Include="Areawise Garbage Type Collection.rdl" />
     <Report Include="Citywise Garbage Report.rdl" />
+    <Report Include="Copy of DumpYard_Supervisor_Performance_Report.rdl" />
     <Report Include="Copy of Employee_Performance_Report.rdl" />
     <Report Include="CTPT_Details.rdl" />
     <Report Include="CTPT_Feedback.rdl" />
@@ -80,6 +81,7 @@
     <Report Include="Liquid Ghar Sankalan Tapashil.rdl" />
     <Report Include="Liquid single Employee Collection.rdl" />
     <Report Include="LiquidDashboard_1.rdl" />
+    <Report Include="QR_PropertyScan_Report.rdl" />
     <Report Include="Report1.rdl" />
     <Report Include="single Employee Collection.rdl" />
     <Report Include="Street Areawise Garbage Collection.rdl" />

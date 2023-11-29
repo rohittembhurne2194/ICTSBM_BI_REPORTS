@@ -455,7 +455,6 @@ group by sm.AreaId
                     <InterlacedColor>Silver</InterlacedColor>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
-                    <LogScale>true</LogScale>
                     <LogBase>2</LogBase>
                     <ChartAxisScaleBreak>
                       <Style />

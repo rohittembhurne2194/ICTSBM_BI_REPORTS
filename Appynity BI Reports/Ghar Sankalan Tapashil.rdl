@@ -94,29 +94,61 @@ from UserMaster where EmployeeType Is Null</CommandText>
 --set @userid=null
 --set @gartype=null
 
-select gc.gcDate cdate,
-       um.userId DriverId,
-       um.userName DriverName,
-       gc.vehicleNumber vehcleNO,
-	   gc.garbageType GCType,
-	   gc.note Comment,
-	   hm.houseOwner HouseOname,
-	   isnull(hm.houseOwnerMobile,'') MobileNo,
-	   hm.ReferanceId houseid,
-	   hm.houseAddress HouseAdd
 
-from GarbageCollectionDetails gc with(nolock),
-     HouseMaster hm ,
-	 UserMaster um 
-where gc.houseId=hm.houseId
-and   gc.userId=um.userId
-and cast(gc.gcDate as date) between @from and @to
-and um.userId in (isnull((@userid),um.userid))
-and um.EmployeeType Is Null
-and gc.garbageType in (isnull((@gartype),gc.garbageType))
---order by gc.gcid desc
-order by gc.gcdate desc
-OPTION(RECOMPILE)</CommandText>
+if(@gartype = -1 OR @gartype = 3)
+BEGIN
+
+		select gc.gcDate cdate,
+		   um.userId DriverId,
+		   um.userName DriverName,
+		   gc.vehicleNumber vehcleNO,
+		   gc.garbageType GCType,
+		   gc.note Comment,
+		   hm.houseOwner HouseOname,
+		   isnull(hm.houseOwnerMobile,'') MobileNo,
+		   hm.ReferanceId houseid,
+		   hm.houseAddress HouseAdd
+
+	from GarbageCollectionDetails gc with(nolock),
+		 HouseMaster hm ,
+		 UserMaster um 
+	where gc.houseId=hm.houseId
+	and   gc.userId=um.userId
+	and cast(gc.gcDate as date) between @from and @to
+	and um.userId in (isnull((@userid),um.userid))
+	and um.EmployeeType Is Null
+	and (gc.garbageType = -1 OR gc.garbageType = 3)
+	--order by gc.gcid desc
+	order by gc.gcdate desc
+	OPTION(RECOMPILE)
+
+END
+ELSE
+BEGIN
+	select gc.gcDate cdate,
+		   um.userId DriverId,
+		   um.userName DriverName,
+		   gc.vehicleNumber vehcleNO,
+		   gc.garbageType GCType,
+		   gc.note Comment,
+		   hm.houseOwner HouseOname,
+		   isnull(hm.houseOwnerMobile,'') MobileNo,
+		   hm.ReferanceId houseid,
+		   hm.houseAddress HouseAdd
+
+	from GarbageCollectionDetails gc with(nolock),
+		 HouseMaster hm ,
+		 UserMaster um 
+	where gc.houseId=hm.houseId
+	and   gc.userId=um.userId
+	and cast(gc.gcDate as date) between @from and @to
+	and um.userId in (isnull((@userid),um.userid))
+	and um.EmployeeType Is Null
+	and gc.garbageType in (isnull((@gartype),gc.garbageType))
+	--order by gc.gcid desc
+	order by gc.gcdate desc
+	OPTION(RECOMPILE)
+END</CommandText>
       </Query>
       <Fields>
         <Field Name="cdate">
@@ -590,6 +622,7 @@ OPTION(RECOMPILE)</CommandText>
                             <PaddingBottom>5pt</PaddingBottom>
                           </Style>
                         </Image>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -838,7 +871,6 @@ OPTION(RECOMPILE)</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
