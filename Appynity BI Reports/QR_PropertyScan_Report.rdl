@@ -228,10 +228,10 @@ FROM (
         qrEmpId,
 	   (Select qrEmpName from QrEmployeeMaster Where qrEmpId=h.qrEmpId) as UserName,
 		startDate,
-        isnull((Select (count(houseId)) from HouseMaster Where userId=h.qrEmpId and houseLat is not null and CONVERT(date,modified)=CONVERT(date,h.startDate)),0) AS total_attendance,
-		isnull((Select (count(LWId)) from LiquidWasteDetails Where userId=h.qrEmpId and LWLat is not null and CONVERT(date,lastModifiedDate)=CONVERT(date,h.startDate)),0) AS total_attendanceLiquid,
-		isnull((Select (count(SSId)) from StreetSweepingDetails Where userId=h.qrEmpId and SSLat is not null and CONVERT(date,lastModifiedDate)=CONVERT(date,h.startDate)),0) AS total_attendancestreet,
-		isnull((Select (count(dyId)) from DumpYardDetails Where userId=h.qrEmpId and dyLat is not null and CONVERT(date,lastModifiedDate)=CONVERT(date,h.startDate)),0) AS total_attendanceDumpyard
+        isnull((Select (count(houseId)) from HouseMaster Where userId=h.qrEmpId and houseLat is not null and QRStatus=1 and CONVERT(date,modified)=CONVERT(date,h.startDate)),0) AS total_attendance,
+		isnull((Select (count(LWId)) from LiquidWasteDetails Where userId=h.qrEmpId and LWLat is not null and QRStatus=1 and CONVERT(date,lastModifiedDate)=CONVERT(date,h.startDate)),0) AS total_attendanceLiquid,
+		isnull((Select (count(SSId)) from StreetSweepingDetails Where userId=h.qrEmpId and SSLat is not null and QRStatus=1 and CONVERT(date,lastModifiedDate)=CONVERT(date,h.startDate)),0) AS total_attendancestreet,
+		isnull((Select (count(dyId)) from DumpYardDetails Where userId=h.qrEmpId and dyLat is not null and QRStatus=1 and CONVERT(date,lastModifiedDate)=CONVERT(date,h.startDate)),0) AS total_attendanceDumpyard
     FROM 
         Qr_Employee_Daily_Attendance h 
     WHERE 
@@ -1389,7 +1389,6 @@ GROUP BY
                             <BackgroundColor>White</BackgroundColor>
                           </Style>
                         </GaugePanel>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
@@ -16541,7 +16540,7 @@ GROUP BY
             <Top>1.45709in</Top>
             <Left>0.19966in</Left>
             <Height>1in</Height>
-            <Width>45.79054in</Width>
+            <Width>45.79055in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -16594,7 +16593,7 @@ GROUP BY
           <BackgroundColor>#eef5f9</BackgroundColor>
         </Style>
       </Body>
-      <Width>45.9902in</Width>
+      <Width>45.99021in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>
