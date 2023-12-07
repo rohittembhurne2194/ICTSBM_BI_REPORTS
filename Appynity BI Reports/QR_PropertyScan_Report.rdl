@@ -85,9 +85,12 @@ where appid=@appid</CommandText>
         </QueryParameters>
         <CommandText>
 --declare @from datetime,@to datetime
---set @from ='2023-11-01'set @to='2023-11-07'
+--set @from ='2023-11-01'set @to='2023-11-30'
 
 
+Declare @month int ,@year int
+set @month =(Select MONTH(@from))
+set @year =(Select year(@from))
 
 SELECT 
     qrEmpId,
@@ -236,7 +239,9 @@ FROM (
         Qr_Employee_Daily_Attendance h 
     WHERE 
 		
-		Cast(startDate As Date) between @from and @to
+		--Cast(startDate As Date) between @from and @to
+		MONTH(startDate) = @month  -- Replace with the month you are interested in
+        AND YEAR(startDate) = @year -- Replace with the year you are interested in
     GROUP BY 
         qrEmpId,startDate 
 ) AS subquery
