@@ -557,8 +557,8 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.07792in</Top>
-            <Left>7.87942in</Left>
+            <Top>0.0875in</Top>
+            <Left>10.26275in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -1059,7 +1059,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>2.17375in</Top>
             <Left>0.09041in</Left>
             <Height>4.13542in</Height>
-            <Width>11.15498in</Width>
+            <Width>13.55081in</Width>
             <ZIndex>1</ZIndex>
             <ToolTip>="Employee wise collection with Garbage Type..."</ToolTip>
             <Style>
@@ -1621,7 +1621,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>0.58625in</Top>
             <Left>2.04042in</Left>
             <Height>1.32041in</Height>
-            <Width>1.30652in</Width>
+            <Width>1.45549in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -1802,7 +1802,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.33333in</Width>
+                  <Width>1.88541in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1912,9 +1912,9 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             </TablixRowHierarchy>
             <DataSetName>Dashboard_Details</DataSetName>
             <Top>0.59625in</Top>
-            <Left>3.47334in</Left>
+            <Left>3.84834in</Left>
             <Height>1.31041in</Height>
-            <Width>1.33333in</Width>
+            <Width>1.88541in</Width>
             <ZIndex>5</ZIndex>
             <Style>
               <Border>
@@ -1927,7 +1927,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.29167in</Width>
+                  <Width>1.72917in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1943,7 +1943,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>Dump Yard</Value>
+                                  <Value>Dump Yard Trips</Value>
                                   <Style>
                                     <FontFamily>Yu Gothic Medium</FontFamily>
                                     <FontSize>12pt</FontSize>
@@ -2037,9 +2037,9 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             </TablixRowHierarchy>
             <DataSetName>Dashboard_Details</DataSetName>
             <Top>0.59625in</Top>
-            <Left>5.18289in</Left>
+            <Left>6.04747in</Left>
             <Height>1.31041in</Height>
-            <Width>1.29167in</Width>
+            <Width>1.72917in</Width>
             <ZIndex>6</ZIndex>
             <Style>
               <Border>
@@ -2496,9 +2496,12 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <DataSetName>Dumpyard</DataSetName>
             <Top>6.71465in</Top>
             <Left>0.12994in</Left>
-            <Height>4.01042in</Height>
+            <Height>0.26042in</Height>
             <Width>11.12795in</Width>
             <ZIndex>7</ZIndex>
+            <Visibility>
+              <Hidden>true</Hidden>
+            </Visibility>
             <Style>
               <Border>
                 <Color>LightGrey</Color>
@@ -2547,7 +2550,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                       <ChartDataLabel>
                         <Style />
                       </ChartDataLabel>
-                      <ToolTip>="Target  - " &amp; Fields!Total_Target.Value</ToolTip>
+                      <ToolTip>="Name - "&amp; Fields!NameE.Value &amp; VbCrLf &amp; "Target  - " &amp; Fields!Total_Target.Value</ToolTip>
                       <Style>
                         <Border>
                           <Color>Black</Color>
@@ -2596,7 +2599,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                       <ChartDataLabel>
                         <Style />
                       </ChartDataLabel>
-                      <ToolTip>="Achieved  - " &amp; Fields!Total.Value</ToolTip>
+                      <ToolTip>="Name - "&amp; Fields!NameE.Value &amp; VbCrLf &amp; "Achieved  - " &amp; Fields!Total.Value</ToolTip>
                       <Style>
                         <Border>
                           <Color>Black</Color>
@@ -2932,10 +2935,10 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
               </Style>
             </ChartNoDataMessage>
             <DataSetName>Employee_collection</DataSetName>
-            <Top>10.87438in</Top>
-            <Left>0.11744in</Left>
+            <Top>7.11396in</Top>
+            <Left>0.09041in</Left>
             <Height>3.79167in</Height>
-            <Width>11.15498in</Width>
+            <Width>13.55081in</Width>
             <ZIndex>8</ZIndex>
             <Style>
               <Border>
@@ -3328,7 +3331,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
           <BackgroundColor>#eef5f9</BackgroundColor>
         </Style>
       </Body>
-      <Width>11.36334in</Width>
+      <Width>14.25917in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

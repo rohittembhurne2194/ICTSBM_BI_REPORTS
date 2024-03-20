@@ -98,41 +98,42 @@ from UserMaster where EmployeeType Is Null</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
+        <CommandText>
+--declare @from datetime,@to datetime
 --set @from ='01/01/2022' set @to ='03/02/2022' 
 
 select  distinct AreaId,isnull(AreaName,'No Name'),TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,Wet,Dry,No_Entry 
 from(
 
-select    gc.areaid AreaId,
-         (select area from teritorymaster where Id=gc.AreaId ) AreaName,  
+select    hm.areaid AreaId,
+         (select area from teritorymaster where Id=hm.AreaId ) AreaName,  
 		 count(gc.gcId)  TotalCollected,
 		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId 	
 		 and cast(g.gcDate as date) between @from and @to
 		  and g.garbageType=0		  
-		 and isnull(gc.AreaId,0)=isnull(h.AreaId,0)		  
+		 and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
 		 ) Mixed_Garbage,
 
 		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId		  	
 		  and cast(g.gcDate as date) between @from and @to		 
 		  and g.garbageType=1			   
-		  and isnull(gc.AreaId,0)=isnull(h.AreaId,0)	  
+		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)	  
 		 ) Bifurcate_Garbage,
 
 		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId 		
 		 and cast(g.gcDate as date) between @from and @to
 		  and g.garbageType=2		  
-		 and isnull(gc.AreaId,0)=isnull(h.AreaId,0)	  
+		 and isnull(hm.AreaId,0)=isnull(h.AreaId,0)	  
 		 ) NotReceived_Garbage,
 
 		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId 		 
 		 and cast(g.gcDate as date) between @from and @to
 		  and (g.garbageType=-1 OR g.garbageType=3)		  
-		  and isnull(gc.AreaId,0)=isnull(h.AreaId,0)		  
+		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
 		 ) Not_Specified,
 
 	
@@ -141,14 +142,14 @@ select    gc.areaid AreaId,
 		  where g.houseId=h.houseId 		 
 		 and cast(g.gcDate as date) between @from and @to
 		  and g.garbageType=6		  
-		  and isnull(gc.AreaId,0)=isnull(h.AreaId,0)		  
+		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
 		 ) Wet,
 
 		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId 		 
 		 and cast(g.gcDate as date) between @from and @to
 		  and g.garbageType=7		  
-		  and isnull(gc.AreaId,0)=isnull(h.AreaId,0)		  
+		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
 		 ) Dry,
 
 		
@@ -156,7 +157,7 @@ select    gc.areaid AreaId,
 		  where g.houseId=h.houseId 		  
 		  and cast(g.gcDate as date) between @from and @to
 		  and g.garbageType is null		  
-		  and isnull(gc.AreaId,0)=isnull(h.AreaId,0)		  
+		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
 		 ) No_Entry
 		 	 
 from GarbageCollectionDetails gc,
@@ -164,8 +165,8 @@ from GarbageCollectionDetails gc,
 where gc.houseId=hm.houseId
 and   gc.gctype=1
 and cast(gc.gcDate as date) between @from and @to
-and gc.AreaId is not null
-group by gc.AreaId
+and hm.AreaId is not null
+group by hm.AreaId
 ) x</CommandText>
       </Query>
       <Fields>
