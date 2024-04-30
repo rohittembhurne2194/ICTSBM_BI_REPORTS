@@ -109,7 +109,7 @@ OPTION(RECOMPILE)</CommandText>
     </DataSet>
     <DataSet Name="AppName">
       <Query>
-        <DataSourceName>DataSource1</DataSourceName>
+        <DataSourceName>Appconnection</DataSourceName>
         <QueryParameters>
           <QueryParameter Name="@appid">
             <Value>=Parameters!appid.Value</Value>
