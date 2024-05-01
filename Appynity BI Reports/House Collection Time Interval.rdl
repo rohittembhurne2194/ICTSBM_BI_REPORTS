@@ -109,7 +109,7 @@ select * INTO #tempHouseColl  from(
 select DISTINCT u.userName userName,  
  u.userId userId,
 (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u                 
-   where gc.gctype=1                 
+   where gc.gctype=1  And gc.garbageType &lt;&gt; 4                
    and cast(@to AS DATE) =cast(gc.gcDate as date)                  
    and u.userId=gc.userId                  
    and gc.userId=g.userId
@@ -148,6 +148,14 @@ select DISTINCT u.userName userName,
    and gc.gcDate &lt; ISNULL(a.gcDate,@to)
    and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
    ) TotalNotColl,
+(select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u                 
+   where gc.gctype=1  and garbageType=4               
+   and cast(@to AS DATE) =cast(gc.gcDate as date)                  
+   and u.userId=gc.userId                  
+   and gc.userId=g.userId
+   and gc.gcDate &lt; ISNULL(a.gcDate,@to)
+   and gc.gcDate &gt; ISNULL(a.previousgcDate,@from)
+   ) TotalNotScan,
    (select min(gcDate) from GarbageCollectionDetails gc,usermaster u                  
    where gc.gctype=1                   
    and cast(@to AS DATE) =cast(gc.gcDate as date)                  
@@ -196,7 +204,7 @@ ORDER BY userName,StartTime
 select *,LEAD(StartTime,1) OVER(PARTITION BY userId ORDER BY IIF(StartTime IS NULL, 1, 0),StartTime) AS NextStartTime INTO #tempHouseColl1 from #tempHouseColl order by userName,IIF(StartTime IS NULL, 1, 0),StartTime
 
 select *, ISNULL(DATEDIFF(MINUTE,EndTime,DumpTime),0) +  ISNULL(DATEDIFF(MINUTE,DumpTime,NextStartTime),0) AS ScannedTimeDy INTO #tempHouseColl2 from #tempHouseColl1
-select userId,userName,SUM(ScannedTimeHouse) TotalHouseScanTime,SUM(Totalhousecollection) Totalhousecollection,SUM(TotalMixed) TotalMixed,SUM(TotalNotSpecified) TotalNotSpecified,SUM(TotalSeg) TotalSeg,SUM(TotalNotColl) TotalNotColl,Count(DumpTime) TotalDump, SUM(ScannedTimeDy) TotalDumpScanTime INTO #tempHouseColl3 from  #tempHouseColl2 where Totalhousecollection &gt; 0 GROUP BY userId,userName 
+select userId,userName,SUM(ScannedTimeHouse) TotalHouseScanTime,SUM(Totalhousecollection) Totalhousecollection,SUM(TotalMixed) TotalMixed,SUM(TotalNotSpecified) TotalNotSpecified,SUM(TotalSeg) TotalSeg,SUM(TotalNotColl) TotalNotColl,SUM(TotalNotScan) TotalNotScan,Count(DumpTime) TotalDump, SUM(ScannedTimeDy) TotalDumpScanTime INTO #tempHouseColl3 from  #tempHouseColl2 where Totalhousecollection &gt; 0 GROUP BY userId,userName 
 
 select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime % 1440) / 60 ))) + convert(varchar(2), (TotalHouseScanTime % 1440) / 60 )
 
@@ -256,6 +264,10 @@ select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
         </Field>
         <Field Name="ID">
           <DataField />
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="TotalNotScan">
+          <DataField>TotalNotScan</DataField>
           <rd:UserDefined>true</rd:UserDefined>
         </Field>
       </Fields>
@@ -376,11 +388,12 @@ select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                       </ChartDataPointValues>
                       <ChartDataLabel>
                         <Style />
-                        <UseValueAsLabel>true</UseValueAsLabel>
+                        <Label>=(Fields!TotalHouseScanTimeHours.Value) &amp; VbCrLf</Label>
                         <Visible>true</Visible>
                       </ChartDataLabel>
                       <ToolTip>="Name Of Employee - " &amp; Fields!userName.Value  &amp; VbCrLf &amp; 
 "Total Garbage Collection - "  &amp; (Fields!Totalhousecollection.Value) &amp; VbCrLf &amp; 
+"Total Not Scan - " &amp; (Fields!TotalNotScan.Value) &amp; VbCrLf &amp;
 "Total House Collection Time -  "  &amp; (Fields!TotalHouseScanTimeHours.Value) &amp; VbCrLf &amp;
 "Total Dump -  "  &amp; (Fields!TotalDump.Value) &amp; VbCrLf &amp;
 "Total Dump Trip Time - "&amp; (Fields!TotalDumpScanTimeHours.Value) &amp; VbCrLf</ToolTip>

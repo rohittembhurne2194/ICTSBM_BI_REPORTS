@@ -102,7 +102,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
 --declare @from datetime,@to datetime
 --set @from ='01/01/2022' set @to ='03/02/2022' 
 
-select  distinct AreaId,isnull(AreaName,'No Name'),TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,Wet,Dry,No_Entry 
+select  distinct AreaId,isnull(AreaName,'No Name'),TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,Not_Scan,Wet,Dry,No_Entry 
 from(
 
 select    hm.areaid AreaId,
@@ -136,7 +136,12 @@ select    hm.areaid AreaId,
 		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
 		 ) Not_Specified,
 
-	
+	                   (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
+		  where g.houseId=h.houseId 		 
+		 and cast(g.gcDate as date) between @from and @to
+		  and g.garbageType=4	  
+		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
+		 ) Not_Scan,
 
 		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId 		 
@@ -197,6 +202,10 @@ group by hm.AreaId
         <Field Name="Not_Specified">
           <DataField>Not_Specified</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Not_Scan">
+          <DataField>Not_Scan</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
         <Field Name="No_Entry">
           <DataField>No_Entry</DataField>
@@ -324,6 +333,9 @@ group by hm.AreaId
                 </ChartMember>
                 <ChartMember>
                   <Label>Not Specified</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Not Scan</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
@@ -481,6 +493,46 @@ group by hm.AreaId
                   </ChartEmptyPoints>
                   <ChartItemInLegend>
                     <LegendText>="Not Specified - " &amp; Sum(Fields!Not_Specified.Value, "DataSet1")</LegendText>
+                  </ChartItemInLegend>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Not_Scan">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(Fields!Not_Scan.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style />
+                      </ChartDataLabel>
+                      <ToolTip>="Not Scan - " &amp; Sum(Fields!Not_Scan.Value)</ToolTip>
+                      <Style>
+                        <Color>#b6a306</Color>
+                      </Style>
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Subtype>Stacked</Subtype>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ChartItemInLegend>
+                    <LegendText>="Not Scan - " &amp; Sum(Fields!Not_Scan.Value, "DataSet1")</LegendText>
                   </ChartItemInLegend>
                   <ValueAxisName>Primary</ValueAxisName>
                   <CategoryAxisName>Primary</CategoryAxisName>

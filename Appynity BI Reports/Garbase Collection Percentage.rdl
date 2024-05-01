@@ -110,11 +110,10 @@ from GarbageCollectionDetails gc,
 where cast(gc.gcDate as date) between @from and @to
 and   um.userId=gc.userId
 and   um.EmployeeType Is Null
-and   gc.gcType=1
+and   gc.gcType=1 And gc.garbageType &lt;&gt; 4
 group by gc.userId,um.userName
 order by Total_Collection desc
-
-select * from GarbageCollectionDetails where userId=7 and gcType=1</CommandText>
+</CommandText>
       </Query>
       <Fields>
         <Field Name="userid">

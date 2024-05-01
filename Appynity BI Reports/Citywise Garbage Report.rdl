@@ -100,7 +100,7 @@ where appid=@appid</CommandText>
         <CommandText>--declare @from datetime,@to datetime
 --set @from ='01/01/2022' set @to ='02/23/2022' 
 
-select  wardno,wardname,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,ConAndDemo,Horticulture,Wet,Dry,Domestic,Sanitary,No_Entry 
+select  wardno,wardname,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,NotScan,ConAndDemo,Horticulture,Wet,Dry,Domestic,Sanitary,No_Entry 
 from(
 
 select    hm.wardno wardno,w.WardNo wardname,         
@@ -138,6 +138,15 @@ select    hm.wardno wardno,w.WardNo wardname,
           and g.garbageType is not null		  
 		  and hm.WardNo=h.WardNo		  
 		 ) Not_Specified,
+                                      
+		  (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
+		  where g.houseId=h.houseId 		   		   				 
+		  and cast(g.gcDate as date) between @from and @to
+		  and g.garbageType=4
+		  and g.houseId &lt;&gt;0
+                                      and g.garbageType is not null		  
+		  and hm.WardNo=h.WardNo		  
+		 ) NotScan,
 
 		  (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId 		   		   				 
@@ -213,8 +222,7 @@ and gc.garbageType is not null
 group by hm.WardNo
   ,w.wardno
 ) x
-order by TotalCollected desc
-</CommandText>
+order by TotalCollected desc</CommandText>
       </Query>
       <Fields>
         <Field Name="wardno">
@@ -273,6 +281,10 @@ order by TotalCollected desc
           <DataField>Sanitary</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="NotScan">
+          <DataField>NotScan</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
       </Fields>
     </DataSet>
     <DataSet Name="DataSet1">
@@ -289,7 +301,7 @@ order by TotalCollected desc
         <CommandText>--declare @from datetime,@to datetime
 --set @from ='01/01/2022' set @to ='02/24/2022' 
 
-select  wardno,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Null_Entry,NotSpecified,Wet,Dry
+select  wardno,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Null_Entry,NotSpecified,NotScan,Wet,Dry
 from(
 
 select    count(gc.gcId)  TotalCollected,
@@ -337,8 +349,17 @@ select    count(gc.gcId)  TotalCollected,
 		  and (g.garbageType=-1 OR g.garbageType=3)		  
 		  and hm.WardNo=h.WardNo
 		  and g.houseId &lt;&gt;0
-          and g.garbageType is not null		  
+                                       and g.garbageType is not null		  
 		 ) NotSpecified,
+                                
+		  (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
+		  where g.houseId=h.houseId 		 
+		  and cast(g.gcDate as date) between @from and @to
+		  and g.garbageType=4		  
+		  and hm.WardNo=h.WardNo
+		  and g.houseId &lt;&gt;0
+                                       and g.garbageType is not null		  
+		 ) NotScan,
 
 		 (select  count(g.gcId) from GarbageCollectionDetails g,HouseMaster h 
 		  where g.houseId=h.houseId 		 
@@ -370,9 +391,7 @@ and hm.WardNo=wn.id
 and gc.houseId &lt;&gt;0 
 and gc.garbageType is not null
 group by hm.WardNo
-) x
-
-</CommandText>
+) x</CommandText>
       </Query>
       <Fields>
         <Field Name="wardno">
@@ -410,6 +429,10 @@ group by hm.WardNo
         <Field Name="Dry">
           <DataField>Dry</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NotScan">
+          <DataField>NotScan</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
       </Fields>
     </DataSet>
@@ -496,6 +519,9 @@ group by hm.WardNo
             <ChartSeriesHierarchy>
               <ChartMembers>
                 <ChartMember>
+                  <Label>Not Scan</Label>
+                </ChartMember>
+                <ChartMember>
                   <Label>Not Specified</Label>
                 </ChartMember>
                 <ChartMember>
@@ -511,6 +537,48 @@ group by hm.WardNo
             </ChartSeriesHierarchy>
             <ChartData>
               <ChartSeriesCollection>
+                <ChartSeries Name="NotScan">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(Fields!NotScan.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style>
+                          <FontWeight>Bold</FontWeight>
+                          <Color>White</Color>
+                        </Style>
+                        <Label>#PERCENT</Label>
+                        <Visible>true</Visible>
+                      </ChartDataLabel>
+                      <ToolTip>="Not Scan - " &amp; Sum(Fields!NotScan.Value)</ToolTip>
+                      <Style>
+                        <Color>#b6a306</Color>
+                      </Style>
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Type>Shape</Type>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
                 <ChartSeries Name="NotSpecified">
                   <ChartDataPoints>
                     <ChartDataPoint>
@@ -1000,6 +1068,9 @@ group by hm.WardNo
                 <TablixColumn>
                   <Width>0.84916in</Width>
                 </TablixColumn>
+                <TablixColumn>
+                  <Width>1in</Width>
+                </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
@@ -1245,6 +1316,40 @@ group by hm.WardNo
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox2">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Not Scan</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>White</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox2</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>#43ab3c</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
                 <TablixRow>
@@ -1448,12 +1553,47 @@ group by hm.WardNo
                         </Textbox>
                       </CellContents>
                     </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="NotScan">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!NotScan.Value</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                    <Color>#b6a306</Color>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>NotScan</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#DEF0DA", "#FFFFFF")</BackgroundColor>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
                   </TablixCells>
                 </TablixRow>
               </TablixRows>
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -1476,7 +1616,7 @@ group by hm.WardNo
             <Top>1.055in</Top>
             <Left>5.60527in</Left>
             <Height>0.76042in</Height>
-            <Width>4.99898in</Width>
+            <Width>5.99898in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -1527,7 +1667,7 @@ group by hm.WardNo
           </Border>
         </Style>
       </Body>
-      <Width>10.92652in</Width>
+      <Width>11.60425in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

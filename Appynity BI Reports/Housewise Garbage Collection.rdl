@@ -101,7 +101,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
         <CommandText>--declare @from datetime,@to datetime
 --set @from ='04/26/2019' set @to ='05/26/2019' 
 
-select  distinct House,HouseOwner,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,NotSpecified_Garbage,No_Entry 
+select  distinct House,HouseOwner,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,NotSpecified_Garbage,NotScan,No_Entry 
 from(
 
 select    gc.houseId House,
@@ -137,8 +137,16 @@ select    gc.houseId House,
 		  and cast(gcDate as date) between @from and @to
 		  and (garbageType=3 OR garbageType= -1)
 		  and houseId &lt;&gt;0
-          and garbageType is not null			 	  
+                                       and garbageType is not null			 	  
 		 ) NotSpecified_Garbage,
+
+		  (select  count(gcId) from GarbageCollectionDetails 
+		  where houseId=gc.houseId 	  
+		  and cast(gcDate as date) between @from and @to
+		  and garbageType=4
+		  and houseId &lt;&gt;0
+                                       and garbageType is not null			 	  
+		 ) NotScan,
 
 		 (select  count(gcId) from GarbageCollectionDetails 
 		  where houseId=gc.houseId 	 
@@ -184,6 +192,10 @@ group by gc.houseId
         <Field Name="NotSpecified_Garbage">
           <DataField>NotSpecified_Garbage</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NotScan">
+          <DataField>NotScan</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
         <Field Name="No_Entry">
           <DataField>No_Entry</DataField>
@@ -527,6 +539,9 @@ group by gc.houseId
                               <ChartMember>
                                 <Label>Not Specified Garbage</Label>
                               </ChartMember>
+                              <ChartMember>
+                                <Label>Not Scan</Label>
+                              </ChartMember>
                             </ChartMembers>
                           </ChartSeriesHierarchy>
                           <ChartData>
@@ -544,7 +559,7 @@ group by gc.houseId
                                     </ChartDataLabel>
                                     <ToolTip>="Garbage Type - Segregated "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!Bifurcate_Garbage.Value)</ToolTip>
                                     <Style>
-                                      <Color>#01b7a9</Color>
+                                      <Color>#388e3c</Color>
                                     </Style>
                                     <ChartMarker>
                                       <Style />
@@ -587,7 +602,7 @@ group by gc.houseId
                                     </ChartDataLabel>
                                     <ToolTip>="Garbage Type - Mixed "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!Mixed_Garbage.Value)</ToolTip>
                                     <Style>
-                                      <Color>#ff5468</Color>
+                                      <Color>#f44336</Color>
                                     </Style>
                                     <ChartMarker>
                                       <Style />
@@ -633,7 +648,7 @@ group by gc.houseId
                                     </ChartDataLabel>
                                     <ToolTip>="Garbage Type - Not Received "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!NotReceived_Garbage.Value)</ToolTip>
                                     <Style>
-                                      <Color>#fabd4d</Color>
+                                      <Color>#fe9436</Color>
                                     </Style>
                                     <ChartMarker>
                                       <Style />
@@ -678,7 +693,49 @@ group by gc.houseId
                                       <Visible>=iif((Fields!NotSpecified_Garbage.Value)&lt;0.001,False,True)</Visible>
                                     </ChartDataLabel>
                                     <ToolTip>="Garbage Type - Not Specified "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!NotSpecified_Garbage.Value)</ToolTip>
+                                    <Style>
+                                      <Color>#0086c3</Color>
+                                    </Style>
+                                    <ChartMarker>
+                                      <Style />
+                                    </ChartMarker>
+                                    <DataElementOutput>Output</DataElementOutput>
+                                  </ChartDataPoint>
+                                </ChartDataPoints>
+                                <Type>Bar</Type>
+                                <Subtype>PercentStacked</Subtype>
+                                <Style />
+                                <ChartEmptyPoints>
+                                  <Style />
+                                  <ChartMarker>
                                     <Style />
+                                  </ChartMarker>
+                                  <ChartDataLabel>
+                                    <Style />
+                                  </ChartDataLabel>
+                                </ChartEmptyPoints>
+                                <ValueAxisName>Primary</ValueAxisName>
+                                <CategoryAxisName>Primary</CategoryAxisName>
+                                <ChartSmartLabel>
+                                  <CalloutLineColor>Black</CalloutLineColor>
+                                  <MinMovingDistance>0pt</MinMovingDistance>
+                                </ChartSmartLabel>
+                              </ChartSeries>
+                              <ChartSeries Name="NotScan">
+                                <ChartDataPoints>
+                                  <ChartDataPoint>
+                                    <ChartDataPointValues>
+                                      <Y>=Sum(Fields!NotScan.Value)</Y>
+                                    </ChartDataPointValues>
+                                    <ChartDataLabel>
+                                      <Style />
+                                      <UseValueAsLabel>true</UseValueAsLabel>
+                                      <Visible>true</Visible>
+                                    </ChartDataLabel>
+                                    <ToolTip>="Garbage Type - Not Scan "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!NotScan.Value)</ToolTip>
+                                    <Style>
+                                      <Color>#b6a306</Color>
+                                    </Style>
                                     <ChartMarker>
                                       <Style />
                                     </ChartMarker>
@@ -988,6 +1045,7 @@ group by gc.houseId
                             <BackgroundGradientType>None</BackgroundGradientType>
                           </Style>
                         </Chart>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

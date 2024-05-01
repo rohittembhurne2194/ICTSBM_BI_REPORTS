@@ -72,6 +72,7 @@ select cast(gc.gcDate as date) Date,
 	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=0  and g.gcType=1 and cast(g.gcDate as date)=cast(gc.gcDate as date)) MixedG,
 	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=2  and g.gcType=1 and cast(g.gcDate as date)=cast(gc.gcDate as date)) NotReceived,
 	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=-1 and g.gcType=1  and cast(g.gcDate as date)=cast(gc.gcDate as date)) NotSpecified,
+	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=4 and g.gcType=1  and cast(g.gcDate as date)=cast(gc.gcDate as date)) NotScan,
 	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=6  and g.gcType=1 and cast(g.gcDate as date)=cast(gc.gcDate as date)) Wet,
 	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=7  and g.gcType=1 and cast(g.gcDate as date)=cast(gc.gcDate as date)) Dry
 
@@ -117,6 +118,10 @@ order by date desc</CommandText>
         <Field Name="Dry">
           <DataField>Dry</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NotScan">
+          <DataField>NotScan</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
       </Fields>
     </DataSet>
@@ -273,6 +278,9 @@ order by Total desc</CommandText>
                 </ChartMember>
                 <ChartMember>
                   <Label>Dry</Label>
+                </ChartMember>
+                <ChartMember>
+                  <Label>Not Scan</Label>
                 </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
@@ -579,6 +587,43 @@ order by Total desc</CommandText>
                       <ToolTip>="No. of Employee - " &amp; Fields!Total_Employee.Value  &amp; VbCrLf &amp;  "Garbage Collection - "  &amp; Sum(Fields!Total_Collection.Value) &amp; VbCrLf &amp;  "Dry Garbage -  "  &amp; (Fields!Dry.Value) &amp; VbCrLf &amp;  "Date -  "  &amp; (Fields!Date.Value)</ToolTip>
                       <Style>
                         <Color>#66a2d5</Color>
+                      </Style>
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Subtype>Stacked</Subtype>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="NotScan">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(Fields!NotScan.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style />
+                      </ChartDataLabel>
+                      <ToolTip>="No. of Employee - " &amp; Fields!Total_Employee.Value  &amp; VbCrLf &amp;  "Garbage Collection - "  &amp; Sum(Fields!Total_Collection.Value) &amp; VbCrLf &amp;  "Not Scan -  "  &amp; (Fields!NotScan.Value) &amp; VbCrLf &amp;  "Date -  "  &amp; (Fields!Date.Value)</ToolTip>
+                      <Style>
+                        <Color>#b6a306</Color>
                       </Style>
                       <ChartMarker>
                         <Style />

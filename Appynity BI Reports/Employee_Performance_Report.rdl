@@ -86,11 +86,12 @@ where appid=@appid</CommandText>
 
 select distinct um.userName NameE,SUBSTRING(um.userName, 1, CHARINDEX(' ', um.userName + ' ') - 1) FNameEng,      
        um.userNameMar NameH,um.userid,	  
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and gctype=1 and cast(g.gcDate as date) between @from and @to) Total,
+	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and gctype=1 and g.garbageType &lt;&gt; 4 and cast(g.gcDate as date) between @from and @to) Total,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=1 and gctype=1 and cast(g.gcDate as date) between @from and @to) Segregated,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=0 and gctype=1 and cast(g.gcDate as date) between @from and @to) MixedG,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=2 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotReceived,
 	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=-1 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotSpecified,
+	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=4 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotScan,
 	   isnull(um.gcTarget,0) OneDay_Target,
 	   (datediff(day,@from,@to)+1) Total_Day,
 	   (isnull(um.gcTarget,0) * (datediff(day,@from,@to)+1)) Total_Target
@@ -164,6 +165,10 @@ order by um.userName
           <DataField>Total_ComTarget</DataField>
           <rd:UserDefined>true</rd:UserDefined>
         </Field>
+        <Field Name="NotScan">
+          <DataField>NotScan</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
       </Fields>
       <Filters>
         <Filter>
@@ -190,17 +195,21 @@ order by um.userName
 --set @from ='05/01/2022' set @to ='05/12/2022' 
 --set @userid =9
 
-select userid,Ename,Mobile,Total_Day,Total_Target,Total_Collection,(cast((Total_Collection*100.00)/
+select userid,Ename,Mobile,Total_Day,Total_Target,Total_Collection,Total_NotScan,(cast((Total_Collection*100.00)/
 (case when Total_Target=1 then (case when Total_Collection=0 then 100 else Total_Collection end) when Total_Target=0 then (case when Total_Collection=0 then 100 else Total_Collection end)  when Total_Target &lt; Total_Collection then Total_Collection else Total_Target end ) as decimal(10,2))) Achieved_Percentage,Total_Trip
 from(select um.userid userid,
        um.username Ename, um.userMobileNumber Mobile,
 	   (datediff(day,@from,@to)+1) Total_Day,
 	   (isnull(um.gcTarget,1) * (datediff(day,@from,@to)+1)) Total_Target, 
 	   (select  isnull(count(g.gcId),0) from GarbageCollectionDetails g,usermaster u 
-	   where g.gctype=1 and cast(g.gcDate as date) between @from and @to 
+	   where g.gctype=1 and g.garbageType &lt;&gt; 4 and cast(g.gcDate as date) between                      @from and @to 
 	   and u.userId=g.userId
 	   and gc.userId=g.userId) Total_Collection,
 
+	   (select  isnull(count(g.gcId),0) from GarbageCollectionDetails g,usermaster u 
+	   where g.gctype=1 and g.garbageType = 4 and cast(g.gcDate as date) between                      @from and @to 
+	   and u.userId=g.userId
+	   and gc.userId=g.userId) Total_NotScan,
 	  
 	   (select count(g.gcId) from GarbageCollectionDetails g,usermaster u 
 	   where g.gctype=3 and cast(g.gcDate as date) between @from and @to 
@@ -255,6 +264,10 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
         </Field>
         <Field Name="Total_Com_Collection">
           <DataField>Total_Com_Collection</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="Total_NotScan">
+          <DataField>Total_NotScan</DataField>
           <rd:UserDefined>true</rd:UserDefined>
         </Field>
       </Fields>
@@ -758,6 +771,9 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                   <Width>1.78866in</Width>
                 </TablixColumn>
                 <TablixColumn>
+                  <Width>1.09693in</Width>
+                </TablixColumn>
+                <TablixColumn>
                   <Width>2.00741in</Width>
                 </TablixColumn>
                 <TablixColumn>
@@ -1049,6 +1065,61 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                               <TextRuns>
                                 <TextRun>
                                   <Value>Total House Collection</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox9</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <BackgroundColor>Silver</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
+                        <Textbox Name="Textbox10">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Total Not Scan</Value>
                                   <Style>
                                     <FontWeight>Bold</FontWeight>
                                   </Style>
@@ -1525,6 +1596,59 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Total_NotScan">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!Total_NotScan.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Total_NotScan</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <BackgroundColor>=IIF(rownumber(nothing) mod 2 = 0,"White","Ligth Blue")</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Achieved_Percentage">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -1960,6 +2084,60 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox22">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Sum(Fields!Total_NotScan.Value)</Value>
+                                  <Style>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox18</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </LeftBorder>
+                            <RightBorder>
+                              <Color>Black</Color>
+                              <Style>Solid</Style>
+                              <Width>1pt</Width>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Textbox19">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -2080,6 +2258,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
+                <TablixMember />
               </TablixMembers>
             </TablixColumnHierarchy>
             <TablixRowHierarchy>
@@ -2105,7 +2284,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
             <Top>5.42583in</Top>
             <Left>0.11744in</Left>
             <Height>1.09375in</Height>
-            <Width>10.86343in</Width>
+            <Width>11.96036in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
