@@ -99,19 +99,21 @@ where appid=@appid</CommandText>
         </QueryParameters>
         <CommandText>
 --declare @from datetime,@to datetime
---set @from ='03/01/2022' set @to ='03/01/2022' 
+--set @from ='2024-05-01' set @to ='2024-05-30' 
 
 select AreaId,isnull(AreaName,'NoName'),TotalCollected from(
 
-select   distinct gc.areaid AreaId,
-         (select distinct area from teritorymaster where Id=gc.AreaId ) AreaName,  
+select   distinct hm.areaid AreaId,
+         (select distinct area from teritorymaster where Id=hm.AreaId ) AreaName,  
 		 count(gc.gcId)  TotalCollected
 		 
-from GarbageCollectionDetails gc
-where  (gc.gcType=1 OR gc.gcType=6 OR gc.gcType=7 OR gc.gcType=9) and
+from GarbageCollectionDetails gc,
+HouseMaster hm
+where  hm.houseId=gc.houseId and(gc.gcType=1 OR gc.gcType=6 OR gc.gcType=7 OR gc.gcType=9) 
+and 
 cast(gc.gcDate as date) between @from and @to
 
-group by gc.AreaId
+group by hm.AreaId,gc.AreaId
 ) x</CommandText>
       </Query>
       <Fields>
