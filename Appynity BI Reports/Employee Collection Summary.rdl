@@ -192,7 +192,7 @@ order by Total desc</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.92942in</Left>
+            <Left>10.57525in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -296,32 +296,6 @@ order by Total desc</CommandText>
                         <Style />
                       </ChartDataLabel>
                       <ToolTip>="No. of Employee - " &amp; Fields!Total_Employee.Value  &amp; VbCrLf &amp;  "Garbage Collection - "  &amp; Sum(Fields!Total_Collection.Value) &amp; VbCrLf &amp;  "Segregated Garbage -  "  &amp; (Fields!Segregated.Value) &amp; VbCrLf &amp;  "Date -  "  &amp; (Fields!Date.Value)</ToolTip>
-                      <ActionInfo>
-                        <Actions>
-                          <Action>
-                            <Drillthrough>
-                              <ReportName>Employee Collection Summary</ReportName>
-                              <Parameters>
-                                <Parameter Name="appid">
-                                  <Value>=Parameters!appid.Value</Value>
-                                </Parameter>
-                                <Parameter Name="DBName">
-                                  <Value>=Parameters!DBName.Value</Value>
-                                </Parameter>
-                                <Parameter Name="from">
-                                  <Value>=Parameters!from.Value</Value>
-                                </Parameter>
-                                <Parameter Name="to">
-                                  <Value>=Parameters!to.Value</Value>
-                                </Parameter>
-                                <Parameter Name="fromd">
-                                  <Value>=Fields!Date.Value</Value>
-                                </Parameter>
-                              </Parameters>
-                            </Drillthrough>
-                          </Action>
-                        </Actions>
-                      </ActionInfo>
                       <Style>
                         <Color>#186634</Color>
                       </Style>
@@ -359,32 +333,6 @@ order by Total desc</CommandText>
                         <Style />
                       </ChartDataLabel>
                       <ToolTip>="No. of Employee - " &amp; Fields!Total_Employee.Value  &amp; VbCrLf &amp;  "Garbage Collection - "  &amp; Sum(Fields!Total_Collection.Value) &amp; VbCrLf &amp;  "Mixed Garbage -  "  &amp; (Fields!MixedG.Value) &amp; VbCrLf &amp;  "Date -  "  &amp; (Fields!Date.Value)</ToolTip>
-                      <ActionInfo>
-                        <Actions>
-                          <Action>
-                            <Drillthrough>
-                              <ReportName>Employee Collection Summary</ReportName>
-                              <Parameters>
-                                <Parameter Name="appid">
-                                  <Value>=Parameters!appid.Value</Value>
-                                </Parameter>
-                                <Parameter Name="DBName">
-                                  <Value>=Parameters!DBName.Value</Value>
-                                </Parameter>
-                                <Parameter Name="from">
-                                  <Value>=Parameters!from.Value</Value>
-                                </Parameter>
-                                <Parameter Name="to">
-                                  <Value>=Parameters!to.Value</Value>
-                                </Parameter>
-                                <Parameter Name="fromd">
-                                  <Value>=Fields!Date.Value</Value>
-                                </Parameter>
-                              </Parameters>
-                            </Drillthrough>
-                          </Action>
-                        </Actions>
-                      </ActionInfo>
                       <Style>
                         <Color>#f44336</Color>
                       </Style>
@@ -422,32 +370,6 @@ order by Total desc</CommandText>
                         <Style />
                       </ChartDataLabel>
                       <ToolTip>="No. of Employee - " &amp; Fields!Total_Employee.Value  &amp; VbCrLf &amp;  "Garbage Collection - "  &amp; Sum(Fields!Total_Collection.Value) &amp; VbCrLf &amp;  "NotReceived Garbage -  "  &amp; (Fields!NotReceived.Value) &amp; VbCrLf &amp;  "Date -  "  &amp; (Fields!Date.Value)</ToolTip>
-                      <ActionInfo>
-                        <Actions>
-                          <Action>
-                            <Drillthrough>
-                              <ReportName>Employee Collection Summary</ReportName>
-                              <Parameters>
-                                <Parameter Name="appid">
-                                  <Value>=Parameters!appid.Value</Value>
-                                </Parameter>
-                                <Parameter Name="DBName">
-                                  <Value>=Parameters!DBName.Value</Value>
-                                </Parameter>
-                                <Parameter Name="from">
-                                  <Value>=Parameters!from.Value</Value>
-                                </Parameter>
-                                <Parameter Name="to">
-                                  <Value>=Parameters!to.Value</Value>
-                                </Parameter>
-                                <Parameter Name="fromd">
-                                  <Value>=Fields!Date.Value</Value>
-                                </Parameter>
-                              </Parameters>
-                            </Drillthrough>
-                          </Action>
-                        </Actions>
-                      </ActionInfo>
                       <Style>
                         <Color>#fe9436</Color>
                       </Style>
@@ -485,32 +407,6 @@ order by Total desc</CommandText>
                         <Style />
                       </ChartDataLabel>
                       <ToolTip>="No. of Employee - " &amp; Fields!Total_Employee.Value  &amp; VbCrLf &amp;  "Garbage Collection - "  &amp; Sum(Fields!Total_Collection.Value) &amp; VbCrLf &amp;  "NotSpecified Garbage -  "  &amp; (Fields!NotSpecified.Value) &amp; VbCrLf &amp;  "Date -  "  &amp; (Fields!Date.Value)</ToolTip>
-                      <ActionInfo>
-                        <Actions>
-                          <Action>
-                            <Drillthrough>
-                              <ReportName>Employee Collection Summary</ReportName>
-                              <Parameters>
-                                <Parameter Name="appid">
-                                  <Value>=Parameters!appid.Value</Value>
-                                </Parameter>
-                                <Parameter Name="DBName">
-                                  <Value>=Parameters!DBName.Value</Value>
-                                </Parameter>
-                                <Parameter Name="from">
-                                  <Value>=Parameters!from.Value</Value>
-                                </Parameter>
-                                <Parameter Name="to">
-                                  <Value>=Parameters!to.Value</Value>
-                                </Parameter>
-                                <Parameter Name="fromd">
-                                  <Value>=Fields!Date.Value</Value>
-                                </Parameter>
-                              </Parameters>
-                            </Drillthrough>
-                          </Action>
-                        </Actions>
-                      </ActionInfo>
                       <Style>
                         <Color>#0086c3</Color>
                       </Style>
@@ -922,7 +818,7 @@ order by Total desc</CommandText>
             <Top>0.49875in</Top>
             <Left>0.0441in</Left>
             <Height>4.13542in</Height>
-            <Width>11.26379in</Width>
+            <Width>13.90962in</Width>
             <ZIndex>2</ZIndex>
             <ToolTip>Total Garbage Collection a day and Total Employees..</ToolTip>
             <Style>
@@ -939,13 +835,13 @@ order by Total desc</CommandText>
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>0.91728in</Width>
+                  <Width>1.10825in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.67325in</Width>
+                  <Width>1.86422in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.96491in</Width>
+                  <Width>1.15588in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1284,10 +1180,10 @@ order by Total desc</CommandText>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>Detail_Dataset</DataSetName>
-            <Top>5.19111in</Top>
-            <Left>0.0441in</Left>
+            <Top>5.32653in</Top>
+            <Left>0.24202in</Left>
             <Height>0.83333in</Height>
-            <Width>3.55544in</Width>
+            <Width>4.12836in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -1627,8 +1523,8 @@ order by Total desc</CommandText>
               </Style>
             </ChartNoDataMessage>
             <DataSetName>Detail_Dataset</DataSetName>
-            <Top>5.19111in</Top>
-            <Left>3.669in</Left>
+            <Top>5.32653in</Top>
+            <Left>5.81483in</Left>
             <Height>4.54514in</Height>
             <Width>7.63889in</Width>
             <ZIndex>4</ZIndex>
@@ -1674,7 +1570,7 @@ order by Total desc</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox51</rd:DefaultName>
             <Top>4.82014in</Top>
-            <Left>0.0441in</Left>
+            <Left>1.22118in</Left>
             <Height>0.31402in</Height>
             <Width>11.26379in</Width>
             <ZIndex>5</ZIndex>
@@ -1692,14 +1588,14 @@ order by Total desc</CommandText>
             </Style>
           </Textbox>
         </ReportItems>
-        <Height>9.73625in</Height>
+        <Height>9.87167in</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>11.37375in</Width>
+      <Width>14.19667in</Width>
       <Page>
         <PageFooter>
           <Height>0.27292in</Height>

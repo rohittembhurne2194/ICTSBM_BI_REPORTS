@@ -152,8 +152,8 @@ order by Total_Collection desc
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.07792in</Top>
-            <Left>7.1065in</Left>
+            <Top>0.10351in</Top>
+            <Left>8.57525in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -553,7 +553,7 @@ order by Total_Collection desc
                   <ShadowColor>Silver</ShadowColor>
                   <ShadowOffset>1pt</ShadowOffset>
                 </Style>
-                <Position>LeftCenter</Position>
+                <Position>LeftTop</Position>
                 <DockOutsideChartArea>true</DockOutsideChartArea>
                 <ChartLegendTitle>
                   <Caption>Garbage Collection with Employee Percentage</Caption>
@@ -590,8 +590,8 @@ order by Total_Collection desc
             <DataSetName>Employee_Percentage</DataSetName>
             <Top>0.68835in</Top>
             <Left>0.0441in</Left>
-            <Height>4.58333in</Height>
-            <Width>10.44087in</Width>
+            <Height>8.375in</Height>
+            <Width>14.54504in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -603,14 +603,14 @@ order by Total_Collection desc
             </Style>
           </Chart>
         </ReportItems>
-        <Height>5.70918in</Height>
+        <Height>10.86543in</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>10.71171in</Width>
+      <Width>15.33671in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

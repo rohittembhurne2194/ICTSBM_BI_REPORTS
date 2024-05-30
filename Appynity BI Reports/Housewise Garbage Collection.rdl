@@ -101,10 +101,10 @@ from UserMaster where EmployeeType Is Null</CommandText>
         <CommandText>--declare @from datetime,@to datetime
 --set @from ='04/26/2019' set @to ='05/26/2019' 
 
-select  distinct House,HouseOwner,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,NotSpecified_Garbage,NotScan,No_Entry 
+select  distinct House,HouseId,HouseOwner,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,NotSpecified_Garbage,NotScan,No_Entry 
 from(
 
-select    gc.houseId House,
+select    gc.houseId House,hm.ReferanceId HouseId,
           (select houseOwner from HouseMaster where houseId=gc.houseId ) HouseOwner,           
           
 		 count(gc.gcId)  TotalCollected,
@@ -161,7 +161,7 @@ and cast(gcDate as date) between @from and @to
 and gc.houseId &lt;&gt;0
 and gc.houseId is not null
 and gc.garbageType is not null
-group by gc.houseId
+group by gc.houseId,hm.ReferanceId
 ) x</CommandText>
       </Query>
       <Fields>
@@ -200,6 +200,10 @@ group by gc.houseId
         <Field Name="No_Entry">
           <DataField>No_Entry</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="HouseId">
+          <DataField>HouseId</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
       </Fields>
     </DataSet>
@@ -282,6 +286,9 @@ group by gc.houseId
                   <Width>2.44791in</Width>
                 </TablixColumn>
                 <TablixColumn>
+                  <Width>1in</Width>
+                </TablixColumn>
+                <TablixColumn>
                   <Width>1.17361in</Width>
                 </TablixColumn>
                 <TablixColumn>
@@ -341,6 +348,50 @@ group by gc.houseId
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="Textbox6">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>House Id</Value>
+                                  <Style>
+                                    <FontSize>11pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox1</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>LightGrey</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <TopBorder>
+                              <Color>#1c4e80</Color>
+                            </TopBorder>
+                            <BottomBorder>
+                              <Color>#1c4e80</Color>
+                            </BottomBorder>
+                            <LeftBorder>
+                              <Color>CornflowerBlue</Color>
+                            </LeftBorder>
+                            <BackgroundColor>LightSteelBlue</BackgroundColor>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="Textbox2">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -373,7 +424,7 @@ group by gc.houseId
                               <Color>#1c4e80</Color>
                             </BottomBorder>
                             <LeftBorder>
-                              <Style>None</Style>
+                              <Color>CornflowerBlue</Color>
                             </LeftBorder>
                             <RightBorder>
                               <Style>None</Style>
@@ -478,6 +529,40 @@ group by gc.houseId
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
+                        <Textbox Name="HouseId">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!HouseId.Value</Value>
+                                  <Style />
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>HouseId</rd:DefaultName>
+                          <Style>
+                            <Border>
+                              <Color>SteelBlue</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                            <RightBorder>
+                              <Style>None</Style>
+                            </RightBorder>
+                            <VerticalAlign>Middle</VerticalAlign>
+                            <PaddingLeft>5pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                      </CellContents>
+                    </TablixCell>
+                    <TablixCell>
+                      <CellContents>
                         <Textbox Name="TotalCollected">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -500,9 +585,6 @@ group by gc.houseId
                               <Color>SteelBlue</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
                             <RightBorder>
                               <Style>None</Style>
                             </RightBorder>
@@ -517,7 +599,7 @@ group by gc.houseId
                     </TablixCell>
                     <TablixCell>
                       <CellContents>
-                        <Chart Name="DataBar1">
+                        <Chart Name="DataBar4">
                           <ChartCategoryHierarchy>
                             <ChartMembers>
                               <ChartMember>
@@ -547,6 +629,7 @@ group by gc.houseId
                           <ChartData>
                             <ChartSeriesCollection>
                               <ChartSeries Name="Bifurcate_Garbage">
+                                <Hidden>=IIf(IsNothing(Fields!Bifurcate_Garbage.Value) Or Fields!Bifurcate_Garbage.Value = 0, True, False)</Hidden>
                                 <ChartDataPoints>
                                   <ChartDataPoint>
                                     <ChartDataPointValues>
@@ -555,10 +638,13 @@ group by gc.houseId
                                     <ChartDataLabel>
                                       <Style />
                                       <UseValueAsLabel>true</UseValueAsLabel>
-                                      <Visible>=iif((Fields!Bifurcate_Garbage.Value)&lt;0.001,False,True)</Visible>
+                                      <Visible>true</Visible>
                                     </ChartDataLabel>
                                     <ToolTip>="Garbage Type - Segregated "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!Bifurcate_Garbage.Value)</ToolTip>
                                     <Style>
+                                      <Border>
+                                        <Style>None</Style>
+                                      </Border>
                                       <Color>#388e3c</Color>
                                     </Style>
                                     <ChartMarker>
@@ -569,7 +655,9 @@ group by gc.houseId
                                 </ChartDataPoints>
                                 <Type>Bar</Type>
                                 <Subtype>PercentStacked</Subtype>
-                                <Style />
+                                <Style>
+                                  <ShadowColor>#00ffffff</ShadowColor>
+                                </Style>
                                 <ChartEmptyPoints>
                                   <Style />
                                   <ChartMarker>
@@ -579,9 +667,6 @@ group by gc.houseId
                                     <Style />
                                   </ChartDataLabel>
                                 </ChartEmptyPoints>
-                                <ChartItemInLegend>
-                                  <ToolTip>=Fields!Bifurcate_Garbage.Value</ToolTip>
-                                </ChartItemInLegend>
                                 <ValueAxisName>Primary</ValueAxisName>
                                 <CategoryAxisName>Primary</CategoryAxisName>
                                 <ChartSmartLabel>
@@ -590,6 +675,7 @@ group by gc.houseId
                                 </ChartSmartLabel>
                               </ChartSeries>
                               <ChartSeries Name="Mixed_Garbage">
+                                <Hidden>=IIf(IsNothing(Fields!Mixed_Garbage.Value) Or Fields!Mixed_Garbage.Value = 0, True, False)</Hidden>
                                 <ChartDataPoints>
                                   <ChartDataPoint>
                                     <ChartDataPointValues>
@@ -598,24 +684,27 @@ group by gc.houseId
                                     <ChartDataLabel>
                                       <Style />
                                       <UseValueAsLabel>true</UseValueAsLabel>
-                                      <Visible>=iif((Fields!Mixed_Garbage.Value)&lt;0.001,False,True)</Visible>
+                                      <Visible>true</Visible>
                                     </ChartDataLabel>
                                     <ToolTip>="Garbage Type - Mixed "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!Mixed_Garbage.Value)</ToolTip>
                                     <Style>
+                                      <Border>
+                                        <Style>None</Style>
+                                      </Border>
                                       <Color>#f44336</Color>
                                     </Style>
                                     <ChartMarker>
                                       <Style />
                                     </ChartMarker>
                                     <DataElementOutput>Output</DataElementOutput>
-                                    <ChartItemInLegend>
-                                      <Hidden>=Sum(Fields!Mixed_Garbage.Value)/Sum(Fields!Mixed_Garbage.Value,"DataSet1") &lt; 0.001</Hidden>
-                                    </ChartItemInLegend>
                                   </ChartDataPoint>
                                 </ChartDataPoints>
                                 <Type>Bar</Type>
                                 <Subtype>PercentStacked</Subtype>
-                                <Style />
+                                <Style>
+                                  <ShadowColor>#00ffffff</ShadowColor>
+                                  <ShadowOffset>0pt</ShadowOffset>
+                                </Style>
                                 <ChartEmptyPoints>
                                   <Style />
                                   <ChartMarker>
@@ -625,9 +714,6 @@ group by gc.houseId
                                     <Style />
                                   </ChartDataLabel>
                                 </ChartEmptyPoints>
-                                <ChartItemInLegend>
-                                  <ToolTip>=Fields!Mixed_Garbage.Value</ToolTip>
-                                </ChartItemInLegend>
                                 <ValueAxisName>Primary</ValueAxisName>
                                 <CategoryAxisName>Primary</CategoryAxisName>
                                 <ChartSmartLabel>
@@ -636,6 +722,7 @@ group by gc.houseId
                                 </ChartSmartLabel>
                               </ChartSeries>
                               <ChartSeries Name="NotReceived_Garbage">
+                                <Hidden>=IIf(IsNothing(Fields!NotReceived_Garbage.Value) Or Fields!NotReceived_Garbage.Value = 0, True, False)</Hidden>
                                 <ChartDataPoints>
                                   <ChartDataPoint>
                                     <ChartDataPointValues>
@@ -644,24 +731,26 @@ group by gc.houseId
                                     <ChartDataLabel>
                                       <Style />
                                       <UseValueAsLabel>true</UseValueAsLabel>
-                                      <Visible>=iif((Fields!NotReceived_Garbage.Value)&lt;0.001,False,True)</Visible>
+                                      <Visible>true</Visible>
                                     </ChartDataLabel>
-                                    <ToolTip>="Garbage Type - Not Received "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!NotReceived_Garbage.Value)</ToolTip>
+                                    <ToolTip>="Garbage Type - Not Collected "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!NotReceived_Garbage.Value)</ToolTip>
                                     <Style>
+                                      <Border>
+                                        <Style>None</Style>
+                                      </Border>
                                       <Color>#fe9436</Color>
                                     </Style>
                                     <ChartMarker>
                                       <Style />
                                     </ChartMarker>
                                     <DataElementOutput>Output</DataElementOutput>
-                                    <ChartItemInLegend>
-                                      <Hidden>=Sum(Fields!NotReceived_Garbage.Value)/Sum(Fields!NotReceived_Garbage.Value,"DataSet1") &lt; 0.001</Hidden>
-                                    </ChartItemInLegend>
                                   </ChartDataPoint>
                                 </ChartDataPoints>
                                 <Type>Bar</Type>
                                 <Subtype>PercentStacked</Subtype>
-                                <Style />
+                                <Style>
+                                  <ShadowColor>#00ffffff</ShadowColor>
+                                </Style>
                                 <ChartEmptyPoints>
                                   <Style />
                                   <ChartMarker>
@@ -671,9 +760,6 @@ group by gc.houseId
                                     <Style />
                                   </ChartDataLabel>
                                 </ChartEmptyPoints>
-                                <ChartItemInLegend>
-                                  <ToolTip>=Fields!NotReceived_Garbage.Value</ToolTip>
-                                </ChartItemInLegend>
                                 <ValueAxisName>Primary</ValueAxisName>
                                 <CategoryAxisName>Primary</CategoryAxisName>
                                 <ChartSmartLabel>
@@ -682,6 +768,7 @@ group by gc.houseId
                                 </ChartSmartLabel>
                               </ChartSeries>
                               <ChartSeries Name="NotSpecified_Garbage">
+                                <Hidden>=IIf(IsNothing(Fields!NotSpecified_Garbage.Value) Or Fields!NotSpecified_Garbage.Value = 0, True, False)</Hidden>
                                 <ChartDataPoints>
                                   <ChartDataPoint>
                                     <ChartDataPointValues>
@@ -690,10 +777,13 @@ group by gc.houseId
                                     <ChartDataLabel>
                                       <Style />
                                       <UseValueAsLabel>true</UseValueAsLabel>
-                                      <Visible>=iif((Fields!NotSpecified_Garbage.Value)&lt;0.001,False,True)</Visible>
+                                      <Visible>true</Visible>
                                     </ChartDataLabel>
                                     <ToolTip>="Garbage Type - Not Specified "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!NotSpecified_Garbage.Value)</ToolTip>
                                     <Style>
+                                      <Border>
+                                        <Style>None</Style>
+                                      </Border>
                                       <Color>#0086c3</Color>
                                     </Style>
                                     <ChartMarker>
@@ -704,7 +794,9 @@ group by gc.houseId
                                 </ChartDataPoints>
                                 <Type>Bar</Type>
                                 <Subtype>PercentStacked</Subtype>
-                                <Style />
+                                <Style>
+                                  <ShadowColor>#00ffffff</ShadowColor>
+                                </Style>
                                 <ChartEmptyPoints>
                                   <Style />
                                   <ChartMarker>
@@ -722,6 +814,7 @@ group by gc.houseId
                                 </ChartSmartLabel>
                               </ChartSeries>
                               <ChartSeries Name="NotScan">
+                                <Hidden>=IIf(IsNothing(Fields!NotScan.Value) Or Fields!NotScan.Value = 0, True, False)</Hidden>
                                 <ChartDataPoints>
                                   <ChartDataPoint>
                                     <ChartDataPointValues>
@@ -734,6 +827,10 @@ group by gc.houseId
                                     </ChartDataLabel>
                                     <ToolTip>="Garbage Type - Not Scan "   &amp; VbCrLf &amp; "Garbage Collection - "  &amp; Sum(Fields!NotScan.Value)</ToolTip>
                                     <Style>
+                                      <Border>
+                                        <Color>#00ffffff</Color>
+                                        <Style>None</Style>
+                                      </Border>
                                       <Color>#b6a306</Color>
                                     </Style>
                                     <ChartMarker>
@@ -744,7 +841,9 @@ group by gc.houseId
                                 </ChartDataPoints>
                                 <Type>Bar</Type>
                                 <Subtype>PercentStacked</Subtype>
-                                <Style />
+                                <Style>
+                                  <ShadowColor>#00ffffff</ShadowColor>
+                                </Style>
                                 <ChartEmptyPoints>
                                   <Style />
                                   <ChartMarker>
@@ -932,14 +1031,12 @@ group by gc.houseId
                                     <Length>0.5</Length>
                                   </ChartMinorTickMarks>
                                   <CrossAt>NaN</CrossAt>
-                                  <Minimum>NaN</Minimum>
+                                  <Minimum>0</Minimum>
                                   <Maximum>NaN</Maximum>
-                                  <LogBase>20</LogBase>
                                   <ChartAxisScaleBreak>
                                     <Style />
                                   </ChartAxisScaleBreak>
                                   <rd:SyncScope>Tablix1</rd:SyncScope>
-                                  <rd:SyncMinimum>true</rd:SyncMinimum>
                                   <rd:SyncMaximum>true</rd:SyncMaximum>
                                 </ChartAxis>
                                 <ChartAxis Name="Secondary">
@@ -1032,20 +1129,13 @@ group by gc.houseId
                           <DataSetName>DataSet1</DataSetName>
                           <Style>
                             <Border>
-                              <Color>SteelBlue</Color>
+                              <Color>LightGrey</Color>
                               <Style>Solid</Style>
                             </Border>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Style>None</Style>
-                            </RightBorder>
                             <BackgroundColor>White</BackgroundColor>
                             <BackgroundGradientType>None</BackgroundGradientType>
                           </Style>
                         </Chart>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -1054,6 +1144,7 @@ group by gc.houseId
             </TablixBody>
             <TablixColumnHierarchy>
               <TablixMembers>
+                <TablixMember />
                 <TablixMember />
                 <TablixMember />
                 <TablixMember />
@@ -1073,7 +1164,7 @@ group by gc.houseId
             <Top>0.94667in</Top>
             <Left>0.0675in</Left>
             <Height>0.84376in</Height>
-            <Width>11.20588in</Width>
+            <Width>12.20588in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -1142,6 +1233,21 @@ group by gc.houseId
               </Border>
             </Style>
           </Image>
+          <Image Name="Image4">
+            <Source>Embedded</Source>
+            <Value>NotScan</Value>
+            <Sizing>FitProportional</Sizing>
+            <Top>0.62792in</Top>
+            <Left>9.08208in</Left>
+            <Height>0.18056in</Height>
+            <Width>1.57292in</Width>
+            <ZIndex>7</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Image>
         </ReportItems>
         <Height>2.23833in</Height>
         <Style>
@@ -1150,7 +1256,7 @@ group by gc.houseId
           </Border>
         </Style>
       </Body>
-      <Width>11.36333in</Width>
+      <Width>12.27338in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>
@@ -1300,6 +1406,38 @@ wQIAAAAAAAAAdJsVVUASCwAAAAAAAACgTaZUgQ6SWAAAAAAAAAAA7ZCI7uAHZmIJSSwAAAAAAAAAgLbQ
       <MIMEType>image/png</MIMEType>
       <ImageData>iVBORw0KGgoAAAANSUhEUgAAAMgAAABkCAIAAABM5OhcAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QzE1NzQzNzU4MDY3MTFFOUE3MDBBRTI0MjkxMTE2OTAiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QzE1NzQzNzY4MDY3MTFFOUE3MDBBRTI0MjkxMTE2OTAiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpDMTU3NDM3MzgwNjcxMUU5QTcwMEFFMjQyOTEx
 MTY5MCIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpDMTU3NDM3NDgwNjcxMUU5QTcwMEFFMjQyOTExMTY5MCIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PmQkq8MAAADPSURBVHja7NIxEQAwCACxUlEYwL8bBGCCgSGR8PfRlQ+2fQkwFsbCWGAsjIWxwFgYC2OBsTAWxgJjYSyMBcbCWBgLjIWxMBYYC2NhLDAWxsJYYCyMhbHAWBgLY4GxMBbGAmNhLIwFxsJYGAuMhbEwFhgLY2EsMBbGwlhgLIyFscBYGAtjgbEwFsYCY2EsjAXGwlgYC4yFsTAWGAtjYSwwFsbCWGAsjIWxwFgYC2OBsTAWxgJjYSyMhbHAWBgLY4GxMBbGAmNhLIwFxuK2EWAAb7ECNd8wAoEAAAAASUVORK5CYII=</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="NotScan">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAABLEAAABkCAYAAAB5A6LbAAAACXBIWXMAAAsTAAALEwEAmpwYAAA9dmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4KPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMwNjcgNzkuMTU3NzQ3LCAyMDE1LzAzLzMwLTIzOjQwOjQyICAgICAgICAiPgogICA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogICAgICA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIgogICAgICAgICAgICB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iCiAgICAgICAgICAgIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIgogICAgICAgICAgICB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIKICAgICAgICAgICAgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIKICAgICAgICAgICAgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIgogICAgICAgICAgICB4bWxuczpwaG90b3Nob3A9Imh0dHA6Ly9ucy5hZG9iZS5jb20vcGhvdG9zaG9wLzEuMC8iCiAgICAgICAgICAgIHhtbG5z
+OnRpZmY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vdGlmZi8xLjAvIgogICAgICAgICAgICB4bWxuczpleGlmPSJodHRwOi8vbnMuYWRvYmUuY29tL2V4aWYvMS4wLyI+CiAgICAgICAgIDx4bXA6Q3JlYXRvclRvb2w+QWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKFdpbmRvd3MpPC94bXA6Q3JlYXRvclRvb2w+CiAgICAgICAgIDx4bXA6Q3JlYXRlRGF0ZT4yMDI0LTA1LTAyVDE2OjAwOjM5KzA1OjMwPC94bXA6Q3JlYXRlRGF0ZT4KICAgICAgICAgPHhtcDpNb2RpZnlEYXRlPjIwMjQtMDUtMDJUMTY6MTU6MDcrMDU6MzA8L3htcDpNb2RpZnlEYXRlPgogICAgICAgICA8eG1wOk1ldGFkYXRhRGF0ZT4yMDI0LTA1LTAyVDE2OjE1OjA3KzA1OjMwPC94bXA6TWV0YWRhdGFEYXRlPgogICAgICAgICA8eG1wTU06SW5zdGFuY2VJRD54bXAuaWlkOjhlM2NlMjFjLWE3N2MtMDg0Yi04ZTIwLWM3MjAxMWViMjQxMzwveG1wTU06SW5zdGFuY2VJRD4KICAgICAgICAgPHhtcE1NOkRvY3VtZW50SUQ+YWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOmYzOTkyMWZlLTA4NzAtMTFlZi05OTRkLTljODUzNjM2MDhjODwveG1wTU06RG9jdW1lbnRJRD4KICAgICAgICAgPHhtcE1NOkRlcml2ZWRGcm9tIHJkZjpwYXJzZVR5cGU9IlJlc291cmNlIj4KICAgICAgICAgICAgPHN0UmVmOmluc3RhbmNlSUQ+eG1wLmlpZDo1RjJGQ0UxNTgwNjkxMUU5ODE3Rjk2MzYzMDI3MEY1Njwvc3RSZWY6aW5zdGFuY2VJRD4KICAgICAgICAgICAgPHN0UmVmOmRvY3VtZW50SUQ+
+eG1wLmRpZDo1RjJGQ0UxNjgwNjkxMUU5ODE3Rjk2MzYzMDI3MEY1Njwvc3RSZWY6ZG9jdW1lbnRJRD4KICAgICAgICAgPC94bXBNTTpEZXJpdmVkRnJvbT4KICAgICAgICAgPHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD54bXAuZGlkOjVGMkZDRTE4ODA2OTExRTk4MTdGOTYzNjMwMjcwRjU2PC94bXBNTTpPcmlnaW5hbERvY3VtZW50SUQ+CiAgICAgICAgIDx4bXBNTTpIaXN0b3J5PgogICAgICAgICAgICA8cmRmOlNlcT4KICAgICAgICAgICAgICAgPHJkZjpsaSByZGY6cGFyc2VUeXBlPSJSZXNvdXJjZSI+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDphY3Rpb24+c2F2ZWQ8L3N0RXZ0OmFjdGlvbj4KICAgICAgICAgICAgICAgICAgPHN0RXZ0Omluc3RhbmNlSUQ+eG1wLmlpZDowMmYyYTFmZi0wOTc1LTMxNDQtODliOC1hNjdjNTk3ZWU5OWM8L3N0RXZ0Omluc3RhbmNlSUQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDp3aGVuPjIwMjQtMDUtMDJUMTY6MTU6MDcrMDU6MzA8L3N0RXZ0OndoZW4+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDpzb2Z0d2FyZUFnZW50PkFkb2JlIFBob3Rvc2hvcCBDQyAyMDE1IChXaW5kb3dzKTwvc3RFdnQ6c29mdHdhcmVBZ2VudD4KICAgICAgICAgICAgICAgICAgPHN0RXZ0OmNoYW5nZWQ+Lzwvc3RFdnQ6Y2hhbmdlZD4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgICAgIDxyZGY6bGkgcmRmOnBhcnNlVHlwZT0iUmVzb3VyY2UiPgogICAgICAgICAgICAgICAgICA8
+c3RFdnQ6YWN0aW9uPnNhdmVkPC9zdEV2dDphY3Rpb24+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDppbnN0YW5jZUlEPnhtcC5paWQ6OGUzY2UyMWMtYTc3Yy0wODRiLThlMjAtYzcyMDExZWIyNDEzPC9zdEV2dDppbnN0YW5jZUlEPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6d2hlbj4yMDI0LTA1LTAyVDE2OjE1OjA3KzA1OjMwPC9zdEV2dDp3aGVuPgogICAgICAgICAgICAgICAgICA8c3RFdnQ6c29mdHdhcmVBZ2VudD5BZG9iZSBQaG90b3Nob3AgQ0MgMjAxNSAoV2luZG93cyk8L3N0RXZ0OnNvZnR3YXJlQWdlbnQ+CiAgICAgICAgICAgICAgICAgIDxzdEV2dDpjaGFuZ2VkPi88L3N0RXZ0OmNoYW5nZWQ+CiAgICAgICAgICAgICAgIDwvcmRmOmxpPgogICAgICAgICAgICA8L3JkZjpTZXE+CiAgICAgICAgIDwveG1wTU06SGlzdG9yeT4KICAgICAgICAgPGRjOmZvcm1hdD5pbWFnZS9wbmc8L2RjOmZvcm1hdD4KICAgICAgICAgPHBob3Rvc2hvcDpDb2xvck1vZGU+MzwvcGhvdG9zaG9wOkNvbG9yTW9kZT4KICAgICAgICAgPHBob3Rvc2hvcDpUZXh0TGF5ZXJzPgogICAgICAgICAgICA8cmRmOkJhZz4KICAgICAgICAgICAgICAgPHJkZjpsaSByZGY6cGFyc2VUeXBlPSJSZXNvdXJjZSI+CiAgICAgICAgICAgICAgICAgIDxwaG90b3Nob3A6TGF5ZXJOYW1lPk5vdCBTY2FuPC9waG90b3Nob3A6TGF5ZXJOYW1lPgogICAgICAgICAgICAgICAgICA8cGhvdG9zaG9wOkxheWVyVGV4dD5Ob3QgU2NhbjwvcGhvdG9zaG9w
+OkxheWVyVGV4dD4KICAgICAgICAgICAgICAgPC9yZGY6bGk+CiAgICAgICAgICAgIDwvcmRmOkJhZz4KICAgICAgICAgPC9waG90b3Nob3A6VGV4dExheWVycz4KICAgICAgICAgPHBob3Rvc2hvcDpEb2N1bWVudEFuY2VzdG9ycz4KICAgICAgICAgICAgPHJkZjpCYWc+CiAgICAgICAgICAgICAgIDxyZGY6bGk+eG1wLmRpZDo1RjJGQ0UxODgwNjkxMUU5ODE3Rjk2MzYzMDI3MEY1NjwvcmRmOmxpPgogICAgICAgICAgICA8L3JkZjpCYWc+CiAgICAgICAgIDwvcGhvdG9zaG9wOkRvY3VtZW50QW5jZXN0b3JzPgogICAgICAgICA8dGlmZjpPcmllbnRhdGlvbj4xPC90aWZmOk9yaWVudGF0aW9uPgogICAgICAgICA8dGlmZjpYUmVzb2x1dGlvbj43MjAwMDAvMTAwMDA8L3RpZmY6WFJlc29sdXRpb24+CiAgICAgICAgIDx0aWZmOllSZXNvbHV0aW9uPjcyMDAwMC8xMDAwMDwvdGlmZjpZUmVzb2x1dGlvbj4KICAgICAgICAgPHRpZmY6UmVzb2x1dGlvblVuaXQ+MjwvdGlmZjpSZXNvbHV0aW9uVW5pdD4KICAgICAgICAgPGV4aWY6Q29sb3JTcGFjZT42NTUzNTwvZXhpZjpDb2xvclNwYWNlPgogICAgICAgICA8ZXhpZjpQaXhlbFhEaW1lbnNpb24+MTIwMTwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj4xMDA8L2V4aWY6UGl4ZWxZRGltZW5zaW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIAogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgCiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAKPD94cGFja2V0IGVuZD0idyI/PnXWXIoAAAAgY0hSTQAAeiUAAICDAAD5/wAAgOkAAHUwAADqYAAAOpgAABdvkl/FRgAAFR1JREFUeNrs3UFy2zbDxvEnmk634ncCqycQewIxy66s7Dsj5gRRTxD5BFFOYHl6gCqbbkOfIPQJSp3gpZfduN8C0FhxZJuAQBKS/r8ZjZOYFEEQZF88LwC++fvPn/8TgL1++/3fN9QCAAAAAAD9G1AFAAAAAAAAiB0hFgAAAAAAAKJHiAUAAAAAAIDoEWIBAAAAAAAgeoRYAAAAAAAAiB4hFgAAAAAAAKJHiAUAAAAAAIDoEWIBAAAAAAAgeoRYAAAAAAAAiB4hFgAAAAAAAKJHiAUAAAAAAIDoEWIBAAAAAAAgeoRYAAAAAAAAiB4hFgAAAAAAAKJHiAUAAAAAAIDo/UQVAOdrMCDHxknJJI3sJ5WU7PxuYn/eSap3/r20fy/tp6Ia0YWHhwcqAQAAwBEhFnAmBoNBKmnxpGP/nEpS3nORE1vetEFZ5/o+mMB5SCVNZcKrScN9xk/+/nS/e0mFpLX90K4AAACASBBiAWfABliFpGHDXSYy4dCix2KvJF02LGsmM/oGpy+RCa7m+jGQCmFo292lpGtJX2TCrBVVDwAAAPTct6UKgLPp+A8d9/mo10dBtV3mpi64xM/W4VLSfzJT5XLHeo3NQiZcvVY7AdY+2zCrUv+jEwEAAICzRogF4CUrHXfocc7mMsHLB/v3sUwYkx7huWT2XD7KPYwN5cLWX3mkdQgAAAAcPUIsAC8Zq98phXCXyQQ+n9Rf4BPSQtJXxTPabizpG/cFAAAA0D1CLACv+SCzBhHiNpJZ9yymwOdQK5nRVzH6KEYqAgAAAJ0ixALQBJ31eCX2+vyj5m/oO5Y2N4u8jDOZ4BAAAABABwixADQxlHlDG+IzV/xhj6vVEZ3TWLy5EAAA
+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</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
