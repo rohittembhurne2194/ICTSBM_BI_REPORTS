@@ -58,6 +58,7 @@
     <Report Include="CTPT_Feedback.rdl" />
     <Report Include="Dashboard_1.rdl" />
     <Report Include="Daywise Collection.rdl" />
+    <Report Include="DayWiseEmployeeWorkDetails.rdl" />
     <Report Include="Dumpyard_Employeeswise.rdl" />
     <Report Include="Dumpyard_Summary.rdl" />
     <Report Include="DumpYard_Supervisor_Performance_Report.rdl" />
