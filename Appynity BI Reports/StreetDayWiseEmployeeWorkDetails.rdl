@@ -6,7 +6,7 @@
     <DataSource Name="DataSource1">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value+";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>a57d2e8d-fa58-40d8-93f4-e63a254a26b4</rd:DataSourceID>
