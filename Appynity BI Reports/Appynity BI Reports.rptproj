@@ -82,6 +82,7 @@
     <Report Include="Liquid Ghar Sankalan Tapashil.rdl" />
     <Report Include="Liquid single Employee Collection.rdl" />
     <Report Include="LiquidDashboard_1.rdl" />
+    <Report Include="LiquidDayWiseEmployeeWorkDetails.rdl" />
     <Report Include="QR_PropertyScan_Report.rdl" />
     <Report Include="Report1.rdl" />
     <Report Include="single Employee Collection.rdl" />
@@ -97,6 +98,7 @@
     <Report Include="Street single Employee Collection.rdl" />
     <Report Include="Street Sweeping Report.rdl" />
     <Report Include="StreetDashboard_1.rdl" />
+    <Report Include="StreetDayWiseEmployeeWorkDetails.rdl" />
     <Report Include="StreetSweepingSubReport.rdl" />
     <Report Include="T20_1.1.rdl" />
     <Report Include="T20_1.2.rdl" />
