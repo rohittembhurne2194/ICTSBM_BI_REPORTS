@@ -82,27 +82,27 @@ where appid=@appid</CommandText>
           </QueryParameter>
         </QueryParameters>
         <CommandText>--declare @from datetime,@to datetime
---set @from ='01-01-2022'set @to='02-25-2022'
+--set @from ='2024-08-14'set @to='2024-08-14'
 
 select distinct cast(gc.gcdate as date) Date1,	         
-	   (select count(g.gcId) from GarbageCollectionDetails g where  cast(gc.gcDate as date)=cast(g.gcDate as date) and g.gctype=1 and cast(g.gcDate as date) between @from and @to ) Total_Collection,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  cast(gc.gcDate as date)=cast(g.gcDate as date) and g.gctype=9  and cast(g.gcDate as date) between @from and @to ) Total_Com_Collection,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=1 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to ) Segregated,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=0 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) MixedG,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=2 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) NotReceived,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  (g.garbageType=-1 OR g.garbageType = 3) and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) NotSpecified,
-	    (select count(g.gcId) from GarbageCollectionDetails g where g.garbageType = 4 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) NotScan,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=6 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) Wet,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  g.garbageType=7 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) Dry,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  g.gctype=3 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to ) Total_Trip,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  cast(gc.gcDate as date)=cast(g.gcDate as date) and g.gctype=1 and cast(g.gcDate as date) between @from and @to ) Total_Collection,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  cast(gc.gcDate as date)=cast(g.gcDate as date) and g.gctype=9  and cast(g.gcDate as date) between @from and @to ) Total_Com_Collection,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  g.garbageType=1 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to ) Segregated,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  g.garbageType=0 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) MixedG,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  g.garbageType=2 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) NotReceived,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  (g.garbageType=-1 OR g.garbageType = 3) and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) NotSpecified,
+	    (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where g.garbageType = 4 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) NotScan,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  g.garbageType=6 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) Wet,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  g.garbageType=7 and g.gctype=1 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) Dry,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  g.gctype=3 and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to ) Total_Trip,
 	  -- isnull(sum(cast(gc.totalGcWeight as decimal(10,2))),0) Total_weight,
 	   isnull(sum(cast(totalWetWeight as decimal(10,4))),0)+ isnull(sum(cast(totalDryWeight as decimal(10,4))),0) Total_weight,
 	   isnull(sum(cast(totalDryWeight as decimal(10,4))),0) Dry_weight,
 	   isnull(sum(cast(totalWetWeight as decimal(10,4))),0) Wet_weight,
-	   (select count(distinct(g.userid)) from GarbageCollectionDetails g where g.EmployeeType is null and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) As EmpCount
+	   (select count(distinct(g.userid)) from GarbageCollectionDetails g with(nolock) where g.EmployeeType is null and cast(gc.gcDate as date)=cast(g.gcDate as date) and cast(g.gcDate as date) between @from and @to) As EmpCount
 	   -- g.gctype=1 and 
 	   
-from  GarbageCollectionDetails gc  
+from  GarbageCollectionDetails gc  with(nolock)
 where cast(gc.gcDate as date) between @from and @to
 group by cast(gc.gcDate as date)
 order by cast(gc.gcDate as date) desc</CommandText>
