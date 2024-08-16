@@ -105,15 +105,14 @@ select
  gc.userid,
  um.username Name,
  count(gc.gcid) Total_Collection
-from GarbageCollectionDetails gc,
-     usermaster um
+from GarbageCollectionDetails gc WITH(NOLOCK),
+     usermaster um WITH(NOLOCK)
 where cast(gc.gcDate as date) between @from and @to
-and   um.userId=gc.userId
-and   um.EmployeeType Is Null
-and   gc.gcType=1 And gc.garbageType &lt;&gt; 4
+and um.userId=gc.userId
+and um.EmployeeType Is Null
+and gc.gcType=1 And gc.garbageType &lt;&gt; 4
 group by gc.userId,um.userName
-order by Total_Collection desc
-</CommandText>
+order by Total_Collection desc</CommandText>
       </Query>
       <Fields>
         <Field Name="userid">

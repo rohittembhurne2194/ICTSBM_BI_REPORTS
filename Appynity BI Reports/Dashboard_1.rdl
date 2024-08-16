@@ -344,44 +344,44 @@ SELECT  distinct u.userName userName,ROW_NUMBER() OVER(partition by u.userId,t.d
   t.daDate Startdate,                  
   t.daenddate Enddate,                   
  --max(t.batteryStatus) InBatteryStatus,max(t.OutbatteryStatus) OutBatteryStatus,                         
-  (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u WITH(NOLOCK)                 
+  (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u WITH(NOLOCK)                 
    where gc.gctype=1                   
    and cast(t.daDate AS DATE) =cast(gc.gcDate as date)                  
    and u.userId=gc.userId                  
    and gc.userId=g.userId                    
    ) Totalhousecollection,
-   (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u WITH(NOLOCK)                 
+   (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u WITH(NOLOCK)                 
    where gc.gctype=1  and gc.garbageType=-1                 
    and cast(t.daDate AS DATE) =cast(gc.gcDate as date)                  
    and u.userId=gc.userId                  
    and gc.userId=g.userId                    
    ) TotalNotSpecified,   
-    (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u WITH(NOLOCK)                 
+    (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u WITH(NOLOCK)                 
    where gc.gctype=1  and gc.garbageType=0                 
    and cast(t.daDate AS DATE) =cast(gc.gcDate as date)                  
    and u.userId=gc.userId                  
    and gc.userId=g.userId                    
    ) TotalMixed, 
-    (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u WITH(NOLOCK)                 
+    (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u WITH(NOLOCK)                 
    where gc.gctype=1  and gc.garbageType=1                 
    and cast(t.daDate AS DATE) =cast(gc.gcDate as date)                  
    and u.userId=gc.userId                  
    and gc.userId=g.userId                    
    ) TotalSeg, 
-    (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc,usermaster u WITH(NOLOCK)                 
+    (select  isnull(count(gc.houseid),0) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u WITH(NOLOCK)                 
    where gc.gctype=1  and gc.garbageType=2                 
    and cast(t.daDate AS DATE) =cast(gc.gcDate as date)                  
    and u.userId=gc.userId                  
    and gc.userId=g.userId                    
    ) TotalNotColl, 
-  (select count(gc.gcId) from GarbageCollectionDetails gc,usermaster u WITH(NOLOCK)                   
+  (select count(gc.gcId) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u WITH(NOLOCK)                   
   where gc.gctype=3 and  cast(t.daDate AS DATE) =cast(gc.gcDate as date)                  
   and u.userId=gc.userId                  
   and gc.userId=g.userId                          
   ) Totaldumpyard    
-  from  UserMaster u left outer  join                  
-        GarbageCollectionDetails g on g.userId=u.userId left outer  join                  
-     daily_attendance  t on t.userid=g.userid and t.userid=u.userid                     
+  from  UserMaster u WITH(NOLOCK) left outer  join                  
+        GarbageCollectionDetails g WITH(NOLOCK) on g.userId=u.userId left outer  join                  
+     daily_attendance  t WITH(NOLOCK) on t.userid=g.userid and t.userid=u.userid                     
   and CAST(t.daDate AS DATE) between @from and @to                 
   and u.userId = isnull(@userid,u.userId)
   
@@ -415,14 +415,14 @@ where gcType=3 and CAST(gcDate as date) between @from and @to) AS Z
 --select * from #tempDumpColl
 
 select h.*, 
-(select min(gcDate) from GarbageCollectionDetails gc,usermaster u WITH(NOLOCK)                 
+(select min(gcDate) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u WITH(NOLOCK)                 
    where gc.gctype=1                   
    and cast(h.Startdate AS DATE) =cast(gc.gcDate as date)                  
    and h.userId=gc.userId                  
    and gc.gcDate &lt; ISNULL(d.gcDate,ISNULL(d.gDateEnd,CONVERT(DATETIME,CONVERT(VARCHAR,CONVERT(date,h.Startdate)) + ' ' + '23:59:59',121)))
    and gc.gcDate &gt; ISNULL(d.previousgcDate,ISNULL(d.gDateStart,CONVERT(DATETIME,CONVERT(VARCHAR,CONVERT(date,h.Startdate)) + ' ' + '00:00:00',121)))
    ) gStartTime,
-    (select max(gcDate) from GarbageCollectionDetails gc,usermaster u  WITH(NOLOCK)                
+    (select max(gcDate) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u  WITH(NOLOCK)                
    where gc.gctype=1                   
    and cast(h.Startdate AS DATE) =cast(gc.gcDate as date)                  
    and h.userId=gc.userId                  
@@ -430,13 +430,13 @@ select h.*,
    and gc.gcDate &gt; ISNULL(d.previousgcDate,ISNULL(d.gDateStart,CONVERT(DATETIME,CONVERT(VARCHAR,CONVERT(date,h.Startdate)) + ' ' + '00:00:00',121)))
    ) gEndTime,
    d.gcDate DumpTime,
-   ISNULL(DATEDIFF(MINUTE,(select min(gcDate) from GarbageCollectionDetails gc,usermaster u WITH(NOLOCK)                 
+   ISNULL(DATEDIFF(MINUTE,(select min(gcDate) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u WITH(NOLOCK)                 
    where gc.gctype=1                   
    and cast(h.Startdate AS DATE) =cast(gc.gcDate as date)                  
    and h.userId=gc.userId                  
    and gc.gcDate &lt; ISNULL(d.gcDate,ISNULL(d.gDateEnd,CONVERT(DATETIME,CONVERT(VARCHAR,CONVERT(date,h.Startdate)) + ' ' + '23:59:59',121)))
    and gc.gcDate &gt; ISNULL(d.previousgcDate,ISNULL(d.gDateStart,CONVERT(DATETIME,CONVERT(VARCHAR,CONVERT(date,h.Startdate)) + ' ' + '00:00:00',121))))
-   ,(select max(gcDate) from GarbageCollectionDetails gc,usermaster u WITH(NOLOCK)                  
+   ,(select max(gcDate) from GarbageCollectionDetails gc WITH(NOLOCK),usermaster u WITH(NOLOCK)                  
    where gc.gctype=1                   
    and cast(h.Startdate AS DATE) =cast(gc.gcDate as date)                  
    and h.userId=gc.userId                  
@@ -468,8 +468,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
 
 
      option (recompile)      
-              
-           </CommandText>
+     </CommandText>
         <rd:UseGenericDesigner>true</rd:UseGenericDesigner>
       </Query>
       <Fields>

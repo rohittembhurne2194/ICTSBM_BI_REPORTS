@@ -141,9 +141,9 @@ select
  distinct cast(gc.gcDate as date) Date,
  gc.userid,
  um.username Name,
-(select count(gcid) from GarbageCollectionDetails where gc.userId=userId and gctype=1 and cast(gcDate as date) = isnull(@fromd,getdate()) ) Total
-from GarbageCollectionDetails gc,
-     usermaster um
+(select count(gcid) from GarbageCollectionDetails with(nolock) where gc.userId=userId and gctype=1 and cast(gcDate as date) = isnull(@fromd,getdate()) ) Total
+from GarbageCollectionDetails gc with(nolock),
+     usermaster um with(nolock)
 where cast(gc.gcDate as date) = isnull(@fromd,getdate())
 and   um.userId=gc.userId and gc.gctype=1 
 and   um.EmployeeType Is Null
@@ -1183,7 +1183,7 @@ order by Total desc</CommandText>
             <Top>5.32653in</Top>
             <Left>0.24202in</Left>
             <Height>0.83333in</Height>
-            <Width>4.12836in</Width>
+            <Width>4.12835in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>

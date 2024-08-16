@@ -201,24 +201,24 @@ from(select um.userid userid,
        um.username Ename, um.userMobileNumber Mobile,
 	   (datediff(day,@from,@to)+1) Total_Day,
 	   (isnull(um.gcTarget,1) * (datediff(day,@from,@to)+1)) Total_Target, 
-	   (select  isnull(count(g.gcId),0) from GarbageCollectionDetails g,usermaster u 
-	   where g.gctype=1 and g.garbageType &lt;&gt; 4 and cast(g.gcDate as date) between                      @from and @to 
+	   (select  isnull(count(g.gcId),0) from GarbageCollectionDetails g WITH(NOLOCK),usermaster u WITH(NOLOCK) 
+	   where g.gctype=1 and g.garbageType &lt;&gt; 4 and cast(g.gcDate as date) between @from and @to 
 	   and u.userId=g.userId
 	   and gc.userId=g.userId) Total_Collection,
 
-	   (select  isnull(count(g.gcId),0) from GarbageCollectionDetails g,usermaster u 
-	   where g.gctype=1 and g.garbageType = 4 and cast(g.gcDate as date) between                      @from and @to 
+	   (select  isnull(count(g.gcId),0) from GarbageCollectionDetails g WITH(NOLOCK),usermaster u WITH(NOLOCK) 
+	   where g.gctype=1 and g.garbageType = 4 and cast(g.gcDate as date) between @from and @to 
 	   and u.userId=g.userId
 	   and gc.userId=g.userId) Total_NotScan,
 	  
-	   (select count(g.gcId) from GarbageCollectionDetails g,usermaster u 
+	   (select count(g.gcId) from GarbageCollectionDetails g WITH(NOLOCK),usermaster u WITH(NOLOCK) 
 	   where g.gctype=3 and cast(g.gcDate as date) between @from and @to 
 	   and u.userId=g.userId
 	   and gc.userId=g.userId	   	   
 	   ) Total_Trip	   
 
-from  UserMaster um left outer  join
-      GarbageCollectionDetails gc on um.userId=gc.userId 
+from  UserMaster um WITH(NOLOCK) left outer  join
+      GarbageCollectionDetails gc WITH(NOLOCK) on um.userId=gc.userId 
 	  where um.isActive='True' and um.EmployeeType Is Null
 --and   gc.userId=isnull(@userid,gc.userId)
 group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
