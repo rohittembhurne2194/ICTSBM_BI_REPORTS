@@ -43,8 +43,8 @@
 --declare @to datetime
 --declare @userid int
 --declare @PId int
---set @from ='2022-08-22' 
---set @to ='2022-08-22'
+--set @from ='2022-07-24' 
+--set @to ='2024-07-24'
 --set @userid=null
 --set @PID=null
 
@@ -58,10 +58,10 @@ select gc.gcDate cdate,
 	   gc.note Comment,
 	   cm.Name HouseOname,
 	   isnull(cm.Mobile,'NA') MobileNo,
-	   cm.ReferanceId houseid,
-	   cm.Address HouseAdd,
-	   um.PrabhagId,
-	   Isnull((select distinct(CommitteeName) from CommitteeMaster cm where cm.Id=gc.PrabhagId And (cm.Id= @PId OR @PId IS NULL OR @PId=0)),'') PrabhagName
+	   cm.SauchalayID houseid,
+	   cm.Address HouseAdd
+	  -- um.PrabhagId,
+	   --Isnull((select distinct(CommitteeName) from CommitteeMaster cm where cm.Id=gc.PrabhagId And (cm.Id= @PId OR @PId IS NULL OR @PId=0)),'') PrabhagName
 
 from GarbageCollectionDetails gc with(nolock),
      SauchalayAddress cm ,
@@ -74,7 +74,7 @@ and   gc.userId=um.userId
 and cast(gc.gcDate as date) between @from and @to
 and um.userId in (isnull((@userid),um.userid))
 and um.userId in(select userId from Daily_Attendance where EmployeeType in('CT','PT','U') and daDate between @from and @to)
-and (gc.PrabhagId= @PId OR @PId IS NULL OR @PId=0)
+--and (gc.PrabhagId= @PId OR @PId IS NULL OR @PId=0)
 --and da.EmployeeType in('CT','PT','U')
 --order by gc.gcid desc
 order by gc.gcdate desc
@@ -123,18 +123,6 @@ OPTION(RECOMPILE)</CommandText>
         </Field>
         <Field Name="HouseAdd">
           <DataField>HouseAdd</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="CommitteeName">
-          <DataField>CommitteeName</DataField>
-          <rd:UserDefined>true</rd:UserDefined>
-        </Field>
-        <Field Name="PrabhagId">
-          <DataField>PrabhagId</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="PrabhagName">
-          <DataField>PrabhagName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
@@ -202,9 +190,6 @@ from UserMaster where EmployeeType Is Null</CommandText>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>30.6387mm</Width>
-                </TablixColumn>
-                <TablixColumn>
-                  <Width>25.4mm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>29.8655mm</Width>
@@ -331,50 +316,6 @@ from UserMaster where EmployeeType Is Null</CommandText>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox5</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Style>None</Style>
-                            </RightBorder>
-                            <BackgroundColor>#d3d6d1</BackgroundColor>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="Textbox13">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Prabhag Name</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#189cdf</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox13</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -633,46 +574,6 @@ from UserMaster where EmployeeType Is Null</CommandText>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>houseid</rd:DefaultName>
-                          <Style>
-                            <Border>
-                              <Color>LightGrey</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <LeftBorder>
-                              <Style>None</Style>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Style>None</Style>
-                            </RightBorder>
-                            <BackgroundColor>=IIF(ROWNUMBER(NOTHING) MOD 2, "#FFFFFF", "#F7F7F7")</BackgroundColor>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                      </CellContents>
-                    </TablixCell>
-                    <TablixCell>
-                      <CellContents>
-                        <Textbox Name="PrabhagName">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!PrabhagName.Value</Value>
-                                  <Style />
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>PrabhagName</rd:DefaultName>
                           <Style>
                             <Border>
                               <Color>LightGrey</Color>
@@ -984,53 +885,6 @@ from UserMaster where EmployeeType Is Null</CommandText>
                   <TablixHeader>
                     <Size>6.35mm</Size>
                     <CellContents>
-                      <Textbox Name="Textbox12">
-                        <CanGrow>true</CanGrow>
-                        <KeepTogether>true</KeepTogether>
-                        <Paragraphs>
-                          <Paragraph>
-                            <TextRuns>
-                              <TextRun>
-                                <Value />
-                                <Style>
-                                  <FontSize>11pt</FontSize>
-                                  <FontWeight>Bold</FontWeight>
-                                  <Color>#388e3c</Color>
-                                </Style>
-                              </TextRun>
-                            </TextRuns>
-                            <Style>
-                              <TextAlign>Center</TextAlign>
-                            </Style>
-                          </Paragraph>
-                        </Paragraphs>
-                        <rd:DefaultName>Textbox12</rd:DefaultName>
-                        <Style>
-                          <Border>
-                            <Color>LightGrey</Color>
-                            <Style>Solid</Style>
-                          </Border>
-                          <LeftBorder>
-                            <Style>None</Style>
-                          </LeftBorder>
-                          <RightBorder>
-                            <Style>None</Style>
-                          </RightBorder>
-                          <BackgroundColor>#d3d6d1</BackgroundColor>
-                          <VerticalAlign>Middle</VerticalAlign>
-                          <PaddingLeft>2pt</PaddingLeft>
-                          <PaddingRight>2pt</PaddingRight>
-                          <PaddingTop>2pt</PaddingTop>
-                          <PaddingBottom>2pt</PaddingBottom>
-                        </Style>
-                      </Textbox>
-                    </CellContents>
-                  </TablixHeader>
-                </TablixMember>
-                <TablixMember>
-                  <TablixHeader>
-                    <Size>6.35mm</Size>
-                    <CellContents>
                       <Textbox Name="Textbox2">
                         <CanGrow>true</CanGrow>
                         <KeepTogether>true</KeepTogether>
@@ -1193,7 +1047,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
             <Top>23.72343mm</Top>
             <Left>3.66014mm</Left>
             <Height>27.52505mm</Height>
-            <Width>270.79524mm</Width>
+            <Width>245.39524mm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -1273,7 +1127,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
               <Paragraph>
                 <TextRuns>
                   <TextRun>
-                    <Value>Thane Mahanagar Palika</Value>
+                    <Value>Shrirampur Nagar Parishad</Value>
                     <Style>
                       <FontSize>14pt</FontSize>
                       <FontWeight>Bold</FontWeight>
@@ -1445,12 +1299,17 @@ from UserMaster where EmployeeType Is Null</CommandText>
     </ReportParameter>
     <ReportParameter Name="id">
       <DataType>String</DataType>
+      <Nullable>true</Nullable>
       <Prompt>id</Prompt>
     </ReportParameter>
     <ReportParameter Name="PId">
       <DataType>Integer</DataType>
       <Nullable>true</Nullable>
       <Prompt>PId</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="DBSource">
+      <DataType>String</DataType>
+      <Prompt>DBSource</Prompt>
     </ReportParameter>
   </ReportParameters>
   <ReportParametersLayout>
@@ -1492,6 +1351,11 @@ from UserMaster where EmployeeType Is Null</CommandText>
           <ColumnIndex>2</ColumnIndex>
           <RowIndex>1</RowIndex>
           <ParameterName>PId</ParameterName>
+        </CellDefinition>
+        <CellDefinition>
+          <ColumnIndex>3</ColumnIndex>
+          <RowIndex>1</RowIndex>
+          <ParameterName>DBSource</ParameterName>
         </CellDefinition>
       </CellDefinitions>
     </GridLayoutDefinition>
