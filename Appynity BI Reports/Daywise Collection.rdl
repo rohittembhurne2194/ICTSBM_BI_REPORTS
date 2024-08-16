@@ -81,9 +81,8 @@ where appid=@appid</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>
---declare @from datetime,@to datetime
---set @from ='01-01-2022'set @to='02-25-2022'
+        <CommandText>--declare @from datetime,@to datetime
+--set @from ='2024-08-14'set @to='2024-08-14'
 
 select distinct cast(gc.gcdate as date) Date1,	         
 	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  cast(gc.gcDate as date)=cast(g.gcDate as date) and g.gctype=1 and cast(g.gcDate as date) between @from and @to ) Total_Collection,
