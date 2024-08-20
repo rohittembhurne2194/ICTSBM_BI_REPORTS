@@ -81,27 +81,22 @@ where appid=@appid</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>
---declare @from datetime,@to datetime
---set @from ='2022-09-26' set @to ='2022-09-30'
+        <CommandText>--declare @from datetime,@to datetime
+--set @from ='2024-08-20' set @to ='2024-08-20'
 
 select   Total_Garbage_collection,Segregated,MixedGar,Not_Received,Not_specified,Wet,Dry,TotalHouse, TotalPoint,TotalDump from(select
               
 		--(Select count(houseid) from HouseMaster  ) TotalHouse_incity,
-		(Select  Count(gcId) from GarbageCollectionDetails where garbageType is not null and gctype=1 and Convert(date,gcDate) between @from and @to  ) Total_Garbage_collection,
-		(Select  Count(gcId) from GarbageCollectionDetails where garbageType=1 and gctype=1 and Convert(date,gcDate) between @from and @to ) Segregated,	
-		(Select  Count(gcId) from GarbageCollectionDetails where garbageType=0 and gctype=1 and Convert(date,gcDate) between @from and @to ) MixedGar,
-		(Select  Count(gcId) from GarbageCollectionDetails where garbageType=2 and gctype=1 and Convert(date,gcDate) between @from and @to ) Not_Received,
-		(Select  Count(gcId) from GarbageCollectionDetails where garbageType=-1 and gctype=1 and Convert(date,gcDate) between @from and @to ) Not_specified,
-		(Select  Count(gcId) from GarbageCollectionDetails where garbageType=6 and gctype=1 and Convert(date,gcDate) between @from and @to ) Wet,
-		(Select  Count(gcId) from GarbageCollectionDetails where garbageType=7 and gctype=1 and Convert(date,gcDate) between @from and @to ) Dry,
-		(Select  Count(gcId) from GarbageCollectionDetails where gcType=1 and garbageType is not null and Convert(date,gcDate) between @from and @to ) TotalHouse,
-        (Select distinct Count(*) from GarbageCollectionDetails where gcType=2 and  garbageType is not null and Convert(date,gcDate) between @from and @to) TotalPoint,
-	    (Select Count(*) from GarbageCollectionDetails where gcType=3  and Convert(date,gcDate) between @from and @to) TotalDump) x
-
-		
-
-		</CommandText>
+		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType is not null and gctype=1 and Convert(date,gcDate) between @from and @to  ) Total_Garbage_collection,
+		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=1 and gctype=1 and Convert(date,gcDate) between @from and @to ) Segregated,	
+		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=0 and gctype=1 and Convert(date,gcDate) between @from and @to ) MixedGar,
+		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=2 and gctype=1 and Convert(date,gcDate) between @from and @to ) Not_Received,
+		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=-1 and gctype=1 and Convert(date,gcDate) between @from and @to ) Not_specified,
+		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=6 and gctype=1 and Convert(date,gcDate) between @from and @to ) Wet,
+		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=7 and gctype=1 and Convert(date,gcDate) between @from and @to ) Dry,
+		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where gcType=1 and garbageType is not null and Convert(date,gcDate) between @from and @to ) TotalHouse,
+        (Select distinct Count(*) from GarbageCollectionDetails with(nolock) where gcType=2 and  garbageType is not null and Convert(date,gcDate) between @from and @to) TotalPoint,
+	    (Select Count(*) from GarbageCollectionDetails with(nolock) where gcType=3  and Convert(date,gcDate) between @from and @to) TotalDump) x</CommandText>
       </Query>
       <Fields>
         <Field Name="Total_Garbage_collection">
@@ -158,7 +153,7 @@ select   Total_Garbage_collection,Segregated,MixedGar,Not_Received,Not_specified
           </QueryParameter>
         </QueryParameters>
         <CommandText>-- declare @from datetime,@to datetime
---set @from ='01/01/2022' set @to ='03/02/2022'
+--set @from ='2024-08-20' set @to ='2024-08-20'
 
  select   um.userName ,
           --isnull(gc.vehiclenumber,'Not Available'),
@@ -167,14 +162,13 @@ select   Total_Garbage_collection,Segregated,MixedGar,Not_Received,Not_specified
 		  sum(cast(gc.totalGcWeight as decimal(10,2))) Total_weight,
 		  sum(cast(gc.totalDryWeight as decimal(10,2))) Dry,
 		  sum(cast(gc.totalWetWeight as decimal(10,2))) Wet
- from GarbageCollectionDetails gc,
-      usermaster um
+ from GarbageCollectionDetails gc with(nolock),
+      usermaster um with(nolock)
  where gc.totalGcWeight is not null
  and gc.userId=um.userId
  and Convert(date,gc.gcDate) between @from and @to
  and gc.gcType=3
- group by gc.userId,um.userName
- </CommandText>
+ group by gc.userId,um.userName</CommandText>
       </Query>
       <Fields>
         <Field Name="userName">
@@ -215,23 +209,23 @@ select   Total_Garbage_collection,Segregated,MixedGar,Not_Received,Not_specified
           </QueryParameter>
         </QueryParameters>
         <CommandText>--declare @from datetime,@to datetime
---set @from ='01-01-2022'set @to='02-24-2022'
+--set @from ='08-20-2024'set @to='08-20-2024'
 
 select distinct um.userName NameE,SUBSTRING(um.userName, 1, CHARINDEX(' ', um.userName + ' ') - 1) FNameEng,      
        um.userNameMar NameH,um.userid,	  
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and (gctype=1 OR gctype =6 OR gctype=7) and cast(g.gcDate as date) between @from and @to) Total,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and gctype=9  and cast(g.gcDate as date) between @from and @to) Total_Com,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=1 and gctype=1 and cast(g.gcDate as date) between @from and @to) Segregated,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=0 and gctype=1 and cast(g.gcDate as date) between @from and @to) MixedG,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=2 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotReceived,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and (g.garbageType=-1 OR g.garbageType=3) and gctype=1 and cast(g.gcDate as date) between @from and @to) NotSpecified,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=6 and gctype=1 and cast(g.gcDate as date) between @from and @to) Wet,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=7 and gctype=1 and cast(g.gcDate as date) between @from and @to) Dry,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and (gctype=1 OR gctype =6 OR gctype=7) and cast(g.gcDate as date) between @from and @to) Total,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and gctype=9  and cast(g.gcDate as date) between @from and @to) Total_Com,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=1 and gctype=1 and cast(g.gcDate as date) between @from and @to) Segregated,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=0 and gctype=1 and cast(g.gcDate as date) between @from and @to) MixedG,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=2 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotReceived,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and (g.garbageType=-1 OR g.garbageType=3) and gctype=1 and cast(g.gcDate as date) between @from and @to) NotSpecified,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=6 and gctype=1 and cast(g.gcDate as date) between @from and @to) Wet,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=7 and gctype=1 and cast(g.gcDate as date) between @from and @to) Dry,
 	   isnull(um.gcTarget,0) OneDay_HouseTarget,
 	   (datediff(day,@from,@to)+1) Total_Day,
 	   isnull(Cast(gcTarget AS int),0)  * (datediff(day,@from,@to)+1) Total_Target
-from    GarbageCollectionDetails gc  INNER JOIN
-        UserMaster um ON gc.userId = um.userId	
+from    GarbageCollectionDetails gc with(nolock)  INNER JOIN
+        UserMaster um with(nolock) ON gc.userId = um.userId	
 where cast(gc.gcDate as date) between @from and @to
             and um.EmployeeType is Null
 group by gc.userId,um.userName,um.userNameMar,gc.gcId,um.userId,um.gcTarget
@@ -311,7 +305,7 @@ order by um.userName</CommandText>
         <CommandText>
 --DECLARE @from datetime
 --DECLARE @to datetime
---set @from ='05-24-2022'set @to='05-25-2022'
+--set @from ='08-20-2024'set @to='08-20-2024'
 
 DECLARE @userid int = null;
 

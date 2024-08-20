@@ -82,27 +82,25 @@ where appid=@appid</CommandText>
           </QueryParameter>
         </QueryParameters>
         <CommandText>--declare @from datetime,@to datetime
---set @from ='01-01-2022'set @to='02-26-2022'
+--set @from ='08-20-2024'set @to='08-20-2024'
 
 select distinct um.userName NameE,SUBSTRING(um.userName, 1, CHARINDEX(' ', um.userName + ' ') - 1) FNameEng,      
        um.userNameMar NameH,um.userid,	  
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and gctype=1 and g.garbageType &lt;&gt; 4 and cast(g.gcDate as date) between @from and @to) Total,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=1 and gctype=1 and cast(g.gcDate as date) between @from and @to) Segregated,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=0 and gctype=1 and cast(g.gcDate as date) between @from and @to) MixedG,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=2 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotReceived,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=-1 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotSpecified,
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.garbageType=4 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotScan,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and gctype=1 and g.garbageType &lt;&gt; 4 and cast(g.gcDate as date) between @from and @to) Total,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=1 and gctype=1 and cast(g.gcDate as date) between @from and @to) Segregated,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=0 and gctype=1 and cast(g.gcDate as date) between @from and @to) MixedG,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=2 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotReceived,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=-1 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotSpecified,
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=4 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotScan,
 	   isnull(um.gcTarget,0) OneDay_Target,
 	   (datediff(day,@from,@to)+1) Total_Day,
 	   (isnull(um.gcTarget,0) * (datediff(day,@from,@to)+1)) Total_Target
-from    GarbageCollectionDetails gc  INNER JOIN
-        UserMaster um ON gc.userId = um.userId	
+from    GarbageCollectionDetails gc with(nolock)  INNER JOIN
+        UserMaster um with(nolock) ON gc.userId = um.userId	
 where cast(gc.gcDate as date) between @from and @to
 		and um.EmployeeType Is Null
 group by gc.userId,um.userName,um.userNameMar,gc.gcId,um.userId,um.gcTarget
-order by um.userName
-
- </CommandText>
+order by um.userName</CommandText>
       </Query>
       <Fields>
         <Field Name="NameE">
@@ -192,7 +190,7 @@ order by um.userName
           </QueryParameter>
         </QueryParameters>
         <CommandText>--declare @from datetime,@to datetime,@userid int
---set @from ='05/01/2022' set @to ='05/12/2022' 
+--set @from ='08/20/2024' set @to ='08/20/2024' 
 --set @userid =9
 
 select userid,Ename,Mobile,Total_Day,Total_Target,Total_Collection,Total_NotScan,(cast((Total_Collection*100.00)/
@@ -223,7 +221,9 @@ from  UserMaster um WITH(NOLOCK) left outer  join
 --and   gc.userId=isnull(@userid,gc.userId)
 group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
 --order by name
-) X</CommandText>
+) X
+
+ </CommandText>
       </Query>
       <Fields>
         <Field Name="userid">
