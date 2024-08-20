@@ -99,24 +99,22 @@ from UserMaster where EmployeeType is null</CommandText>
           </QueryParameter>
         </QueryParameters>
         <CommandText>--declare @from datetime,@to datetime
---set @from ='01-01-2022 00:00:01'set @to='03-02-2022 23:59:59'
+--set @from ='08-20-2024 00:00:01'set @to='08-20-2024 23:59:59'
 
 select distinct um.userName NameE,
        SUBSTRING(um.userName, 1 , CHARINDEX(' ', um.userName + ' ' ) -1) FName,
        um.userNameMar NameH,um.userid,	  
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and g.gcType=1 and cast(g.gcDate as date) between @from and @to) Total
+	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.gcType=1 and cast(g.gcDate as date) between @from and @to) Total
 
 
-from    GarbageCollectionDetails gc  INNER JOIN
-        UserMaster um ON gc.userId = um.userId
+from    GarbageCollectionDetails gc with(nolock)  INNER JOIN
+        UserMaster um with(nolock) ON gc.userId = um.userId
 	-- INNER JOIN Daily_Attendance da ON um.userId = da.userId
 where cast(gc.gcDate as date) between @from and @to
 and   um.EmployeeType Is Null
 and   gc.gcType = 1
 group by gc.userId,um.userName,um.userNameMar,gc.gcId,um.userId
-order by um.userName
-
- </CommandText>
+order by um.userName</CommandText>
       </Query>
       <Fields>
         <Field Name="NameE">

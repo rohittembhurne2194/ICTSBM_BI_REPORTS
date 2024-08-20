@@ -99,16 +99,16 @@ from UserMaster where EmployeeType Is Null</CommandText>
           </QueryParameter>
         </QueryParameters>
         <CommandText>--declare @from datetime,@to datetime
---set @from ='04/26/2019' set @to ='05/26/2019' 
+--set @from ='08/20/2024' set @to ='08/20/2024'
 
 select  distinct House,HouseId,HouseOwner,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,NotSpecified_Garbage,NotScan,No_Entry 
 from(
 
 select    gc.houseId House,hm.ReferanceId HouseId,
-          (select houseOwner from HouseMaster where houseId=gc.houseId ) HouseOwner,           
+          (select houseOwner from HouseMaster with(nolock) where houseId=gc.houseId ) HouseOwner,           
           
 		 count(gc.gcId)  TotalCollected,
-		 (select  count(gcId) from GarbageCollectionDetails 
+		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
 		  where houseId=gc.houseId	  
 		  and cast(gcDate as date) between @from and @to
 		  and garbageType=0	
@@ -116,7 +116,7 @@ select    gc.houseId House,hm.ReferanceId HouseId,
           and garbageType is not null	 	  
 		 ) Mixed_Garbage,
 
-		 (select  count(gcId) from GarbageCollectionDetails 
+		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
 		  where houseId=gc.houseId 	 
 		  and cast(gcDate as date) between @from and @to
 		  and garbageType=1	
@@ -124,7 +124,7 @@ select    gc.houseId House,hm.ReferanceId HouseId,
           and garbageType is not null			  
 		 ) Bifurcate_Garbage,
 
-		 (select  count(gcId) from GarbageCollectionDetails 
+		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
 		  where houseId=gc.houseId 	  
 		  and cast(gcDate as date) between @from and @to
 		  and garbageType=2	
@@ -132,7 +132,7 @@ select    gc.houseId House,hm.ReferanceId HouseId,
           and garbageType is not null		 	  
 		 ) NotReceived_Garbage,
 
-		 (select  count(gcId) from GarbageCollectionDetails 
+		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
 		  where houseId=gc.houseId 	  
 		  and cast(gcDate as date) between @from and @to
 		  and (garbageType=3 OR garbageType= -1)
@@ -140,7 +140,7 @@ select    gc.houseId House,hm.ReferanceId HouseId,
                                        and garbageType is not null			 	  
 		 ) NotSpecified_Garbage,
 
-		  (select  count(gcId) from GarbageCollectionDetails 
+		  (select  count(gcId) from GarbageCollectionDetails with(nolock) 
 		  where houseId=gc.houseId 	  
 		  and cast(gcDate as date) between @from and @to
 		  and garbageType=4
@@ -148,14 +148,14 @@ select    gc.houseId House,hm.ReferanceId HouseId,
                                        and garbageType is not null			 	  
 		 ) NotScan,
 
-		 (select  count(gcId) from GarbageCollectionDetails 
+		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
 		  where houseId=gc.houseId 	 
 		 and cast(gcDate as date) between @from and @to
 		  and garbageType is null			 		  
 		 ) No_Entry
 		 	 
-from GarbageCollectionDetails gc,
-     HouseMaster hm	 
+from GarbageCollectionDetails gc with(nolock),
+     HouseMaster hm with(nolock)	 
 where gc.houseId=hm.houseId
 and cast(gcDate as date) between @from and @to
 and gc.houseId &lt;&gt;0
