@@ -960,8 +960,8 @@ order by cast(gc.gcDate as date) desc</CommandText>
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>Daywise_Summary</DataSetName>
-            <Top>5.12374in</Top>
-            <Left>0.10772in</Left>
+            <Top>3.12374in</Top>
+            <Left>1.98272in</Left>
             <Height>1.125in</Height>
             <Width>5.6181in</Width>
             <ZIndex>1</ZIndex>
@@ -2193,7 +2193,8 @@ order by cast(gc.gcDate as date) desc</CommandText>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>4.66013in</Top>
+            <Top>2.66013in</Top>
+            <Left>5.08cm</Left>
             <Height>0.28264in</Height>
             <Width>5.07368in</Width>
             <ZIndex>4</ZIndex>
