@@ -84,70 +84,104 @@ from UserMaster where EmployeeType Is Null</CommandText>
             <Value>=Parameters!gartype.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>
---declare @from datetime
---declare @to datetime
---declare @userid int
---declare @gartype int
---set @from ='01/01/2022' 
---set @to ='02/23/2023'
---set @userid=null
---set @gartype=null
+        <CommandText>--DECLARE @from DATETIME
+--DECLARE @to DATETIME
+--DECLARE @userid INT
+--DECLARE @gartype INT
+--SET @from = '2024-09-05' 
+--SET @to = '2024-09-05'
+--SET @userid = NULL
+--SET @gartype = NULL
 
-
-if(@gartype = -1 OR @gartype = 3)
+IF(@gartype = -1 OR @gartype = 3)
 BEGIN
+    SELECT 
+        gc.gcDate AS cdate,
+        um.userId AS DriverId,
+        um.userName AS DriverName,
+        gc.vehicleNumber AS vehcleNO,
+        gc.garbageType AS GCType,
+        gc.note AS Comment,
+        hm.houseOwner AS HouseOname,
+        ISNULL(hm.houseOwnerMobile, '') AS MobileNo,
+        hm.ReferanceId AS houseid,
+        hm.houseAddress AS HouseAdd
+    FROM GarbageCollectionDetails gc WITH (NOLOCK)
+    JOIN HouseMaster hm ON gc.houseId = hm.houseId
+    JOIN UserMaster um ON gc.userId = um.userId
+    WHERE CAST(gc.gcDate AS DATE) BETWEEN @from AND @to
+    AND um.userId IN (ISNULL(@userid, um.userId))
+    AND um.EmployeeType IS NULL
+    AND (gc.garbageType = -1 OR gc.garbageType = 3)
+    
+    UNION ALL
+    
+    SELECT 
+        ns.gcDate AS cdate,
+        um.userId AS DriverId,
+        um.userName AS DriverName,
+        ns.vehicleNumber AS vehcleNO,
+        ns.garbageType AS GCType,
+        NULL AS Comment,
+        hm.houseOwner AS HouseOname,
+        ISNULL(hm.houseOwnerMobile, '') AS MobileNo,
+        hm.ReferanceId AS houseid,
+        hm.houseAddress AS HouseAdd
+    FROM GarbageCollection_NotScan ns WITH (NOLOCK)
+    JOIN HouseMaster hm ON ns.houseId = hm.houseId
+    JOIN UserMaster um ON ns.userId = um.userId
+    WHERE CAST(ns.gcDate AS DATE) BETWEEN @from AND @to
+    AND um.userId IN (ISNULL(@userid, um.userId))
+    AND um.EmployeeType IS NULL
+    AND ns.isNotScan = 1
 
-		select gc.gcDate cdate,
-		   um.userId DriverId,
-		   um.userName DriverName,
-		   gc.vehicleNumber vehcleNO,
-		   gc.garbageType GCType,
-		   gc.note Comment,
-		   hm.houseOwner HouseOname,
-		   isnull(hm.houseOwnerMobile,'') MobileNo,
-		   hm.ReferanceId houseid,
-		   hm.houseAddress HouseAdd
-
-	from GarbageCollectionDetails gc with(nolock),
-		 HouseMaster hm ,
-		 UserMaster um 
-	where gc.houseId=hm.houseId
-	and   gc.userId=um.userId
-	and cast(gc.gcDate as date) between @from and @to
-	and um.userId in (isnull((@userid),um.userid))
-	and um.EmployeeType Is Null
-	and (gc.garbageType = -1 OR gc.garbageType = 3)
-	--order by gc.gcid desc
-	order by gc.gcdate desc
-	OPTION(RECOMPILE)
-
+    ORDER BY cdate DESC
+    OPTION (RECOMPILE)
 END
 ELSE
 BEGIN
-	select gc.gcDate cdate,
-		   um.userId DriverId,
-		   um.userName DriverName,
-		   gc.vehicleNumber vehcleNO,
-		   gc.garbageType GCType,
-		   gc.note Comment,
-		   hm.houseOwner HouseOname,
-		   isnull(hm.houseOwnerMobile,'') MobileNo,
-		   hm.ReferanceId houseid,
-		   hm.houseAddress HouseAdd
+    SELECT 
+        gc.gcDate AS cdate,
+        um.userId AS DriverId,
+        um.userName AS DriverName,
+        gc.vehicleNumber AS vehcleNO,
+        gc.garbageType AS GCType,
+        gc.note AS Comment,
+        hm.houseOwner AS HouseOname,
+        ISNULL(hm.houseOwnerMobile, '') AS MobileNo,
+        hm.ReferanceId AS houseid,
+        hm.houseAddress AS HouseAdd
+    FROM GarbageCollectionDetails gc WITH (NOLOCK)
+    JOIN HouseMaster hm ON gc.houseId = hm.houseId
+    JOIN UserMaster um ON gc.userId = um.userId
+    WHERE CAST(gc.gcDate AS DATE) BETWEEN @from AND @to
+    AND um.userId IN (ISNULL(@userid, um.userId))
+    AND um.EmployeeType IS NULL
+    AND gc.garbageType IN (ISNULL(@gartype, gc.garbageType))
+    
+    UNION ALL
+    
+    SELECT 
+        ns.gcDate AS cdate,
+        um.userId AS DriverId,
+        um.userName AS DriverName,
+        ns.vehicleNumber AS vehcleNO,
+        ns.garbageType AS GCType,
+        NULL AS Comment,
+        hm.houseOwner AS HouseOname,
+        ISNULL(hm.houseOwnerMobile, '') AS MobileNo,
+        hm.ReferanceId AS houseid,
+        hm.houseAddress AS HouseAdd
+    FROM GarbageCollection_NotScan ns WITH (NOLOCK)
+    JOIN HouseMaster hm ON ns.houseId = hm.houseId
+    JOIN UserMaster um ON ns.userId = um.userId
+    WHERE CAST(ns.gcDate AS DATE) BETWEEN @from AND @to
+    AND um.userId IN (ISNULL(@userid, um.userId))
+    AND um.EmployeeType IS NULL
+    AND ns.isNotScan = 1
 
-	from GarbageCollectionDetails gc with(nolock),
-		 HouseMaster hm ,
-		 UserMaster um 
-	where gc.houseId=hm.houseId
-	and   gc.userId=um.userId
-	and cast(gc.gcDate as date) between @from and @to
-	and um.userId in (isnull((@userid),um.userid))
-	and um.EmployeeType Is Null
-	and gc.garbageType in (isnull((@gartype),gc.garbageType))
-	--order by gc.gcid desc
-	order by gc.gcdate desc
-	OPTION(RECOMPILE)
+    ORDER BY cdate DESC
+    OPTION (RECOMPILE)
 END</CommandText>
       </Query>
       <Fields>
@@ -575,7 +609,6 @@ END</CommandText>
                             <PaddingBottom>5pt</PaddingBottom>
                           </Style>
                         </Image>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
