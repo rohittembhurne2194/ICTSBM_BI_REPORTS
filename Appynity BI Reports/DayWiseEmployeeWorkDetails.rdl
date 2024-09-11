@@ -34,22 +34,46 @@
             <rd:UserDefined>true</rd:UserDefined>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='2024-06-01' set @to ='2024-06-13'
+        <CommandText>--DECLARE @from DATETIME, @to DATETIME;
+--SET @from = '2024-09-04';
+--SET @to = '2024-09-06';
 
-select 
- distinct cast(gc.gcDate as date) Date,
- gc.userid,
- um.username Name,
- count(gc.gcId) Total_Collection
-from GarbageCollectionDetails gc,
-     usermaster um
-where cast(gc.gcDate as date) between @from and @to
-and   um.userId=gc.userId
-and   um.EmployeeType Is Null
-and   gc.gctype=1 
-group by cast(gc.gcDate as date),gc.userId,um.userName
-order by date</CommandText>
+SELECT
+    Date,
+    userId,
+    Name,
+    SUM(Total_Collection) AS Total_Collection
+FROM (
+    SELECT 
+        CAST(gc.gcDate AS DATE) AS Date,
+        gc.userId,
+        um.username AS Name,
+        COUNT(gc.gcId) AS Total_Collection
+    FROM GarbageCollectionDetails gc
+    JOIN usermaster um ON um.userId = gc.userId
+    WHERE CAST(gc.gcDate AS DATE) BETWEEN @from AND @to
+      AND um.EmployeeType IS NULL
+      AND gc.gcType = 1
+    GROUP BY CAST(gc.gcDate AS DATE), gc.userId, um.username
+
+    UNION ALL
+
+    SELECT 
+        CAST(nsc.gcDate AS DATE) AS Date,
+        nsc.userId,
+        um.username AS Name,
+        COUNT(nsc.gcNotScanId) AS Total_Collection
+    FROM GarbageCollection_NotScan nsc
+    JOIN usermaster um ON um.userId = nsc.userId
+    WHERE CAST(nsc.gcDate AS DATE) BETWEEN @from AND @to
+      AND um.EmployeeType IS NULL
+      AND nsc.isNotScan = 1
+    GROUP BY CAST(nsc.gcDate AS DATE), nsc.userId, um.username
+) AS CombinedData
+GROUP BY Date, userId, Name
+ORDER BY Date, userId;
+
+</CommandText>
       </Query>
       <Fields>
         <Field Name="Date">

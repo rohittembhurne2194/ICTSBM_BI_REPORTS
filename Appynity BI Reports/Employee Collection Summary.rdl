@@ -61,26 +61,61 @@ where appid=@appid</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='01/01/2022' set @to ='03/02/2022' 
+        <CommandText>--DECLARE @from DATETIME, @to DATETIME;
+--SET @from = '2024-09-11';
+--SET @to = '2024-09-11';
 
-select cast(gc.gcDate as date) Date,
-       count(distinct gc.userId) as Total_Employee,
-	   count(gc.gcid) as Total_Collection,
-	  -- (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  gcType=1  and cast(g.gcDate as date)=cast(gc.gcDate as date)) Total_Collection,
-	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=1  and g.gcType=1 and cast(g.gcDate as date)=cast(gc.gcDate as date)) Segregated,
-	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=0  and g.gcType=1 and cast(g.gcDate as date)=cast(gc.gcDate as date)) MixedG,
-	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=2  and g.gcType=1 and cast(g.gcDate as date)=cast(gc.gcDate as date)) NotReceived,
-	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=-1 and g.gcType=1  and cast(g.gcDate as date)=cast(gc.gcDate as date)) NotSpecified,
-	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=4 and g.gcType=1  and cast(g.gcDate as date)=cast(gc.gcDate as date)) NotScan,
-	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=6  and g.gcType=1 and cast(g.gcDate as date)=cast(gc.gcDate as date)) Wet,
-	   (select count(g.gcId) from GarbageCollectionDetails g with (nolock) where  g.garbageType=7  and g.gcType=1 and cast(g.gcDate as date)=cast(gc.gcDate as date)) Dry
+WITH GarbageDetailsCounts AS (
+    SELECT 
+        CAST(gc.gcDate AS DATE) AS Date,
+        COUNT(DISTINCT gc.userId) AS Total_Employee,
+        COUNT(gc.gcid) AS TotalGcCount,
+        COUNT(CASE WHEN gc.garbageType = 1 THEN 1 END) AS Segregated,
+        COUNT(CASE WHEN gc.garbageType = 0 THEN 1 END) AS MixedG,
+        COUNT(CASE WHEN gc.garbageType = 2 THEN 1 END) AS NotReceived,
+        COUNT(CASE WHEN gc.garbageType IN (-1, 3) THEN 1 END) AS NotSpecified,
+        COUNT(CASE WHEN gc.garbageType = 4 THEN 1 END) AS NotScan,
+        COUNT(CASE WHEN gc.garbageType = 6 THEN 1 END) AS Wet,
+        COUNT(CASE WHEN gc.garbageType = 7 THEN 1 END) AS Dry
+    FROM GarbageCollectionDetails gc WITH (NOLOCK)
+    WHERE gc.gcType = 1
+    AND CAST(gc.gcDate AS DATE) BETWEEN @from AND @to
+    GROUP BY CAST(gc.gcDate AS DATE)
+),
 
- from GarbageCollectionDetails gc with (nolock)   
- where cast(gc.gcDate as date) between @from and @to 
- and   gc.gctype=1
-group by  cast(gc.gcDate as date) 
-order by date desc</CommandText>
+NotScanCounts AS (
+    SELECT 
+        CAST(gcn.gcDate AS DATE) AS Date,
+        COUNT(DISTINCT gcn.userId) AS TotalNotScanEmployee,
+        COUNT(gcn.gcNotScanId) AS TotalNotScan
+    FROM GarbageCollection_NotScan gcn WITH (NOLOCK)
+    WHERE gcn.isNotScan = 1
+    AND CAST(gcn.gcDate AS DATE) BETWEEN @from AND @to
+    GROUP BY CAST(gcn.gcDate AS DATE)
+)
+
+SELECT 
+    d.Date,
+    COALESCE(g.Total_Employee, 0) + COALESCE(ns.TotalNotScanEmployee, 0) AS Total_Employee,
+    COALESCE(g.TotalGcCount, 0) + COALESCE(ns.TotalNotScan, 0) AS Total_Collection,
+    COALESCE(g.Segregated, 0) AS Segregated,
+    COALESCE(g.MixedG, 0) AS MixedG,
+    COALESCE(g.NotReceived, 0) AS NotReceived,
+    COALESCE(g.NotSpecified, 0) AS NotSpecified,
+    COALESCE(g.NotScan, 0) + COALESCE(ns.TotalNotScan, 0) AS NotScan,
+    COALESCE(g.Wet, 0) AS Wet,
+    COALESCE(g.Dry, 0) AS Dry
+FROM 
+    (SELECT DISTINCT CAST(gc.gcDate AS DATE) AS Date
+     FROM GarbageCollectionDetails gc WITH (NOLOCK)
+     WHERE CAST(gc.gcDate AS DATE) BETWEEN @from AND @to
+     UNION
+     SELECT DISTINCT CAST(gcn.gcDate AS DATE) AS Date
+     FROM GarbageCollection_NotScan gcn WITH (NOLOCK)
+     WHERE CAST(gcn.gcDate AS DATE) BETWEEN @from AND @to) AS d
+LEFT JOIN GarbageDetailsCounts g ON d.Date = g.Date
+LEFT JOIN NotScanCounts ns ON d.Date = ns.Date
+ORDER BY d.Date DESC;</CommandText>
       </Query>
       <Fields>
         <Field Name="Date">
@@ -133,22 +168,47 @@ order by date desc</CommandText>
             <Value>=Parameters!fromd.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @fromd date=null
---set @fromd ='02/19/2022'
---set @from = null
+        <CommandText>--DECLARE @fromd DATE = NULL;
+--SET @fromd = '2024-09-11';
 
-select 
- distinct cast(gc.gcDate as date) Date,
- gc.userid,
- um.username Name,
-(select count(gcid) from GarbageCollectionDetails with(nolock) where gc.userId=userId and gctype=1 and cast(gcDate as date) = isnull(@fromd,getdate()) ) Total
-from GarbageCollectionDetails gc with(nolock),
-     usermaster um with(nolock)
-where cast(gc.gcDate as date) = isnull(@fromd,getdate())
-and   um.userId=gc.userId and gc.gctype=1 
-and   um.EmployeeType Is Null
-group by gc.userId,gc.gcdate,gc.gcid,um.userName
-order by Total desc</CommandText>
+SELECT 
+    Date,
+    userId,
+    Name,
+    (
+        COALESCE(SUM(GC_Count), 0) + COALESCE(SUM(NS_Count), 0)
+    ) AS Total
+FROM (
+    SELECT 
+        CAST(gc.gcDate AS DATE) AS Date,
+        gc.userId,
+        um.username AS Name,
+        COUNT(gc.gcid) AS GC_Count,
+        0 AS NS_Count
+    FROM GarbageCollectionDetails gc WITH (NOLOCK)
+    INNER JOIN usermaster um WITH (NOLOCK) ON um.userId = gc.userId
+    WHERE CAST(gc.gcDate AS DATE) = ISNULL(@fromd, GETDATE())
+    AND gc.gcType = 1
+    AND um.EmployeeType IS NULL
+    GROUP BY CAST(gc.gcDate AS DATE), gc.userId, um.username
+
+    UNION ALL
+
+    SELECT 
+        CAST(gcn.gcDate AS DATE) AS Date,
+        gcn.userId,
+        um.username AS Name,
+        0 AS GC_Count,
+        COUNT(gcn.gcNotScanId) AS NS_Count
+    FROM GarbageCollection_NotScan gcn WITH (NOLOCK)
+    INNER JOIN usermaster um WITH (NOLOCK) ON um.userId = gcn.userId
+    WHERE CAST(gcn.gcDate AS DATE) = ISNULL(@fromd, GETDATE())
+    AND gcn.isNotScan = 1
+    AND um.EmployeeType IS NULL
+    GROUP BY CAST(gcn.gcDate AS DATE), gcn.userId, um.username
+) AS Combined
+GROUP BY Date, userId, Name
+ORDER BY Total DESC;</CommandText>
       </Query>
       <Fields>
         <Field Name="Date">

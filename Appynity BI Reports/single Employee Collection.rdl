@@ -102,22 +102,32 @@ from UserMaster where EmployeeType is Null</CommandText>
           </QueryParameter>
         </QueryParameters>
         <CommandText>--declare @from datetime,@to datetime,@userid int
---set @from ='01/01/2022' set @to ='02/25/2022' set @userid =3
+--set @from ='2024-09-05' set @to ='2024-09-05' set @userid =1
 
-select 
- distinct cast(gc.gcDate as date) Date,
- gc.userid,
- um.username Name,
- count(gc.gcId) Total_Collection
-from GarbageCollectionDetails gc,
-     usermaster um
-where cast(gc.gcDate as date) between @from and @to
-and   um.userId=gc.userId
-and   um.EmployeeType Is Null
-and   gc.userId=@userid
-and   gc.gctype=1 
-group by cast(gc.gcDate as date),gc.userId,um.userName
-order by date</CommandText>
+SELECT 
+    DISTINCT CAST(gc.gcDate AS DATE) AS Date,
+    gc.userid,
+    um.username AS Name,
+    COUNT(gc.gcId) AS Total_Collection
+FROM (
+    SELECT gc.gcId, gc.gcDate, gc.userId, gc.gctype
+    FROM GarbageCollectionDetails gc
+    WHERE CAST(gc.gcDate AS DATE) BETWEEN @from AND @to
+    AND gc.gctype = 1
+    AND gc.userId = @userid
+
+    UNION ALL
+
+    SELECT ns.gcNotScanId, ns.gcDate, ns.userId, ns.gctype
+    FROM GarbageCollection_NotScan ns
+    WHERE CAST(ns.gcDate AS DATE) BETWEEN @from AND @to
+    AND ns.isNotScan = 1
+    AND ns.userId = @userid
+) gc
+JOIN UserMaster um ON um.userId = gc.userId
+WHERE um.EmployeeType IS NULL
+GROUP BY CAST(gc.gcDate AS DATE), gc.userId, um.userName
+ORDER BY Date</CommandText>
       </Query>
       <Fields>
         <Field Name="Date">
@@ -811,8 +821,8 @@ from UserMaster where EmployeeType Is Null</CommandText>
             <DataSetName>Collection_Detail</DataSetName>
             <Top>5.93625in</Top>
             <Left>1.04042in</Left>
-            <Height>0.95833in</Height>
-            <Width>8.33333in</Width>
+            <Height>0.95834in</Height>
+            <Width>8.33332in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
