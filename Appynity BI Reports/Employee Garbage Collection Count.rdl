@@ -98,23 +98,71 @@ from UserMaster where EmployeeType is null</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='08-20-2024 00:00:01'set @to='08-20-2024 23:59:59'
+        <CommandText>--DECLARE @from DATETIME, @to DATETIME;
+--SET @from = '2024-09-11';
+--SET @to = '2024-09-11';
 
-select distinct um.userName NameE,
-       SUBSTRING(um.userName, 1 , CHARINDEX(' ', um.userName + ' ' ) -1) FName,
-       um.userNameMar NameH,um.userid,	  
-	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.gcType=1 and cast(g.gcDate as date) between @from and @to) Total
-
-
-from    GarbageCollectionDetails gc with(nolock)  INNER JOIN
-        UserMaster um with(nolock) ON gc.userId = um.userId
-	-- INNER JOIN Daily_Attendance da ON um.userId = da.userId
-where cast(gc.gcDate as date) between @from and @to
-and   um.EmployeeType Is Null
-and   gc.gcType = 1
-group by gc.userId,um.userName,um.userNameMar,gc.gcId,um.userId
-order by um.userName</CommandText>
+SELECT 
+    um.userName AS NameE,
+    SUBSTRING(um.userName, 1, CHARINDEX(' ', um.userName + ' ') - 1) AS FName,
+    um.userNameMar AS NameH,
+    um.userId,
+    COALESCE(
+        (
+            SELECT COUNT(g.gcId)
+            FROM GarbageCollectionDetails g WITH (NOLOCK)
+            WHERE g.userId = um.userId
+              AND g.gcType = 1
+              AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+        ) +
+        (
+            SELECT COUNT(gn.gcNotScanId)
+            FROM GarbageCollection_NotScan gn WITH (NOLOCK)
+            WHERE gn.userId = um.userId
+              AND gn.isNotScan = 1
+              AND CAST(gn.gcDate AS DATE) BETWEEN @from AND @to
+        ),
+        0
+    ) AS Total
+FROM 
+    UserMaster um
+LEFT JOIN 
+    GarbageCollectionDetails gc WITH (NOLOCK)
+    ON um.userId = gc.userId
+    AND gc.gcType = 1
+    AND CAST(gc.gcDate AS DATE) BETWEEN @from AND @to
+LEFT JOIN 
+    GarbageCollection_NotScan gcn WITH (NOLOCK)
+    ON um.userId = gcn.userId
+    AND gcn.isNotScan = 1
+    AND CAST(gcn.gcDate AS DATE) BETWEEN @from AND @to
+WHERE 
+    um.EmployeeType IS NULL
+GROUP BY 
+    um.userName,
+    um.userNameMar,
+    um.userId
+HAVING 
+    COALESCE(
+        (
+            SELECT COUNT(g.gcId)
+            FROM GarbageCollectionDetails g WITH (NOLOCK)
+            WHERE g.userId = um.userId
+              AND g.gcType = 1
+              AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+        ) +
+        (
+            SELECT COUNT(gn.gcNotScanId)
+            FROM GarbageCollection_NotScan gn WITH (NOLOCK)
+            WHERE gn.userId = um.userId
+              AND gn.isNotScan = 1
+              AND CAST(gn.gcDate AS DATE) BETWEEN @from AND @to
+        ),
+        0
+    ) &gt; 0
+ORDER BY 
+    um.userName;
+</CommandText>
       </Query>
       <Fields>
         <Field Name="NameE">
