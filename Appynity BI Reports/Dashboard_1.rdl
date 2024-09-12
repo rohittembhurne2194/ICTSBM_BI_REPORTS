@@ -83,22 +83,27 @@ where appid=@appid</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='2024-08-20' set @to ='2024-08-20'
+        <CommandText>
+--declare @from datetime,@to datetime
+--set @from ='2024-09-12'set @to='2024-09-12'
 
-select   Total_Garbage_collection,Segregated,MixedGar,Not_Received,Not_specified,Wet,Dry,TotalHouse, TotalPoint,TotalDump from(select
+select   Total_Garbage_collection,Segregated,MixedGar,Not_Received,Not_specified,Not_Scan,Wet,Dry,TotalHouse, TotalPoint,TotalDump from(select
               
-		--(Select count(houseid) from HouseMaster  ) TotalHouse_incity,
-		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType is not null and gctype=1 and Convert(date,gcDate) between @from and @to  ) Total_Garbage_collection,
-		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=1 and gctype=1 and Convert(date,gcDate) between @from and @to ) Segregated,	
-		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=0 and gctype=1 and Convert(date,gcDate) between @from and @to ) MixedGar,
-		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=2 and gctype=1 and Convert(date,gcDate) between @from and @to ) Not_Received,
-		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=-1 and gctype=1 and Convert(date,gcDate) between @from and @to ) Not_specified,
-		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=6 and gctype=1 and Convert(date,gcDate) between @from and @to ) Wet,
-		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=7 and gctype=1 and Convert(date,gcDate) between @from and @to ) Dry,
-		(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where gcType=1 and garbageType is not null and Convert(date,gcDate) between @from and @to ) TotalHouse,
-        (Select distinct Count(*) from GarbageCollectionDetails with(nolock) where gcType=2 and  garbageType is not null and Convert(date,gcDate) between @from and @to) TotalPoint,
-	    (Select Count(*) from GarbageCollectionDetails with(nolock) where gcType=3  and Convert(date,gcDate) between @from and @to) TotalDump) x</CommandText>
+--(Select count(houseid) from HouseMaster  ) TotalHouse_incity,
+(Select (Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType is not null and gctype=1 and Convert(date,gcDate) between @from and @to) +
+(select count(gcns.gcNotScanId) from GarbageCollection_NotScan gcns with(nolock) where gcns.garbageType is not null and gctype=1 and gcns.isNotScan=1 and cast(gcns.gcDate as date) between @from and @to) ) Total_Garbage_collection,
+(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=1 and gctype=1 and Convert(date,gcDate) between @from and @to ) Segregated,	
+(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=0 and gctype=1 and Convert(date,gcDate) between @from and @to ) MixedGar,
+(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=2 and gctype=1 and Convert(date,gcDate) between @from and @to ) Not_Received,
+(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=-1 and gctype=1 and Convert(date,gcDate) between @from and @to ) Not_specified,
+(Select(select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  g.garbageType=4 and gctype=1 and cast(g.gcDate as date) between @from and @to) +
+(select count(gcns.gcNotScanId) from GarbageCollection_NotScan gcns with(nolock) where gcns.garbageType=4 and gctype=1 and gcns.isNotScan=1 and cast(gcns.gcDate as date) between @from and @to)) Not_Scan,
+(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=6 and gctype=1 and Convert(date,gcDate) between @from and @to ) Wet,
+(Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType=7 and gctype=1 and Convert(date,gcDate) between @from and @to ) Dry,
+(Select (Select  Count(gcId) from GarbageCollectionDetails with(nolock) where garbageType is not null and gctype=1 and Convert(date,gcDate) between @from and @to) +
+(select count(gcns.gcNotScanId) from GarbageCollection_NotScan gcns with(nolock) where gcns.garbageType is not null and gctype=1 and gcns.isNotScan=1 and cast(gcns.gcDate as date) between @from and @to) ) TotalHouse,
+(Select distinct Count(*) from GarbageCollectionDetails with(nolock) where gcType=2 and  garbageType is not null and Convert(date,gcDate) between @from and @to) TotalPoint,
+(Select Count(*) from GarbageCollectionDetails with(nolock) where gcType=3  and Convert(date,gcDate) between @from and @to) TotalDump) x</CommandText>
       </Query>
       <Fields>
         <Field Name="Total_Garbage_collection">
@@ -132,6 +137,10 @@ select   Total_Garbage_collection,Segregated,MixedGar,Not_Received,Not_specified
         <Field Name="Not_specified">
           <DataField>Not_specified</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Not_Scan">
+          <DataField>Not_Scan</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
         <Field Name="Wet">
           <DataField>Wet</DataField>
@@ -211,7 +220,7 @@ select   Total_Garbage_collection,Segregated,MixedGar,Not_Received,Not_specified
           </QueryParameter>
         </QueryParameters>
         <CommandText>--declare @from datetime,@to datetime
---set @from ='08-20-2024'set @to='08-20-2024'
+--set @from ='2024-09-12'set @to='2024-09-12'
 
 select distinct um.userName NameE,SUBSTRING(um.userName, 1, CHARINDEX(' ', um.userName + ' ') - 1) FNameEng,      
        um.userNameMar NameH,um.userid,	  
@@ -221,6 +230,8 @@ select distinct um.userName NameE,SUBSTRING(um.userName, 1, CHARINDEX(' ', um.us
 	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=0 and gctype=1 and cast(g.gcDate as date) between @from and @to) MixedG,
 	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=2 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotReceived,
 	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and (g.garbageType=-1 OR g.garbageType=3) and gctype=1 and cast(g.gcDate as date) between @from and @to) NotSpecified,
+	   (Select(select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=4 and gctype=1 and cast(g.gcDate as date) between @from and @to) +
+	   (select count(gcns.gcNotScanId) from GarbageCollection_NotScan gcns with(nolock) where  GNS.userId=gcns.userid and gcns.garbageType=4 and gctype=1 and gcns.isNotScan=1 and cast(gcns.gcDate as date) between @from and @to)) NotScan,
 	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=6 and gctype=1 and cast(g.gcDate as date) between @from and @to) Wet,
 	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=7 and gctype=1 and cast(g.gcDate as date) between @from and @to) Dry,
 	   isnull(um.gcTarget,0) OneDay_HouseTarget,
@@ -228,10 +239,14 @@ select distinct um.userName NameE,SUBSTRING(um.userName, 1, CHARINDEX(' ', um.us
 	   isnull(Cast(gcTarget AS int),0)  * (datediff(day,@from,@to)+1) Total_Target
 from    GarbageCollectionDetails gc with(nolock)  INNER JOIN
         UserMaster um with(nolock) ON gc.userId = um.userId	
-where cast(gc.gcDate as date) between @from and @to
+		INNER JOIN GarbageCollection_NotScan GNS With(nolock) On GNS.userId=um.userId
+where (cast(gc.gcDate as date) between @from and @to OR cast(GNS.gcDate as date) between @from and @to)
             and um.EmployeeType is Null
-group by gc.userId,um.userName,um.userNameMar,gc.gcId,um.userId,um.gcTarget
-order by um.userName</CommandText>
+group by gc.userId,um.userName,um.userNameMar,gc.gcId,um.userId,um.gcTarget,GNS.userId
+order by um.userName
+
+
+</CommandText>
       </Query>
       <Fields>
         <Field Name="NameE">
@@ -269,6 +284,10 @@ order by um.userName</CommandText>
         <Field Name="NotSpecified">
           <DataField>NotSpecified</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="NotScan">
+          <DataField>NotScan</DataField>
+          <rd:UserDefined>true</rd:UserDefined>
         </Field>
         <Field Name="Wet">
           <DataField>Wet</DataField>
@@ -599,6 +618,9 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                 <ChartMember>
                   <Label>Not Specified</Label>
                 </ChartMember>
+                <ChartMember>
+                  <Label>Not Scan</Label>
+                </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
             <ChartData>
@@ -729,6 +751,43 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                       <ToolTip>="Not Specified Garbage - " &amp; Sum(Fields!NotSpecified.Value)</ToolTip>
                       <Style>
                         <Color>#0086c3</Color>
+                      </Style>
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Subtype>Stacked</Subtype>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="NotScan">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(Fields!NotScan.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style />
+                      </ChartDataLabel>
+                      <ToolTip>="Not Scan Garbage - " &amp; Sum(Fields!NotScan.Value)</ToolTip>
+                      <Style>
+                        <Color>#b6a306</Color>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -1094,6 +1153,9 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                 <ChartMember>
                   <Label>Dry</Label>
                 </ChartMember>
+                <ChartMember>
+                  <Label>Not Scan</Label>
+                </ChartMember>
               </ChartMembers>
             </ChartSeriesHierarchy>
             <ChartData>
@@ -1321,6 +1383,48 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
                       <ToolTip>="Dry Garbage - " &amp; Sum(Fields!Dry.Value, "Dashboard_Details")</ToolTip>
                       <Style>
                         <Color>#66a2d5</Color>
+                      </Style>
+                      <ChartMarker>
+                        <Style />
+                      </ChartMarker>
+                      <DataElementOutput>Output</DataElementOutput>
+                    </ChartDataPoint>
+                  </ChartDataPoints>
+                  <Style />
+                  <ChartEmptyPoints>
+                    <Style />
+                    <ChartMarker>
+                      <Style />
+                    </ChartMarker>
+                    <ChartDataLabel>
+                      <Style />
+                    </ChartDataLabel>
+                  </ChartEmptyPoints>
+                  <CustomProperties>
+                    <CustomProperty>
+                      <Name>DrawingStyle</Name>
+                      <Value>Cylinder</Value>
+                    </CustomProperty>
+                  </CustomProperties>
+                  <ValueAxisName>Primary</ValueAxisName>
+                  <CategoryAxisName>Primary</CategoryAxisName>
+                  <ChartSmartLabel>
+                    <CalloutLineColor>Black</CalloutLineColor>
+                    <MinMovingDistance>0pt</MinMovingDistance>
+                  </ChartSmartLabel>
+                </ChartSeries>
+                <ChartSeries Name="Not_Scan">
+                  <ChartDataPoints>
+                    <ChartDataPoint>
+                      <ChartDataPointValues>
+                        <Y>=Sum(Fields!Not_Scan.Value)</Y>
+                      </ChartDataPointValues>
+                      <ChartDataLabel>
+                        <Style />
+                      </ChartDataLabel>
+                      <ToolTip>="Not Scan Garbage - " &amp; Sum(Fields!Not_Scan.Value, "Dashboard_Details")</ToolTip>
+                      <Style>
+                        <Color>#b6a306</Color>
                       </Style>
                       <ChartMarker>
                         <Style />
@@ -2931,7 +3035,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             </ChartNoDataMessage>
             <DataSetName>Employee_collection</DataSetName>
             <Top>7.11396in</Top>
-            <Left>0.09041in</Left>
+            <Left>0.10291in</Left>
             <Height>3.79167in</Height>
             <Width>13.55081in</Width>
             <ZIndex>8</ZIndex>
