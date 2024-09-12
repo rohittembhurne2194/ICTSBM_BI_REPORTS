@@ -98,15 +98,21 @@ from UserMaster where EmployeeType Is Null</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='01/01/2022' set @to ='03/02/2022' 
+        <CommandText>--DECLARE @from DATETIME, @to DATETIME
+--SET @from = '2024-06-25'
+--SET @to = '2024-09-11'
 
-select  distinct AreaId,isnull(AreaName,'No Name'),TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,Not_Scan,Wet,Dry,No_Entry 
+select  distinct AreaId,isnull(AreaName,'No Name')AreaName,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,Not_Scan,Wet,Dry,No_Entry 
 from(
 
 select    hm.areaid AreaId,
          (select area from teritorymaster with(nolock) where Id=hm.AreaId ) AreaName,  
-		 count(gc.gcId)  TotalCollected,
+		  COUNT(gc.gcId) + ISNULL((SELECT COUNT(ns.gcNotScanId) 
+                                 FROM GarbageCollection_NotScan ns 
+                                 INNER JOIN HouseMaster h WITH (NOLOCK) ON ns.houseId = h.houseId 
+                                 WHERE CAST(ns.gcDate AS DATE) BETWEEN @from AND @to 
+                                 AND h.areaId = hm.areaId 
+                                 AND ns.isNotScan = 1), 0) TotalCollected,
 		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock)
 		  where g.houseId=h.houseId 	
 		 and cast(g.gcDate as date) between @from and @to
@@ -135,12 +141,22 @@ select    hm.areaid AreaId,
 		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
 		 ) Not_Specified,
 
-	     (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
-		  where g.houseId=h.houseId 		 
-		 and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=4	  
-		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
-		 ) Not_Scan,
+	     (
+          (SELECT COUNT(g.gcId)
+           FROM GarbageCollectionDetails g WITH(NOLOCK)
+           INNER JOIN HouseMaster h WITH(NOLOCK) ON g.houseId = h.houseId
+           WHERE CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+           AND g.garbageType = 4
+           AND ISNULL(hm.AreaId, 0) = ISNULL(h.AreaId, 0)
+          ) +
+          (SELECT COUNT(gcn.gcNotScanId)
+           FROM GarbageCollection_NotScan gcn WITH(NOLOCK)
+		   INNER JOIN HouseMaster h WITH(NOLOCK) ON gcn.houseId = h.houseId
+           WHERE CAST(gcn.gcDate AS DATE) BETWEEN @from AND @to
+           AND gcn.isNotScan = 1
+           AND ISNULL(hm.AreaId, 0) = ISNULL(h.areaid, 0)
+          )
+        ) AS Not_Scan,
 
 		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
 		  where g.houseId=h.houseId 		 
@@ -180,6 +196,10 @@ group by hm.AreaId
         </Field>
         <Field Name="ID">
           <DataField />
+          <rd:UserDefined>true</rd:UserDefined>
+        </Field>
+        <Field Name="AreaName">
+          <DataField>AreaName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="TotalCollected">
@@ -315,6 +335,21 @@ group by hm.AreaId
                       <Value>=Fields!ID.Value</Value>
                     </SortExpression>
                   </SortExpressions>
+                  <ChartMembers>
+                    <ChartMember>
+                      <Group Name="Chart1_CategoryGroup1">
+                        <GroupExpressions>
+                          <GroupExpression>=Fields!AreaName.Value</GroupExpression>
+                        </GroupExpressions>
+                      </Group>
+                      <SortExpressions>
+                        <SortExpression>
+                          <Value>=Fields!AreaName.Value</Value>
+                        </SortExpression>
+                      </SortExpressions>
+                      <Label>=Fields!AreaName.Value</Label>
+                    </ChartMember>
+                  </ChartMembers>
                   <Label>=Fields!ID.Value</Label>
                 </ChartMember>
               </ChartMembers>
