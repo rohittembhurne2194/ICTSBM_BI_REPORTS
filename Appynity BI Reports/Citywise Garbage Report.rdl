@@ -97,14 +97,31 @@ where appid=@appid</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='2024-08-20' set @to ='2024-08-20'
+        <CommandText>--DECLARE @from DATETIME, @to DATETIME;
+--SET @from = '2024-06-25';
+--SET @to = '2024-09-11';
 
 select  wardno,wardname,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,NotScan,ConAndDemo,Horticulture,Wet,Dry,Domestic,Sanitary,No_Entry 
 from(
 
 select    hm.wardno wardno,w.WardNo wardname,         
-		 count(gc.gcId)  TotalCollected,
+		    ((SELECT COUNT(g.gcId) 
+             FROM GarbageCollectionDetails g WITH (NOLOCK)
+             JOIN HouseMaster h WITH (NOLOCK) ON g.houseId = h.houseId
+             WHERE CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+             AND g.houseId &lt;&gt; 0
+             AND g.garbageType IS NOT NULL
+             AND hm.WardNo = h.WardNo) +
+             
+            (SELECT COUNT(gcn.gcNotScanId)
+             FROM GarbageCollection_NotScan gcn WITH (NOLOCK)
+             JOIN HouseMaster h WITH (NOLOCK) ON gcn.houseId = h.houseId
+             WHERE CAST(gcn.gcDate AS DATE) BETWEEN @from AND @to
+             AND gcn.houseId &lt;&gt; 0
+             AND gcn.isNotScan = 1
+             AND hm.WardNo = h.WardNo)
+        ) AS TotalCollected,
+
 		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock)
 		  where g.houseId=h.houseId 		   		   				 
 		  and cast(g.gcDate as date) between @from and @to
@@ -139,14 +156,21 @@ select    hm.wardno wardno,w.WardNo wardname,
 		  and hm.WardNo=h.WardNo		  
 		 ) Not_Specified,
                                       
-		  (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
+		  ((select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
 		  where g.houseId=h.houseId 		   		   				 
 		  and cast(g.gcDate as date) between @from and @to
 		  and g.garbageType=4
 		  and g.houseId &lt;&gt;0
-                                      and g.garbageType is not null		  
+          and g.garbageType is not null		  
 		  and hm.WardNo=h.WardNo		  
-		 ) NotScan,
+		 ) +
+		 (select  count(gcn.gcNotScanId) from GarbageCollection_NotScan gcn with(nolock),HouseMaster h with(nolock) 
+		  where gcn.houseId=h.houseId 		   		   				 
+		  and cast(gcn.gcDate as date) between @from and @to
+		  and gcn.houseId &lt;&gt;0
+          and gcn.isNotScan=1	  
+		  and hm.WardNo=h.WardNo		  
+		 )) NotScan,
 
 		  (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
 		  where g.houseId=h.houseId 		   		   				 
@@ -298,13 +322,29 @@ order by TotalCollected desc</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='08/20/2024' set @to ='08/20/2024' 
+        <CommandText>--DECLARE @from DATETIME, @to DATETIME;
+--SET @from = '2024-06-25';
+--SET @to = '2024-09-11';
 
 select  wardno,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Null_Entry,NotSpecified,NotScan,Wet,Dry
 from(
 
-select    count(gc.gcId)  TotalCollected,
+select    ((SELECT COUNT(g.gcId) 
+             FROM GarbageCollectionDetails g WITH (NOLOCK)
+             JOIN HouseMaster h WITH (NOLOCK) ON g.houseId = h.houseId
+             WHERE CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+             AND g.houseId &lt;&gt; 0
+             AND g.garbageType IS NOT NULL
+             AND hm.WardNo = h.WardNo) +
+             
+            (SELECT COUNT(gcn.gcNotScanId)
+             FROM GarbageCollection_NotScan gcn WITH (NOLOCK)
+             JOIN HouseMaster h WITH (NOLOCK) ON gcn.houseId = h.houseId
+             WHERE CAST(gcn.gcDate AS DATE) BETWEEN @from AND @to
+             AND gcn.houseId &lt;&gt; 0
+             AND gcn.isNotScan = 1
+             AND hm.WardNo = h.WardNo)
+        ) AS TotalCollected,
           hm.wardno wardno,		 
 
 		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
@@ -352,14 +392,24 @@ select    count(gc.gcId)  TotalCollected,
                                        and g.garbageType is not null		  
 		 ) NotSpecified,
                                 
-		  (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
-		  where g.houseId=h.houseId 		 
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=4		  
-		  and hm.WardNo=h.WardNo
-		  and g.houseId &lt;&gt;0
-                                       and g.garbageType is not null		  
-		 ) NotScan,
+		  (
+          (SELECT COUNT(g.gcId)
+           FROM GarbageCollectionDetails g WITH(NOLOCK)
+           INNER JOIN HouseMaster h WITH(NOLOCK) ON g.houseId = h.houseId
+           WHERE CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+           AND g.garbageType = 4
+           AND h.WardNo = hm.WardNo
+           AND g.houseId &lt;&gt; 0
+          ) +
+          (SELECT COUNT(gcn.gcNotScanId)
+           FROM GarbageCollection_NotScan gcn WITH(NOLOCK)
+           INNER JOIN HouseMaster h WITH(NOLOCK) ON gcn.houseId = h.houseId
+           WHERE CAST(gcn.gcDate AS DATE) BETWEEN @from AND @to
+           AND gcn.isNotScan = 1
+           AND h.WardNo = hm.WardNo
+           AND gcn.houseId &lt;&gt; 0
+          )
+        ) AS NotScan,
 
 		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
 		  where g.houseId=h.houseId 		 

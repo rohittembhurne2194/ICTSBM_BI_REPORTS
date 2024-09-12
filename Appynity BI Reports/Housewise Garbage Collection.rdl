@@ -98,70 +98,100 @@ from UserMaster where EmployeeType Is Null</CommandText>
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='08/20/2024' set @to ='08/20/2024'
+        <CommandText>--DECLARE @from DATETIME, @to DATETIME
+--SET @from = '2024-06-25'
+--SET @to = '2024-09-11'
 
-select  distinct House,HouseId,HouseOwner,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,NotSpecified_Garbage,NotScan,No_Entry 
-from(
+SELECT DISTINCT House, HouseId, HouseOwner, TotalCollected, Mixed_Garbage, Bifurcate_Garbage, NotReceived_Garbage, NotSpecified_Garbage, NotScan, No_Entry 
+FROM (
+    SELECT 
+        COALESCE(gc.houseId, ns.houseId) AS House,
+        hm.ReferanceId AS HouseId,
+        (SELECT houseOwner 
+         FROM HouseMaster WITH (NOLOCK) 
+         WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+        ) AS HouseOwner,           
 
-select    gc.houseId House,hm.ReferanceId HouseId,
-          (select houseOwner from HouseMaster with(nolock) where houseId=gc.houseId ) HouseOwner,           
-          
-		 count(gc.gcId)  TotalCollected,
-		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
-		  where houseId=gc.houseId	  
-		  and cast(gcDate as date) between @from and @to
-		  and garbageType=0	
-		  and houseId &lt;&gt;0
-          and garbageType is not null	 	  
-		 ) Mixed_Garbage,
+        (
+            (SELECT COUNT(gcId) 
+             FROM GarbageCollectionDetails WITH (NOLOCK)
+             WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+             AND CAST(gcDate AS DATE) BETWEEN @from AND @to
+             AND garbageType IS NOT NULL
+             AND houseId &lt;&gt; 0) 
+            +
+            (SELECT COUNT(gcNotScanId) 
+             FROM GarbageCollection_NotScan WITH (NOLOCK)
+             WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+             AND CAST(gcDate AS DATE) BETWEEN @from AND @to
+             AND isNotScan = 1
+             AND houseId &lt;&gt; 0)
+        ) AS TotalCollected,
 
-		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
-		  where houseId=gc.houseId 	 
-		  and cast(gcDate as date) between @from and @to
-		  and garbageType=1	
-		  and houseId &lt;&gt;0
-          and garbageType is not null			  
-		 ) Bifurcate_Garbage,
+        (SELECT COUNT(gcId) 
+         FROM GarbageCollectionDetails WITH (NOLOCK)
+         WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+         AND CAST(gcDate AS DATE) BETWEEN @from AND @to
+         AND garbageType = 0
+         AND houseId &lt;&gt; 0
+         AND garbageType IS NOT NULL) AS Mixed_Garbage,
 
-		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
-		  where houseId=gc.houseId 	  
-		  and cast(gcDate as date) between @from and @to
-		  and garbageType=2	
-		  and houseId &lt;&gt;0
-          and garbageType is not null		 	  
-		 ) NotReceived_Garbage,
+        (SELECT COUNT(gcId) 
+         FROM GarbageCollectionDetails WITH (NOLOCK)
+         WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+         AND CAST(gcDate AS DATE) BETWEEN @from AND @to
+         AND garbageType = 1
+         AND houseId &lt;&gt; 0
+         AND garbageType IS NOT NULL) AS Bifurcate_Garbage,
 
-		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
-		  where houseId=gc.houseId 	  
-		  and cast(gcDate as date) between @from and @to
-		  and (garbageType=3 OR garbageType= -1)
-		  and houseId &lt;&gt;0
-                                       and garbageType is not null			 	  
-		 ) NotSpecified_Garbage,
+        (SELECT COUNT(gcId) 
+         FROM GarbageCollectionDetails WITH (NOLOCK)
+         WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+         AND CAST(gcDate AS DATE) BETWEEN @from AND @to
+         AND garbageType = 2
+         AND houseId &lt;&gt; 0
+         AND garbageType IS NOT NULL) AS NotReceived_Garbage,
 
-		  (select  count(gcId) from GarbageCollectionDetails with(nolock) 
-		  where houseId=gc.houseId 	  
-		  and cast(gcDate as date) between @from and @to
-		  and garbageType=4
-		  and houseId &lt;&gt;0
-                                       and garbageType is not null			 	  
-		 ) NotScan,
+        (SELECT COUNT(gcId) 
+         FROM GarbageCollectionDetails WITH (NOLOCK)
+         WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+         AND CAST(gcDate AS DATE) BETWEEN @from AND @to
+         AND (garbageType = 3 OR garbageType = -1)
+         AND houseId &lt;&gt; 0
+         AND garbageType IS NOT NULL) AS NotSpecified_Garbage,
 
-		 (select  count(gcId) from GarbageCollectionDetails with(nolock) 
-		  where houseId=gc.houseId 	 
-		 and cast(gcDate as date) between @from and @to
-		  and garbageType is null			 		  
-		 ) No_Entry
-		 	 
-from GarbageCollectionDetails gc with(nolock),
-     HouseMaster hm with(nolock)	 
-where gc.houseId=hm.houseId
-and cast(gcDate as date) between @from and @to
-and gc.houseId &lt;&gt;0
-and gc.houseId is not null
-and gc.garbageType is not null
-group by gc.houseId,hm.ReferanceId
+        (
+            (SELECT COUNT(gcId) 
+             FROM GarbageCollectionDetails WITH (NOLOCK)
+             WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+             AND CAST(gcDate AS DATE) BETWEEN @from AND @to
+             AND garbageType = 4
+             AND houseId &lt;&gt; 0
+             AND garbageType IS NOT NULL)
+            +
+            (SELECT COUNT(gcNotScanId) 
+             FROM GarbageCollection_NotScan WITH (NOLOCK)
+             WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+             AND CAST(gcDate AS DATE) BETWEEN @from AND @to
+             AND isNotScan = 1
+             AND houseId &lt;&gt; 0)
+        ) AS NotScan,
+
+        (SELECT COUNT(gcId) 
+         FROM GarbageCollectionDetails WITH (NOLOCK)
+         WHERE houseId = COALESCE(gc.houseId, ns.houseId)
+         AND CAST(gcDate AS DATE) BETWEEN @from AND @to
+         AND garbageType IS NULL) AS No_Entry
+
+    FROM GarbageCollectionDetails gc WITH (NOLOCK)
+    FULL OUTER JOIN GarbageCollection_NotScan ns WITH (NOLOCK) 
+        ON gc.houseId = ns.houseId
+    LEFT JOIN HouseMaster hm WITH (NOLOCK) 
+        ON COALESCE(gc.houseId, ns.houseId) = hm.houseId
+    WHERE 
+        (CAST(gc.gcDate AS DATE) BETWEEN @from AND @to 
+        OR CAST(ns.gcDate AS DATE) BETWEEN @from AND @to)
+        AND (gc.houseId IS NOT NULL OR ns.houseId IS NOT NULL)
 ) x</CommandText>
       </Query>
       <Fields>
