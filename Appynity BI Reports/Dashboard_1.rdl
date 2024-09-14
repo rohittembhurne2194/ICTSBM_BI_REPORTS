@@ -219,34 +219,91 @@ select   Total_Garbage_collection,Segregated,MixedGar,Not_Received,Not_specified
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime
---set @from ='2024-09-12'set @to='2024-09-12'
+        <CommandText>--DECLARE @from DATETIME, @to DATETIME
+--SET @from = '2024-09-14'
+--SET @to = '2024-09-14'
 
-select distinct um.userName NameE,SUBSTRING(um.userName, 1, CHARINDEX(' ', um.userName + ' ') - 1) FNameEng,      
-       um.userNameMar NameH,um.userid,	  
-	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and (gctype=1 OR gctype =6 OR gctype=7) and cast(g.gcDate as date) between @from and @to) Total,
-	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and gctype=9  and cast(g.gcDate as date) between @from and @to) Total_Com,
-	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=1 and gctype=1 and cast(g.gcDate as date) between @from and @to) Segregated,
-	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=0 and gctype=1 and cast(g.gcDate as date) between @from and @to) MixedG,
-	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=2 and gctype=1 and cast(g.gcDate as date) between @from and @to) NotReceived,
-	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and (g.garbageType=-1 OR g.garbageType=3) and gctype=1 and cast(g.gcDate as date) between @from and @to) NotSpecified,
-	   (Select(select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=4 and gctype=1 and cast(g.gcDate as date) between @from and @to) +
-	   (select count(gcns.gcNotScanId) from GarbageCollection_NotScan gcns with(nolock) where  GNS.userId=gcns.userid and gcns.garbageType=4 and gctype=1 and gcns.isNotScan=1 and cast(gcns.gcDate as date) between @from and @to)) NotScan,
-	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=6 and gctype=1 and cast(g.gcDate as date) between @from and @to) Wet,
-	   (select count(g.gcId) from GarbageCollectionDetails g with(nolock) where  gc.userId=g.userid and g.garbageType=7 and gctype=1 and cast(g.gcDate as date) between @from and @to) Dry,
-	   isnull(um.gcTarget,0) OneDay_HouseTarget,
-	   (datediff(day,@from,@to)+1) Total_Day,
-	   isnull(Cast(gcTarget AS int),0)  * (datediff(day,@from,@to)+1) Total_Target
-from    GarbageCollectionDetails gc with(nolock)  INNER JOIN
-        UserMaster um with(nolock) ON gc.userId = um.userId	
-		INNER JOIN GarbageCollection_NotScan GNS With(nolock) On GNS.userId=um.userId
-where (cast(gc.gcDate as date) between @from and @to OR cast(GNS.gcDate as date) between @from and @to)
-            and um.EmployeeType is Null
-group by gc.userId,um.userName,um.userNameMar,gc.gcId,um.userId,um.gcTarget,GNS.userId
-order by um.userName
-
-
-</CommandText>
+SELECT DISTINCT 
+    um.userName AS NameE,
+    SUBSTRING(um.userName, 1, CHARINDEX(' ', um.userName + ' ') - 1) AS FNameEng,      
+    um.userNameMar AS NameH,
+    um.userId,  
+    (SELECT COUNT(g.gcId) 
+     FROM GarbageCollectionDetails g WITH (NOLOCK) 
+     WHERE gc.userId = g.userId 
+     AND (g.gctype = 1 OR g.gctype = 6 OR g.gctype = 7) 
+     AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to) AS Total,
+    (SELECT COUNT(g.gcId) 
+     FROM GarbageCollectionDetails g WITH (NOLOCK) 
+     WHERE gc.userId = g.userId 
+     AND g.gctype = 9  
+     AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to) AS Total_Com,
+    (SELECT COUNT(g.gcId) 
+     FROM GarbageCollectionDetails g WITH (NOLOCK) 
+     WHERE gc.userId = g.userId 
+     AND g.garbageType = 1 
+     AND g.gctype = 1 
+     AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to) AS Segregated,
+    (SELECT COUNT(g.gcId) 
+     FROM GarbageCollectionDetails g WITH (NOLOCK) 
+     WHERE gc.userId = g.userId 
+     AND g.garbageType = 0 
+     AND g.gctype = 1 
+     AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to) AS MixedG,
+    (SELECT COUNT(g.gcId) 
+     FROM GarbageCollectionDetails g WITH (NOLOCK) 
+     WHERE gc.userId = g.userId 
+     AND g.garbageType = 2 
+     AND g.gctype = 1 
+     AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to) AS NotReceived,
+    (SELECT COUNT(g.gcId) 
+     FROM GarbageCollectionDetails g WITH (NOLOCK) 
+     WHERE gc.userId = g.userId 
+     AND (g.garbageType = -1 OR g.garbageType = 3) 
+     AND g.gctype = 1 
+     AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to) AS NotSpecified,
+    (SELECT (SELECT COUNT(g.gcId) 
+             FROM GarbageCollectionDetails g WITH (NOLOCK) 
+             WHERE gc.userId = g.userId 
+             AND g.garbageType = 4 
+             AND g.gctype = 1 
+             AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to) 
+             + 
+            (SELECT COUNT(gcns.gcNotScanId) 
+             FROM GarbageCollection_NotScan gcns WITH (NOLOCK) 
+             WHERE gcns.userId = um.userId 
+             AND gcns.garbageType = 4 
+             AND gcns.gctype = 1 
+             AND gcns.isNotScan = 1 
+             AND CAST(gcns.gcDate AS DATE) BETWEEN @from AND @to)
+    ) AS NotScan,
+    (SELECT COUNT(g.gcId) 
+     FROM GarbageCollectionDetails g WITH (NOLOCK) 
+     WHERE gc.userId = g.userId 
+     AND g.garbageType = 6 
+     AND g.gctype = 1 
+     AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to) AS Wet,
+    (SELECT COUNT(g.gcId) 
+     FROM GarbageCollectionDetails g WITH (NOLOCK) 
+     WHERE gc.userId = g.userId 
+     AND g.garbageType = 7 
+     AND g.gctype = 1 
+     AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to) AS Dry,
+    ISNULL(um.gcTarget, 0) AS OneDay_HouseTarget,
+    (DATEDIFF(DAY, @from, @to) + 1) AS Total_Day,
+    ISNULL(CAST(um.gcTarget AS INT), 0) * (DATEDIFF(DAY, @from, @to) + 1) AS Total_Target
+FROM    
+    GarbageCollectionDetails gc WITH (NOLOCK)  
+    LEFT JOIN UserMaster um WITH (NOLOCK) ON gc.userId = um.userId    
+    LEFT JOIN GarbageCollection_NotScan GNS WITH (NOLOCK) ON GNS.userId = um.userId
+WHERE 
+    (CAST(gc.gcDate AS DATE) BETWEEN @from AND @to 
+     OR CAST(GNS.gcDate AS DATE) BETWEEN @from AND @to)
+    AND um.EmployeeType IS NULL
+GROUP BY 
+    gc.userId, um.userName, um.userNameMar, um.userId, um.gcTarget
+ORDER BY 
+    um.userName;</CommandText>
       </Query>
       <Fields>
         <Field Name="NameE">

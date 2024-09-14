@@ -99,95 +99,69 @@ from UserMaster where EmployeeType Is Null</CommandText>
           </QueryParameter>
         </QueryParameters>
         <CommandText>--DECLARE @from DATETIME, @to DATETIME
---SET @from = '2024-06-25'
---SET @to = '2024-09-11'
+--SET @from = '2024-09-11'
+--SET @to = '2024-09-13'
 
-select  distinct AreaId,isnull(AreaName,'No Name')AreaName,TotalCollected,Mixed_Garbage,Bifurcate_Garbage,NotReceived_Garbage,Not_Specified,Not_Scan,Wet,Dry,No_Entry 
-from(
+SELECT 
+    AreaId, 
+    AreaName,
+    SUM(TotalCollected) AS TotalCollected,
+    SUM(Mixed_Garbage) AS Mixed_Garbage, 
+    SUM(Bifurcate_Garbage) AS Bifurcate_Garbage, 
+    SUM(NotReceived_Garbage) AS NotReceived_Garbage, 
+    SUM(Not_Specified) AS Not_Specified, 
+    SUM(Not_Scan) AS Not_Scan, 
+    SUM(Wet) AS Wet, 
+    SUM(Dry) AS Dry, 
+    SUM(No_Entry) AS No_Entry 
+FROM (
+    SELECT 
+        hm.areaid AS AreaId,
+        (SELECT area FROM teritorymaster WITH (NOLOCK) WHERE Id = hm.AreaId) AS AreaName,
 
-select    hm.areaid AreaId,
-         (select area from teritorymaster with(nolock) where Id=hm.AreaId ) AreaName,  
-		  COUNT(gc.gcId) + ISNULL((SELECT COUNT(ns.gcNotScanId) 
-                                 FROM GarbageCollection_NotScan ns 
-                                 INNER JOIN HouseMaster h WITH (NOLOCK) ON ns.houseId = h.houseId 
-                                 WHERE CAST(ns.gcDate AS DATE) BETWEEN @from AND @to 
-                                 AND h.areaId = hm.areaId 
-                                 AND ns.isNotScan = 1), 0) TotalCollected,
-		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock)
-		  where g.houseId=h.houseId 	
-		 and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=0		  
-		 and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
-		 ) Mixed_Garbage,
+        COUNT(g.gcId) AS TotalCollected,
+        SUM(CASE WHEN g.garbageType = 0 THEN 1 ELSE 0 END) AS Mixed_Garbage,
+        SUM(CASE WHEN g.garbageType = 1 THEN 1 ELSE 0 END) AS Bifurcate_Garbage,
+        SUM(CASE WHEN g.garbageType = 2 THEN 1 ELSE 0 END) AS NotReceived_Garbage,
+        SUM(CASE WHEN g.garbageType = -1 OR g.garbageType = 3 THEN 1 ELSE 0 END) AS Not_Specified,
+        SUM(CASE WHEN g.garbageType = 4 THEN 1 ELSE 0 END) AS Not_Scan,
+        SUM(CASE WHEN g.garbageType = 6 THEN 1 ELSE 0 END) AS Wet,
+        SUM(CASE WHEN g.garbageType = 7 THEN 1 ELSE 0 END) AS Dry,
+        SUM(CASE WHEN g.garbageType IS NULL THEN 1 ELSE 0 END) AS No_Entry
 
-		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
-		  where g.houseId=h.houseId		  	
-		  and cast(g.gcDate as date) between @from and @to		 
-		  and g.garbageType=1			   
-		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)	  
-		 ) Bifurcate_Garbage,
+    FROM GarbageCollectionDetails g
+    LEFT JOIN HouseMaster hm ON g.houseId = hm.houseId
+    WHERE CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+    GROUP BY hm.areaid
 
-		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
-		  where g.houseId=h.houseId 		
-		 and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=2		  
-		 and isnull(hm.AreaId,0)=isnull(h.AreaId,0)	  
-		 ) NotReceived_Garbage,
+    UNION ALL
 
-		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
-		  where g.houseId=h.houseId 		 
-		 and cast(g.gcDate as date) between @from and @to
-		  and (g.garbageType=-1 OR g.garbageType=3)		  
-		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
-		 ) Not_Specified,
+    SELECT 
+        hm.areaid AS AreaId,
+        (SELECT area FROM teritorymaster WITH (NOLOCK) WHERE Id = hm.AreaId) AS AreaName,
 
-	     (
-          (SELECT COUNT(g.gcId)
-           FROM GarbageCollectionDetails g WITH(NOLOCK)
-           INNER JOIN HouseMaster h WITH(NOLOCK) ON g.houseId = h.houseId
-           WHERE CAST(g.gcDate AS DATE) BETWEEN @from AND @to
-           AND g.garbageType = 4
-           AND ISNULL(hm.AreaId, 0) = ISNULL(h.AreaId, 0)
-          ) +
-          (SELECT COUNT(gcn.gcNotScanId)
-           FROM GarbageCollection_NotScan gcn WITH(NOLOCK)
-		   INNER JOIN HouseMaster h WITH(NOLOCK) ON gcn.houseId = h.houseId
-           WHERE CAST(gcn.gcDate AS DATE) BETWEEN @from AND @to
-           AND gcn.isNotScan = 1
-           AND ISNULL(hm.AreaId, 0) = ISNULL(h.areaid, 0)
-          )
-        ) AS Not_Scan,
+        COUNT(ns.gcNotScanId) AS TotalCollected,
+        0 AS Mixed_Garbage,
+        0 AS Bifurcate_Garbage,
+        0 AS NotReceived_Garbage,
+        0 AS Not_Specified,
+        COUNT(ns.gcNotScanId) AS Not_Scan,
+        0 AS Wet,
+        0 AS Dry,
+        0 AS No_Entry
 
-		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
-		  where g.houseId=h.houseId 		 
-		 and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=6		  
-		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
-		 ) Wet,
-
-		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
-		  where g.houseId=h.houseId 		 
-		 and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType=7		  
-		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
-		 ) Dry,
-
-		
-		 (select  count(g.gcId) from GarbageCollectionDetails g with(nolock),HouseMaster h with(nolock) 
-		  where g.houseId=h.houseId 		  
-		  and cast(g.gcDate as date) between @from and @to
-		  and g.garbageType is null		  
-		  and isnull(hm.AreaId,0)=isnull(h.AreaId,0)		  
-		 ) No_Entry
-		 	 
-from GarbageCollectionDetails gc with(nolock),
-     HouseMaster hm with(nolock)	 
-where gc.houseId=hm.houseId
-and   gc.gctype=1
-and cast(gc.gcDate as date) between @from and @to
-and hm.AreaId is not null
-group by hm.AreaId
-) x</CommandText>
+    FROM GarbageCollection_NotScan ns
+    LEFT JOIN HouseMaster hm ON ns.houseId = hm.houseId
+    WHERE CAST(ns.gcDate AS DATE) BETWEEN @from AND @to
+    AND ns.isNotScan = 1
+    GROUP BY hm.areaid
+) x
+GROUP BY 
+    AreaId, 
+    AreaName
+HAVING 
+    AreaId &lt;&gt; 0;
+</CommandText>
       </Query>
       <Fields>
         <Field Name="AreaId">
