@@ -626,8 +626,9 @@ ORDER BY d.Date1 DESC;
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Format(Fields!Date1.Value,"dd/MM/yyyy")</Value>
+                                  <Value>=Format(Fields!Date1.Value,"MM/dd/yyyy")</Value>
                                   <Style>
+                                    <Format>d</Format>
                                     <Color>White</Color>
                                   </Style>
                                 </TextRun>
@@ -1551,6 +1552,7 @@ ORDER BY d.Date1 DESC;
                                 <TextRun>
                                   <Value>=Format(Fields!Date1.Value, "MM/dd/yyyy")</Value>
                                   <Style>
+                                    <Format>d</Format>
                                     <Color>White</Color>
                                   </Style>
                                 </TextRun>
