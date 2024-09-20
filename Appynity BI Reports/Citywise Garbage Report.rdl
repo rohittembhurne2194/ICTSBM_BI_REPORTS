@@ -642,6 +642,9 @@ HAVING wardno &lt;&gt; 0;</CommandText>
                         <Style />
                       </ChartMarker>
                       <DataElementOutput>Output</DataElementOutput>
+                      <ChartItemInLegend>
+                        <LegendText>Segregated Garbage</LegendText>
+                      </ChartItemInLegend>
                     </ChartDataPoint>
                   </ChartDataPoints>
                   <Type>Shape</Type>
