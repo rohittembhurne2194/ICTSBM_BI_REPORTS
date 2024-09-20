@@ -249,7 +249,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
                         <UseValueAsLabel>true</UseValueAsLabel>
                         <Visible>true</Visible>
                       </ChartDataLabel>
-                      <ToolTip>="Garbage Collection - " &amp; Fields!Total_Collection.Value  &amp; VbCrLf &amp; "Date - "  &amp; (Format(Fields!Date.Value,"dd/MM/yyyy")) &amp; VbCrLf &amp; "Name - "  &amp; Fields!Name.Value</ToolTip>
+                      <ToolTip>="Garbage Collection - " &amp; Fields!Total_Collection.Value  &amp; VbCrLf &amp; "Date - "  &amp; (Format(Fields!Date.Value,"MM/dd/yyyy")) &amp; VbCrLf &amp; "Name - "  &amp; Fields!Name.Value</ToolTip>
                       <Style>
                         <Border>
                           <Color>#daad0a</Color>
@@ -304,6 +304,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
                       </Border>
                       <FontFamily>Arial</FontFamily>
                       <FontSize>8pt</FontSize>
+                      <Format>MM/dd/yyyy</Format>
                     </Style>
                     <ChartAxisTitle>
                       <Caption />
@@ -346,6 +347,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
                       <Length>0.5</Length>
                     </ChartMinorTickMarks>
                     <CrossAt>NaN</CrossAt>
+                    <Scalar>true</Scalar>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
                     <ChartAxisScaleBreak>
@@ -729,7 +731,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
                                 <TextRun>
                                   <Value>=Fields!Date.Value</Value>
                                   <Style>
-                                    <Format>dd-MM-yyyy</Format>
+                                    <Format>d</Format>
                                   </Style>
                                 </TextRun>
                               </TextRuns>
@@ -751,7 +753,6 @@ from UserMaster where EmployeeType Is Null</CommandText>
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                     <TablixCell>
