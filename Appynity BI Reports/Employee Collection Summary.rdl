@@ -14,7 +14,8 @@
     <DataSource Name="Appconnection">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=202.65.157.253;Initial Catalog=LIVEAdvanceDevSwachhBharatMain</ConnectString>
+        <ConnectString>Data Source=103.241.147.8;Initial Catalog=LIVEAdvanceDevSwachhBharatMain</ConnectString>
+        <Prompt>Specify a user name and password for data source Appconnection:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>10eed1ac-d5a7-4294-8f4c-1756710224ec</rd:DataSourceID>

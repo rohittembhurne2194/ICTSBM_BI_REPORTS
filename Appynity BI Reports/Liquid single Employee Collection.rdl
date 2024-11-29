@@ -14,7 +14,7 @@
     <DataSource Name="Appconnection">
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
-        <ConnectString>Data Source=202.65.157.253;Initial Catalog=LIVEAdvanceDevSwachhBharatMain</ConnectString>
+        <ConnectString>Data Source=103.241.147.8;Initial Catalog=LIVEAdvanceDevSwachhBharatMain</ConnectString>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>10eed1ac-d5a7-4294-8f4c-1756710224ec</rd:DataSourceID>
@@ -573,7 +573,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
               </Style>
             </ChartNoDataMessage>
             <DataSetName>Collection_Detail</DataSetName>
-            <Top>0.41612in</Top>
+            <Top>0.42779in</Top>
             <Left>0.0441in</Left>
             <Height>4.99583in</Height>
             <Width>11.13879in</Width>
