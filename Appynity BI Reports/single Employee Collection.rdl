@@ -347,7 +347,6 @@ from UserMaster where EmployeeType Is Null</CommandText>
                       <Length>0.5</Length>
                     </ChartMinorTickMarks>
                     <CrossAt>NaN</CrossAt>
-                    <Scalar>true</Scalar>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
                     <ChartAxisScaleBreak>
