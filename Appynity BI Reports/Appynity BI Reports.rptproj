@@ -110,6 +110,7 @@
     <Report Include="T20_1.7.rdl" />
     <Report Include="T20_1.8.rdl" />
     <Report Include="T20_1.9.rdl" />
+    <Report Include="VehicleUsedDetails.rdl" />
     <Report Include="VehicleWiseReport.rdl" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Reporting Services\Microsoft.ReportingServices.MSBuilder.targets" />
