@@ -84,18 +84,43 @@ where appid=@appid</CommandText>
         <CommandText>--declare @from datetime,@to datetime
 --set @from ='01-01-2022'set @to='02-26-2022'
 
-select distinct um.userName NameE,SUBSTRING(um.userName, 1, CHARINDEX(' ', um.userName + ' ') - 1) FNameEng,      
-       um.userNameMar NameH,um.userid,	  
-	   (select count(g.gcId) from GarbageCollectionDetails g where  gc.userId=g.userid and gctype=5 and cast(g.gcDate as date) between @from and @to) Total,
-	   isnull(um.gcTarget,0) OneDay_Target,
-	   (datediff(day,@from,@to)+1) Total_Day,
-	   (isnull(um.gcTarget,0) * (datediff(day,@from,@to)+1)) Total_Target
-from    GarbageCollectionDetails gc  INNER JOIN
-        UserMaster um ON gc.userId = um.userId	
-where cast(gc.gcDate as date) between @from and @to
-		and um.EmployeeType ='S'
-group by gc.userId,um.userName,um.userNameMar,gc.gcId,um.userId,um.gcTarget
-order by um.userName
+;WITH CleanGC AS (
+    SELECT 
+        gcId,
+        TRY_CAST(userId AS INT) AS userIdInt,
+        gcDate,
+        gctype
+    FROM GarbageCollectionDetails
+    WHERE TRY_CAST(userId AS INT) IS NOT NULL
+)
+
+SELECT DISTINCT 
+    um.userName AS NameE,
+    SUBSTRING(um.userName, 1, CHARINDEX(' ', um.userName + ' ') - 1) AS FNameEng,      
+    um.userNameMar AS NameH,
+    um.userId,	  
+    (
+        SELECT COUNT(*) 
+        FROM CleanGC g 
+        WHERE 
+            g.userIdInt = um.userId AND 
+            g.gctype = 5 AND 
+            CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+    ) AS Total,
+    ISNULL(um.gcTarget, 0) AS OneDay_Target,
+    (DATEDIFF(DAY, @from, @to) + 1) AS Total_Day,
+    (ISNULL(um.gcTarget, 0) * (DATEDIFF(DAY, @from, @to) + 1)) AS Total_Target
+FROM 
+    CleanGC gc
+    INNER JOIN UserMaster um 
+        ON gc.userIdInt = um.userId	
+WHERE 
+    CAST(gc.gcDate AS DATE) BETWEEN @from AND @to 
+    AND um.EmployeeType = 'S'
+GROUP BY 
+    um.userName, um.userNameMar, um.userId, um.gcTarget
+ORDER BY 
+    um.userName
 
  </CommandText>
       </Query>
