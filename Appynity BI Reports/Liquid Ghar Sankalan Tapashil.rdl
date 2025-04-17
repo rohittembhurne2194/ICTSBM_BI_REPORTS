@@ -166,7 +166,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
                   <Width>42.13703mm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>92.93114mm</Width>
+                  <Width>58.946mm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>25.75323mm</Width>
@@ -178,7 +178,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
                   <Width>47.61659mm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>52.51006mm</Width>
+                  <Width>48.54131mm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -726,7 +726,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
             <Top>23.51617mm</Top>
             <Left>0.48514mm</Left>
             <Height>14.91041mm</Height>
-            <Width>286.4706mm</Width>
+            <Width>248.51671mm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -786,7 +786,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.61542in</Top>
-            <Left>7.80442in</Left>
+            <Left>5.92942in</Left>
             <Height>0.25705in</Height>
             <Width>3.49305in</Width>
             <ZIndex>2</ZIndex>
@@ -845,7 +845,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
       <Width>11.35997in</Width>
       <Page>
         <PageFooter>
-          <Height>0.46506in</Height>
+          <Height>0.57964in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
