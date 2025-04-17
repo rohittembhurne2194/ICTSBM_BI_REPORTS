@@ -244,43 +244,79 @@ ORDER BY
             <Value>=Parameters!to.Value</Value>
           </QueryParameter>
         </QueryParameters>
-        <CommandText>--declare @from datetime,@to datetime,@userid int
---set @from ='09-01-2024'set @to='09-11-2024'
---set @userid =9
+        <CommandText>--DECLARE @from DATETIME, @to DATETIME;
+--SET @from = '2024-09-01';
+--SET @to = '2024-09-11';
 
-select userid,Ename,Mobile,Total_Day,Total_Target,Total_Collection,Total_NotScan,(cast((Total_Collection*100.00)/
-(case when Total_Target=1 then (case when Total_Collection=0 then 100 else Total_Collection end) when Total_Target=0 then (case when Total_Collection=0 then 100 else Total_Collection end)  when Total_Target &lt; Total_Collection then Total_Collection else Total_Target end ) as decimal(10,2))) Achieved_Percentage,Total_Trip
-from(select um.userid userid,
-       um.username Ename, um.userMobileNumber Mobile,
-	   (datediff(day,@from,@to)+1) Total_Day,
-	   (isnull(um.gcTarget,1) * (datediff(day,@from,@to)+1)) Total_Target, 
-	   ( 
-         (select  isnull(count(g.gcId),0) from GarbageCollectionDetails g WITH(NOLOCK) where g.gcType = 1 and g.garbageType &lt;&gt; 4 and cast(g.gcDate as date) between @from and @to 
-          and g.userId = um.userId) 
-           ) as Total_Collection,
+SELECT 
+    userid,
+    Ename,
+    Mobile,
+    Total_Day,
+    Total_Target,
+    Total_Collection,
+    Total_NotScan,
+    CAST(
+        (Total_Collection * 100.0) / 
+        (
+            CASE 
+                WHEN Total_Target = 0 THEN 
+                    CASE WHEN Total_Collection = 0 THEN 100 ELSE Total_Collection END
+                WHEN Total_Target = 1 THEN 
+                    CASE WHEN Total_Collection = 0 THEN 100 ELSE Total_Collection END
+                WHEN Total_Target &lt; Total_Collection THEN Total_Collection
+                ELSE Total_Target
+            END
+        ) AS DECIMAL(10, 2)) AS Achieved_Percentage,
+    Total_Trip
+FROM (
+    SELECT 
+        TRY_CAST(um.userId AS INT) AS userid,
+        um.userName AS Ename,
+        um.userMobileNumber AS Mobile,
+        (DATEDIFF(DAY, @from, @to) + 1) AS Total_Day,
+        ISNULL(TRY_CAST(um.gcTarget AS INT), 1) * (DATEDIFF(DAY, @from, @to) + 1) AS Total_Target,
 
-	   ((select  isnull(count(g.gcId),0) from GarbageCollectionDetails g WITH(NOLOCK),usermaster u WITH(NOLOCK) 
-	   where g.gctype=1 and g.garbageType = 4 and cast(g.gcDate as date) between @from and @to 
-	   and u.userId=g.userId
-	   and gc.userId=g.userId)
-	   +
-	   (select isnull(count(gn.gcNotScanId),0) from GarbageCollection_NotScan gn WITH(NOLOCK)
-        where gn.isNotScan = 1 and cast(gn.gcDate as date) between @from and @to 
-        and gn.userId = um.userId)) Total_NotScan,
-	  
-	   (select count(g.gcId) from GarbageCollectionDetails g WITH(NOLOCK),usermaster u WITH(NOLOCK) 
-	   where g.gctype=3 and cast(g.gcDate as date) between @from and @to 
-	   and u.userId=g.userId
-	   and gc.userId=g.userId	   	   
-	   ) Total_Trip	   
+        (
+            SELECT COUNT(g.gcId)
+            FROM GarbageCollectionDetails g WITH (NOLOCK)
+            WHERE g.gcType = 1 AND g.garbageType &lt;&gt; 4
+              AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+              AND TRY_CAST(g.userId AS INT) = TRY_CAST(um.userId AS INT)
+        ) AS Total_Collection,
 
-from  UserMaster um WITH(NOLOCK) left outer  join
-      GarbageCollectionDetails gc WITH(NOLOCK) on um.userId=gc.userId 
-	  where um.isActive='True' and um.EmployeeType Is Null
---and   gc.userId=isnull(@userid,gc.userId)
-group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
---order by name
-) X</CommandText>
+        (
+            (
+                SELECT COUNT(g.gcId)
+                FROM GarbageCollectionDetails g WITH (NOLOCK)
+                WHERE g.gcType = 1 AND g.garbageType = 4
+                  AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+                  AND TRY_CAST(g.userId AS INT) = TRY_CAST(um.userId AS INT)
+            )
+            +
+            (
+                SELECT COUNT(gn.gcNotScanId)
+                FROM GarbageCollection_NotScan gn WITH (NOLOCK)
+                WHERE gn.isNotScan = 1
+                  AND CAST(gn.gcDate AS DATE) BETWEEN @from AND @to
+                  AND TRY_CAST(gn.userId AS INT) = TRY_CAST(um.userId AS INT)
+            )
+        ) AS Total_NotScan,
+
+        (
+            SELECT COUNT(g.gcId)
+            FROM GarbageCollectionDetails g WITH (NOLOCK)
+            WHERE g.gcType = 3
+              AND CAST(g.gcDate AS DATE) BETWEEN @from AND @to
+              AND TRY_CAST(g.userId AS INT) = TRY_CAST(um.userId AS INT)
+        ) AS Total_Trip
+
+    FROM UserMaster um WITH (NOLOCK)
+    WHERE um.isActive = 'True'
+      AND um.EmployeeType IS NULL
+    GROUP BY um.userId, um.userName, um.gcTarget, um.userMobileNumber
+) X
+WHERE X.Total_Collection &gt; 0;</CommandText>
       </Query>
       <Fields>
         <Field Name="userid">
