@@ -576,7 +576,7 @@ from UserMaster where EmployeeType ='S'</CommandText>
             <Top>0.41612in</Top>
             <Left>0.0441in</Left>
             <Height>4.99583in</Height>
-            <Width>11.13879in</Width>
+            <Width>11.48254in</Width>
             <ZIndex>2</ZIndex>
             <ToolTip>="Datewise Garbage Collection by Employee.."</ToolTip>
             <Style>
@@ -596,7 +596,7 @@ from UserMaster where EmployeeType ='S'</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>11.22791in</Width>
+      <Width>12.31124in</Width>
       <Page>
         <PageFooter>
           <Height>0.0125in</Height>

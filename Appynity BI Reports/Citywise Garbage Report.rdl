@@ -404,7 +404,7 @@ HAVING wardno &lt;&gt; 0;</CommandText>
             <Top>0.57792in</Top>
             <Left>0.07069in</Left>
             <Height>0.28264in</Height>
-            <Width>5.07767in</Width>
+            <Width>4.81822in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -948,7 +948,7 @@ HAVING wardno &lt;&gt; 0;</CommandText>
             <Top>1.055in</Top>
             <Left>0.17955cm</Left>
             <Height>3.19374in</Height>
-            <Width>5.09947in</Width>
+            <Width>4.81822in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -1579,7 +1579,7 @@ HAVING wardno &lt;&gt; 0;</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>11.60425in</Width>
+      <Width>11.72925in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

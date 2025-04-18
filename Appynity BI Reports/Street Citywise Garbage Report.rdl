@@ -245,7 +245,7 @@ group by sm.wardId,wn.wardno
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.81851in</Left>
+            <Left>7.94351in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -281,7 +281,7 @@ group by sm.wardId,wn.wardno
             <Top>0.07792in</Top>
             <Left>0.07069in</Left>
             <Height>0.28264in</Height>
-            <Width>6.91743in</Width>
+            <Width>6.05285in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -948,7 +948,7 @@ group by sm.wardId,wn.wardno
           </Border>
         </Style>
       </Body>
-      <Width>13.46465in</Width>
+      <Width>12.56882in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

@@ -536,7 +536,7 @@ order by Total desc</CommandText>
             <Top>0.49875in</Top>
             <Left>0.0441in</Left>
             <Height>4.13542in</Height>
-            <Width>11.26379in</Width>
+            <Width>11.72212in</Width>
             <ZIndex>2</ZIndex>
             <ToolTip>Total Garbage Collection a day and Total Employees..</ToolTip>
             <Style>
@@ -1230,7 +1230,7 @@ order by Total desc</CommandText>
             <Top>5.19111in</Top>
             <Left>3.669in</Left>
             <Height>4.54514in</Height>
-            <Width>7.63889in</Width>
+            <Width>8.09722in</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -1276,7 +1276,7 @@ order by Total desc</CommandText>
             <Top>4.82014in</Top>
             <Left>0.0441in</Left>
             <Height>0.31402in</Height>
-            <Width>11.26379in</Width>
+            <Width>11.72212in</Width>
             <ZIndex>5</ZIndex>
             <ToolTip>="To change date of below report,Click on any bar of above column chart.."</ToolTip>
             <Style>
@@ -1299,7 +1299,7 @@ order by Total desc</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>11.37375in</Width>
+      <Width>12.41542in</Width>
       <Page>
         <PageFooter>
           <Height>0.27292in</Height>

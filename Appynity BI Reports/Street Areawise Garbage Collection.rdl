@@ -526,7 +526,7 @@ group by gc.AreaId
             <Top>0.44043in</Top>
             <Left>0.0441in</Left>
             <Height>5.11041in</Height>
-            <Width>11.25129in</Width>
+            <Width>11.76171in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -545,7 +545,7 @@ group by gc.AreaId
           </Border>
         </Style>
       </Body>
-      <Width>11.34249in</Width>
+      <Width>12.36332in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

@@ -330,7 +330,7 @@ where appid=@appid</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox16933</rd:DefaultName>
             <Top>0.75in</Top>
-            <Left>2.55208in</Left>
+            <Left>1.67708in</Left>
             <Height>0.25in</Height>
             <Width>3.83333in</Width>
             <ZIndex>1</ZIndex>
@@ -363,7 +363,7 @@ where appid=@appid</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.74295in</Top>
-            <Left>6.81598in</Left>
+            <Left>6.06598in</Left>
             <Height>0.25705in</Height>
             <Width>3.49305in</Width>
             <ZIndex>2</ZIndex>
@@ -382,7 +382,7 @@ where appid=@appid</CommandText>
         <Height>3.89583in</Height>
         <Style />
       </Body>
-      <Width>10.65625in</Width>
+      <Width>11.51042in</Width>
       <Page>
         <PageHeight>29.7cm</PageHeight>
         <PageWidth>21cm</PageWidth>

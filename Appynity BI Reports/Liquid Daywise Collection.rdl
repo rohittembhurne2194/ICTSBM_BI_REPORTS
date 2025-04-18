@@ -516,7 +516,7 @@ order by cast(gc.gcDate as date) desc</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>13.89517in</Width>
+      <Width>12.23892in</Width>
       <Page>
         <PageFooter>
           <Height>0.94444in</Height>

@@ -268,7 +268,7 @@ ORDER BY Total DESC;</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>9.95025in</Left>
+            <Left>8.82525in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -895,7 +895,7 @@ ORDER BY Total DESC;</CommandText>
             <Top>0.49875in</Top>
             <Left>0.0441in</Left>
             <Height>4.13542in</Height>
-            <Width>13.90962in</Width>
+            <Width>12.44087in</Width>
             <ZIndex>2</ZIndex>
             <ToolTip>Total Garbage Collection a day and Total Employees..</ToolTip>
             <Style>
@@ -1603,7 +1603,7 @@ ORDER BY Total DESC;</CommandText>
             <Top>5.32653in</Top>
             <Left>5.81483in</Left>
             <Height>4.54514in</Height>
-            <Width>7.63889in</Width>
+            <Width>6.67014in</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -1672,7 +1672,7 @@ ORDER BY Total DESC;</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>14.19667in</Width>
+      <Width>12.74539in</Width>
       <Page>
         <PageFooter>
           <Height>0.27292in</Height>

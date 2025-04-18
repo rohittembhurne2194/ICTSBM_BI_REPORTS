@@ -601,7 +601,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.0875in</Top>
-            <Left>10.26275in</Left>
+            <Left>8.88775in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -1142,7 +1142,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>2.17375in</Top>
             <Left>0.09041in</Left>
             <Height>4.13542in</Height>
-            <Width>13.55081in</Width>
+            <Width>12.57373in</Width>
             <ZIndex>1</ZIndex>
             <ToolTip>="Employee wise collection with Garbage Type..."</ToolTip>
             <Style>
@@ -2625,7 +2625,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>6.71465in</Top>
             <Left>0.12994in</Left>
             <Height>0.26042in</Height>
-            <Width>11.12795in</Width>
+            <Width>10.30503in</Width>
             <ZIndex>7</ZIndex>
             <Visibility>
               <Hidden>true</Hidden>
@@ -3066,7 +3066,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>7.11396in</Top>
             <Left>0.10291in</Left>
             <Height>3.79167in</Height>
-            <Width>13.55081in</Width>
+            <Width>12.56123in</Width>
             <ZIndex>8</ZIndex>
             <Style>
               <Border>
@@ -3436,7 +3436,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>6.45708in</Top>
             <Left>0.10291in</Left>
             <Height>0.18812in</Height>
-            <Width>11.15498in</Width>
+            <Width>10.33206in</Width>
             <ZIndex>9</ZIndex>
             <Visibility>
               <Hidden>true</Hidden>
@@ -3459,7 +3459,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
           <BackgroundColor>#eef5f9</BackgroundColor>
         </Style>
       </Body>
-      <Width>14.25917in</Width>
+      <Width>12.73834in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

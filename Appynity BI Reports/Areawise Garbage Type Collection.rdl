@@ -248,7 +248,7 @@ HAVING
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.91692in</Left>
+            <Left>6.91692in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -282,7 +282,7 @@ HAVING
             <Top>0.07792in</Top>
             <Left>0.0441in</Left>
             <Height>0.28264in</Height>
-            <Width>6.91743in</Width>
+            <Width>6.12576in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -829,7 +829,7 @@ HAVING
             <DataSetName>DataSet1</DataSetName>
             <Top>0.59667in</Top>
             <Height>5.48541in</Height>
-            <Width>11.29539in</Width>
+            <Width>10.69122in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>

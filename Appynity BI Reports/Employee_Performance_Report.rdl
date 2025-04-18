@@ -388,7 +388,7 @@ WHERE X.Total_Collection &gt; 0;</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.87942in</Left>
+            <Left>8.62942in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -794,7 +794,7 @@ WHERE X.Total_Collection &gt; 0;</CommandText>
             <DataSetName>Employee_collection</DataSetName>
             <Top>0.79458in</Top>
             <Height>4.53125in</Height>
-            <Width>11.36334in</Width>
+            <Width>12.48405in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -870,7 +870,7 @@ WHERE X.Total_Collection &gt; 0;</CommandText>
                   <Width>2.00741in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.81991in</Width>
+                  <Width>1.22616in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1906,7 +1906,7 @@ WHERE X.Total_Collection &gt; 0;</CommandText>
             <Top>5.42583in</Top>
             <Left>0.11744in</Left>
             <Height>1.09375in</Height>
-            <Width>11.96036in</Width>
+            <Width>12.36661in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -1923,7 +1923,7 @@ WHERE X.Total_Collection &gt; 0;</CommandText>
           <BackgroundColor>#eef5f9</BackgroundColor>
         </Style>
       </Body>
-      <Width>12.44539in</Width>
+      <Width>12.74747in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

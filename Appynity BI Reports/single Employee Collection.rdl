@@ -194,7 +194,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.80442in</Left>
+            <Left>8.55442in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -552,7 +552,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
             <Top>0.41612in</Top>
             <Left>0.0441in</Left>
             <Height>4.99583in</Height>
-            <Width>14.24296in</Width>
+            <Width>12.49296in</Width>
             <ZIndex>1</ZIndex>
             <ToolTip>="Datewise Garbage Collection by Employee.."</ToolTip>
             <Style>
@@ -861,7 +861,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>14.76958in</Width>
+      <Width>12.75916in</Width>
       <Page>
         <PageFooter>
           <Height>0.0125in</Height>

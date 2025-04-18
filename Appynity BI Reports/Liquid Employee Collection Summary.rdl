@@ -164,7 +164,7 @@ order by Total desc</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.92942in</Left>
+            <Left>8.05442in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -549,7 +549,7 @@ order by Total desc</CommandText>
             <Top>0.49875in</Top>
             <Left>0.0441in</Left>
             <Height>4.13542in</Height>
-            <Width>11.26379in</Width>
+            <Width>11.68046in</Width>
             <ZIndex>2</ZIndex>
             <ToolTip>Total Garbage Collection a day and Total Employees..</ToolTip>
             <Style>
@@ -1243,7 +1243,7 @@ order by Total desc</CommandText>
             <Top>5.19111in</Top>
             <Left>3.669in</Left>
             <Height>4.54514in</Height>
-            <Width>7.63889in</Width>
+            <Width>8.05556in</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -1289,7 +1289,7 @@ order by Total desc</CommandText>
             <Top>4.82014in</Top>
             <Left>0.0441in</Left>
             <Height>0.31402in</Height>
-            <Width>11.26379in</Width>
+            <Width>11.68046in</Width>
             <ZIndex>5</ZIndex>
             <ToolTip>="To change date of below report,Click on any bar of above column chart.."</ToolTip>
             <Style>
@@ -1312,7 +1312,7 @@ order by Total desc</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>11.37375in</Width>
+      <Width>12.36333in</Width>
       <Page>
         <PageFooter>
           <Height>0.27292in</Height>
