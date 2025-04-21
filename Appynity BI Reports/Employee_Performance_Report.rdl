@@ -316,7 +316,7 @@ FROM (
       AND um.EmployeeType IS NULL
     GROUP BY um.userId, um.userName, um.gcTarget, um.userMobileNumber
 ) X
-WHERE X.Total_Collection &gt; 0;</CommandText>
+--WHERE X.Total_Collection &gt; 0;</CommandText>
       </Query>
       <Fields>
         <Field Name="userid">
