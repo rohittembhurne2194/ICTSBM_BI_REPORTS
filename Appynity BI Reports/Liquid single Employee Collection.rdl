@@ -184,8 +184,8 @@ from UserMaster where EmployeeType ='L'</CommandText>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.07792in</Top>
-            <Left>7.17942in</Left>
+            <Top>0.10351in</Top>
+            <Left>5.77317in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -221,7 +221,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
             <Top>0.07792in</Top>
             <Left>0.0441in</Left>
             <Height>0.28264in</Height>
-            <Width>6.91743in</Width>
+            <Width>4.04243in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -577,7 +577,7 @@ from UserMaster where EmployeeType ='L'</CommandText>
             <Top>0.42779in</Top>
             <Left>0.0441in</Left>
             <Height>4.99583in</Height>
-            <Width>10.87837in</Width>
+            <Width>10.0867in</Width>
             <ZIndex>2</ZIndex>
             <ToolTip>="Datewise Garbage Collection by Employee.."</ToolTip>
             <Style>

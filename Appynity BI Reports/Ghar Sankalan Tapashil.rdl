@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>d2b3a5e4-8389-4b95-a606-e9687a0d8d2a</rd:DataSourceID>
@@ -309,7 +310,7 @@ END</CommandText>
                   <Width>47.61659mm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>79.23307mm</Width>
+                  <Width>75.5289mm</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -946,7 +947,7 @@ END</CommandText>
             <Top>23.51617mm</Top>
             <Left>0.48514mm</Left>
             <Height>14.91041mm</Height>
-            <Width>286.4706mm</Width>
+            <Width>282.76643mm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -976,7 +977,7 @@ END</CommandText>
             <Top>1.50283mm</Top>
             <Left>1.12014mm</Left>
             <Height>10.23333mm</Height>
-            <Width>285.83569mm</Width>
+            <Width>271.54819mm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -1005,8 +1006,8 @@ END</CommandText>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.61542in</Top>
-            <Left>7.80442in</Left>
+            <Top>0.59934in</Top>
+            <Left>6.9815in</Left>
             <Height>0.25705in</Height>
             <Width>3.49305in</Width>
             <ZIndex>2</ZIndex>
@@ -1039,7 +1040,7 @@ END</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.61731in</Top>
-            <Left>0.0191in</Left>
+            <Left>0.2691in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <ZIndex>3</ZIndex>
@@ -1121,7 +1122,7 @@ END</CommandText>
               <Top>0.10881in</Top>
               <Left>0.0441in</Left>
               <Height>0.25in</Height>
-              <Width>11.25337in</Width>
+              <Width>11.10754in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>

@@ -185,7 +185,7 @@ from UserMaster where EmployeeType ='S'</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.42942in</Left>
+            <Left>6.21067in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -219,9 +219,9 @@ from UserMaster where EmployeeType ='S'</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>0.0441in</Left>
+            <Left>0.40868in</Left>
             <Height>0.28264in</Height>
-            <Width>6.91743in</Width>
+            <Width>4.69868in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -575,9 +575,9 @@ from UserMaster where EmployeeType ='S'</CommandText>
             </ChartNoDataMessage>
             <DataSetName>Collection_Detail</DataSetName>
             <Top>0.41612in</Top>
-            <Left>0.0441in</Left>
-            <Height>4.99583in</Height>
-            <Width>11.07629in</Width>
+            <Left>0.24202in</Left>
+            <Height>3.88125in</Height>
+            <Width>9.85754in</Width>
             <ZIndex>2</ZIndex>
             <ToolTip>="Datewise Garbage Collection by Employee.."</ToolTip>
             <Style>
@@ -590,17 +590,17 @@ from UserMaster where EmployeeType ='S'</CommandText>
             </Style>
           </Chart>
         </ReportItems>
-        <Height>5.43751in</Height>
+        <Height>4.67709in</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>11.41541in</Width>
+      <Width>10.66541in</Width>
       <Page>
         <PageFooter>
-          <Height>0.0125in</Height>
+          <Height>0.01042in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <Style>

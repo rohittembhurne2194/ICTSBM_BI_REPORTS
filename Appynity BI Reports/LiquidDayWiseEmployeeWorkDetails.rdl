@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>a57d2e8d-fa58-40d8-93f4-e63a254a26b4</rd:DataSourceID>
@@ -15,6 +16,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>Data Source=103.241.147.8;Initial Catalog=LIVEAdvanceDevSwachhBharatMain</ConnectString>
+        <Prompt>Specify a user name and password for data source AppConnection:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>b9dea797-eb67-4b3d-882a-8af038241252</rd:DataSourceID>
@@ -215,7 +217,7 @@ where appid=@appid</CommandText>
                           <Paragraph>
                             <TextRuns>
                               <TextRun>
-                                <Value>=Fields!Date.Value</Value>
+                                <Value>=Format(Fields!Date.Value, "dd MMM yyyy")</Value>
                                 <Style>
                                   <FontSize>12pt</FontSize>
                                   <FontWeight>Bold</FontWeight>
@@ -362,8 +364,8 @@ where appid=@appid</CommandText>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.74295in</Top>
-            <Left>6.06598in</Left>
+            <Top>0.28462in</Top>
+            <Left>2.01736in</Left>
             <Height>0.25705in</Height>
             <Width>3.49305in</Width>
             <ZIndex>2</ZIndex>

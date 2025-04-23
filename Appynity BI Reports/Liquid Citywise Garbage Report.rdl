@@ -247,7 +247,7 @@ group by lm.wardId,wn.wardno,gc.gcDate
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.81851in</Left>
+            <Left>5.61018in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -283,7 +283,7 @@ group by lm.wardId,wn.wardno,gc.gcDate
             <Top>0.07792in</Top>
             <Left>0.07069in</Left>
             <Height>0.28264in</Height>
-            <Width>6.91743in</Width>
+            <Width>3.21951in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -684,7 +684,7 @@ group by lm.wardId,wn.wardno,gc.gcDate
               </Style>
             </ChartNoDataMessage>
             <DataSetName>DataSet1</DataSetName>
-            <Top>0.43in</Top>
+            <Top>0.805in</Top>
             <Left>0.17955cm</Left>
             <Height>3.19374in</Height>
             <Width>5.09947in</Width>
@@ -937,8 +937,8 @@ group by lm.wardId,wn.wardno,gc.gcDate
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>Ward_Rank</DataSetName>
-            <Top>0.72335in</Top>
-            <Left>5.98812in</Left>
+            <Top>0.805in</Top>
+            <Left>5.61018in</Left>
             <Height>0.76042in</Height>
             <Width>4.45886in</Width>
             <ZIndex>3</ZIndex>
@@ -956,7 +956,7 @@ group by lm.wardId,wn.wardno,gc.gcDate
           </Border>
         </Style>
       </Body>
-      <Width>11.69382in</Width>
+      <Width>10.48549in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

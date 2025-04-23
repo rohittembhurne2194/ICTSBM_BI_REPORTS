@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>d2b3a5e4-8389-4b95-a606-e9687a0d8d2a</rd:DataSourceID>
@@ -164,7 +165,7 @@ from UserMaster where EmployeeType ='S'</CommandText>
                   <Width>17.72437mm</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>42.13703mm</Width>
+                  <Width>37.11004mm</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>48.48376mm</Width>
@@ -819,7 +820,7 @@ from UserMaster where EmployeeType ='S'</CommandText>
             <Top>23.51617mm</Top>
             <Left>0.48514mm</Left>
             <Height>14.91041mm</Height>
-            <Width>259.74759mm</Width>
+            <Width>254.7206mm</Width>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -849,7 +850,7 @@ from UserMaster where EmployeeType ='S'</CommandText>
             <Top>1.50283mm</Top>
             <Left>1.12014mm</Left>
             <Height>10.23333mm</Height>
-            <Width>285.83569mm</Width>
+            <Width>224.71694mm</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -878,8 +879,8 @@ from UserMaster where EmployeeType ='S'</CommandText>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.61542in</Top>
-            <Left>7.80442in</Left>
+            <Top>0.62712in</Top>
+            <Left>5.39817in</Left>
             <Height>0.25705in</Height>
             <Width>3.49305in</Width>
             <ZIndex>2</ZIndex>
@@ -912,7 +913,7 @@ from UserMaster where EmployeeType ='S'</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.61731in</Top>
-            <Left>0.0191in</Left>
+            <Left>0.2691in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <ZIndex>3</ZIndex>
@@ -935,10 +936,10 @@ from UserMaster where EmployeeType ='S'</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>12.1308in</Width>
+      <Width>10.39122in</Width>
       <Page>
         <PageFooter>
-          <Height>0.46506in</Height>
+          <Height>0.72548in</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
@@ -994,7 +995,7 @@ from UserMaster where EmployeeType ='S'</CommandText>
               <Top>0.10881in</Top>
               <Left>0.0441in</Left>
               <Height>0.25in</Height>
-              <Width>11.25337in</Width>
+              <Width>10.00337in</Width>
               <ZIndex>1</ZIndex>
               <Style>
                 <Border>
