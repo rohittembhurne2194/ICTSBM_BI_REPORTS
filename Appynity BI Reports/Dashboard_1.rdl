@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>d2b3a5e4-8389-4b95-a606-e9687a0d8d2a</rd:DataSourceID>
@@ -601,7 +602,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.0875in</Top>
-            <Left>8.88775in</Left>
+            <Left>6.92942in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -1142,7 +1143,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>2.17375in</Top>
             <Left>0.09041in</Left>
             <Height>4.13542in</Height>
-            <Width>12.57373in</Width>
+            <Width>10.59456in</Width>
             <ZIndex>1</ZIndex>
             <ToolTip>="Employee wise collection with Garbage Type..."</ToolTip>
             <Style>
@@ -2625,7 +2626,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>6.71465in</Top>
             <Left>0.12994in</Left>
             <Height>0.26042in</Height>
-            <Width>10.30503in</Width>
+            <Width>9.5967in</Width>
             <ZIndex>7</ZIndex>
             <Visibility>
               <Hidden>true</Hidden>
@@ -3066,7 +3067,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>7.11396in</Top>
             <Left>0.10291in</Left>
             <Height>3.79167in</Height>
-            <Width>12.56123in</Width>
+            <Width>10.58206in</Width>
             <ZIndex>8</ZIndex>
             <Style>
               <Border>
@@ -3436,7 +3437,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             <Top>6.45708in</Top>
             <Left>0.10291in</Left>
             <Height>0.18812in</Height>
-            <Width>10.33206in</Width>
+            <Width>9.62373in</Width>
             <ZIndex>9</ZIndex>
             <Visibility>
               <Hidden>true</Hidden>
@@ -3451,7 +3452,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
             </Style>
           </Chart>
         </ReportItems>
-        <Height>14.97791in</Height>
+        <Height>11.18624in</Height>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3459,7 +3460,7 @@ Select *,REPLICATE('0', 2 - DATALENGTH(convert(varchar(2), (TotalHouseScanTime %
           <BackgroundColor>#eef5f9</BackgroundColor>
         </Style>
       </Body>
-      <Width>12.73834in</Width>
+      <Width>10.80997in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

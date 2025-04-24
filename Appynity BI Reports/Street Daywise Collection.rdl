@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>d2b3a5e4-8389-4b95-a606-e9687a0d8d2a</rd:DataSourceID>
@@ -127,7 +128,7 @@ order by cast(gc.gcDate as date) desc</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.60554in</Left>
+            <Left>6.24096in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -516,7 +517,7 @@ order by cast(gc.gcDate as date) desc</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>12.83267in</Width>
+      <Width>10.541in</Width>
       <Page>
         <PageFooter>
           <Height>0.94444in</Height>

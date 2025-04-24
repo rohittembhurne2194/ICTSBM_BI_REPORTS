@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>d2b3a5e4-8389-4b95-a606-e9687a0d8d2a</rd:DataSourceID>
@@ -368,7 +369,7 @@ HAVING wardno &lt;&gt; 0;</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.22578in</Left>
+            <Left>6.37662in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -966,13 +967,13 @@ HAVING wardno &lt;&gt; 0;</CommandText>
                   <Width>0.6973in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.77449in</Width>
+                  <Width>0.6761in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.02425in</Width>
+                  <Width>0.89925in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>0.80606in</Width>
+                  <Width>0.74356in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.84772in</Width>
@@ -981,7 +982,7 @@ HAVING wardno &lt;&gt; 0;</CommandText>
                   <Width>0.84916in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1in</Width>
+                  <Width>0.80208in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1526,9 +1527,9 @@ HAVING wardno &lt;&gt; 0;</CommandText>
             </TablixRowHierarchy>
             <DataSetName>Ward_Rank</DataSetName>
             <Top>1.055in</Top>
-            <Left>5.60527in</Left>
+            <Left>5.24069in</Left>
             <Height>0.76042in</Height>
-            <Width>5.99898in</Width>
+            <Width>5.51517in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -1556,7 +1557,7 @@ HAVING wardno &lt;&gt; 0;</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.57792in</Top>
-            <Left>5.60527in</Left>
+            <Left>5.24069in</Left>
             <Height>0.28264in</Height>
             <Width>4.90059in</Width>
             <ZIndex>4</ZIndex>
@@ -1579,7 +1580,7 @@ HAVING wardno &lt;&gt; 0;</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>11.72925in</Width>
+      <Width>11.198in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

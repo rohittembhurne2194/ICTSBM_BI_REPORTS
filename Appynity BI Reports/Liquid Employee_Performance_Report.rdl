@@ -188,7 +188,9 @@ from(select um.userid userid,
 
 from  UserMaster um left outer  join
       GarbageCollectionDetails gc on um.userId=gc.userId 
+    Inner Join Daily_Attendance DA WITH (NOLOCK) On um.userId=DA.userId
 	  where um.isActive='True' and um.EmployeeType= 'L'
+    AND CAST(DA.daDate as Date) BETWEEN @from AND @to
 --and   gc.userId=isnull(@userid,gc.userId)
 group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
 --order by name
@@ -255,8 +257,8 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.07792in</Top>
-            <Left>8.37942in</Left>
+            <Top>0.0875in</Top>
+            <Left>6.69192in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -662,7 +664,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
             <DataSetName>Employee_collection</DataSetName>
             <Top>0.79458in</Top>
             <Height>4.53125in</Height>
-            <Width>12.1984in</Width>
+            <Width>10.7609in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -726,13 +728,13 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                   <Width>1.25741in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.66366in</Width>
+                  <Width>1.58033in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.04908in</Width>
+                  <Width>1.69491in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.01783in</Width>
+                  <Width>1.52825in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -809,7 +811,9 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox3</rd:DefaultName>
@@ -817,26 +821,6 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>Silver</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -862,7 +846,9 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Center</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox21</rd:DefaultName>
@@ -870,26 +856,6 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>Silver</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -916,7 +882,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -925,26 +891,6 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>Silver</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -971,7 +917,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -980,26 +926,6 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>Silver</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -1026,7 +952,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -1035,26 +961,6 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>Silver</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -1081,7 +987,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -1090,26 +996,6 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
                             <Border>
                               <Style>Solid</Style>
                             </Border>
-                            <TopBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </TopBorder>
-                            <BottomBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </BottomBorder>
-                            <LeftBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </LeftBorder>
-                            <RightBorder>
-                              <Color>Black</Color>
-                              <Style>Solid</Style>
-                              <Width>1pt</Width>
-                            </RightBorder>
                             <BackgroundColor>Silver</BackgroundColor>
                             <VerticalAlign>Middle</VerticalAlign>
                             <PaddingLeft>2pt</PaddingLeft>
@@ -1913,7 +1799,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
             <Top>5.42583in</Top>
             <Left>0.11744in</Left>
             <Height>1.09375in</Height>
-            <Width>12.08096in</Width>
+            <Width>10.15388in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -1930,7 +1816,7 @@ group by um.userId,um.userName, gc.userId,um.gcTarget,um.userMobileNumber
           <BackgroundColor>#eef5f9</BackgroundColor>
         </Style>
       </Body>
-      <Width>12.53914in</Width>
+      <Width>10.90372in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

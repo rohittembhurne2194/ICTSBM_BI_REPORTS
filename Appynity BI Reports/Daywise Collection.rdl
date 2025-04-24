@@ -327,7 +327,7 @@ ORDER BY d.Date1 DESC;
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.98054in</Left>
+            <Left>5.58471in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -345,19 +345,19 @@ ORDER BY d.Date1 DESC;
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.12362in</Width>
+                  <Width>2.09408in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.12362in</Width>
+                  <Width>1.40638in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.12362in</Width>
+                  <Width>1.16251in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.12362in</Width>
+                  <Width>1.39989in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.12362in</Width>
+                  <Width>1.47511in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -431,7 +431,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -445,9 +445,6 @@ ORDER BY d.Date1 DESC;
                             <TopBorder>
                               <Style>None</Style>
                             </TopBorder>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
                             <LeftBorder>
                               <Style>None</Style>
                             </LeftBorder>
@@ -481,7 +478,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -495,9 +492,6 @@ ORDER BY d.Date1 DESC;
                             <TopBorder>
                               <Style>None</Style>
                             </TopBorder>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
                             <LeftBorder>
                               <Style>None</Style>
                             </LeftBorder>
@@ -531,7 +525,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -545,9 +539,6 @@ ORDER BY d.Date1 DESC;
                             <TopBorder>
                               <Style>None</Style>
                             </TopBorder>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
                             <LeftBorder>
                               <Style>None</Style>
                             </LeftBorder>
@@ -581,7 +572,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -595,9 +586,6 @@ ORDER BY d.Date1 DESC;
                             <TopBorder>
                               <Style>None</Style>
                             </TopBorder>
-                            <BottomBorder>
-                              <Style>Solid</Style>
-                            </BottomBorder>
                             <LeftBorder>
                               <Style>None</Style>
                             </LeftBorder>
@@ -678,7 +666,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -721,7 +709,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -764,7 +752,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -807,7 +795,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -898,7 +886,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -942,7 +930,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -986,7 +974,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -1030,7 +1018,7 @@ ORDER BY d.Date1 DESC;
                                 </TextRun>
                               </TextRuns>
                               <Style>
-                                <TextAlign>Right</TextAlign>
+                                <TextAlign>Center</TextAlign>
                               </Style>
                             </Paragraph>
                           </Paragraphs>
@@ -1096,9 +1084,9 @@ ORDER BY d.Date1 DESC;
             </TablixRowHierarchy>
             <DataSetName>Daywise_Summary</DataSetName>
             <Top>3.12374in</Top>
-            <Left>1.98272in</Left>
+            <Left>2.90032in</Left>
             <Height>1.125in</Height>
-            <Width>5.6181in</Width>
+            <Width>7.53797in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -1110,7 +1098,7 @@ ORDER BY d.Date1 DESC;
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>1.12362in</Width>
+                  <Width>1.84237in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.12362in</Width>
@@ -2261,9 +2249,9 @@ ORDER BY d.Date1 DESC;
             </TablixRowHierarchy>
             <DataSetName>Daywise_Summary</DataSetName>
             <Top>1.04625in</Top>
-            <Left>1.92062in</Left>
+            <Left>0.40668in</Left>
             <Height>1.125in</Height>
-            <Width>9.31286in</Width>
+            <Width>10.03161in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -2330,9 +2318,9 @@ ORDER BY d.Date1 DESC;
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>2.66013in</Top>
-            <Left>5.08cm</Left>
+            <Left>9.13714cm</Left>
             <Height>0.28264in</Height>
-            <Width>5.07368in</Width>
+            <Width>3.76118in</Width>
             <ZIndex>4</ZIndex>
             <Style>
               <Border>
@@ -2353,7 +2341,7 @@ ORDER BY d.Date1 DESC;
           </Border>
         </Style>
       </Body>
-      <Width>11.84309in</Width>
+      <Width>11.28811in</Width>
       <Page>
         <PageFooter>
           <Height>2.35417in</Height>

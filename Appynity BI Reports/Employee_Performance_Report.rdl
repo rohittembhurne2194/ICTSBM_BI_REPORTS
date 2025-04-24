@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>d2b3a5e4-8389-4b95-a606-e9687a0d8d2a</rd:DataSourceID>
@@ -312,8 +313,10 @@ FROM (
         ) AS Total_Trip
 
     FROM UserMaster um WITH (NOLOCK)
+    Inner Join Daily_Attendance DA WITH (NOLOCK) On um.userId=DA.userId
     WHERE um.isActive = 'True'
       AND um.EmployeeType IS NULL
+      AND CAST(DA.daDate as Date) BETWEEN @from AND @to
     GROUP BY um.userId, um.userName, um.gcTarget, um.userMobileNumber
 ) X
 --WHERE X.Total_Collection &gt; 0;</CommandText>
@@ -388,7 +391,7 @@ FROM (
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>8.62942in</Left>
+            <Left>7.13984in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -794,7 +797,7 @@ FROM (
             <DataSetName>Employee_collection</DataSetName>
             <Top>0.79458in</Top>
             <Height>4.53125in</Height>
-            <Width>12.48405in</Width>
+            <Width>10.92155in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -852,22 +855,22 @@ FROM (
                   <Width>1.86582in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.47976in</Width>
+                  <Width>1.30268in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>0.77952in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.46446in</Width>
+                  <Width>1.08946in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.78866in</Width>
+                  <Width>1.28866in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.09693in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>2.00741in</Width>
+                  <Width>1.24699in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1.22616in</Width>
@@ -1906,7 +1909,7 @@ FROM (
             <Top>5.42583in</Top>
             <Left>0.11744in</Left>
             <Height>1.09375in</Height>
-            <Width>12.36661in</Width>
+            <Width>10.55411in</Width>
             <ZIndex>3</ZIndex>
             <Style>
               <Border>
@@ -1923,7 +1926,7 @@ FROM (
           <BackgroundColor>#eef5f9</BackgroundColor>
         </Style>
       </Body>
-      <Width>12.74747in</Width>
+      <Width>11.15372in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

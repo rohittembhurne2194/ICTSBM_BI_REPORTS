@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>d2b3a5e4-8389-4b95-a606-e9687a0d8d2a</rd:DataSourceID>
@@ -245,7 +246,7 @@ group by sm.wardId,wn.wardno
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.94351in</Left>
+            <Left>6.56851in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -281,7 +282,7 @@ group by sm.wardId,wn.wardno
             <Top>0.07792in</Top>
             <Left>0.07069in</Left>
             <Height>0.28264in</Height>
-            <Width>6.05285in</Width>
+            <Width>5.09947in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -929,8 +930,8 @@ group by sm.wardId,wn.wardno
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>Ward_Rank</DataSetName>
-            <Top>0.72335in</Top>
-            <Left>5.98812in</Left>
+            <Top>0.43in</Top>
+            <Left>5.89121in</Left>
             <Height>0.76042in</Height>
             <Width>4.45886in</Width>
             <ZIndex>3</ZIndex>
@@ -948,7 +949,7 @@ group by sm.wardId,wn.wardno
           </Border>
         </Style>
       </Body>
-      <Width>12.56882in</Width>
+      <Width>10.53757in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

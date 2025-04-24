@@ -153,7 +153,7 @@ order by Total_Collection desc</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.80442in</Left>
+            <Left>5.3565in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -189,7 +189,7 @@ order by Total_Collection desc</CommandText>
             <Top>0.07792in</Top>
             <Left>0.0441in</Left>
             <Height>0.28264in</Height>
-            <Width>6.91743in</Width>
+            <Width>3.99035in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -591,7 +591,7 @@ order by Total_Collection desc</CommandText>
             <Top>0.67793in</Top>
             <Left>0.0441in</Left>
             <Height>4.59375in</Height>
-            <Width>12.44087in</Width>
+            <Width>10.35754in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -610,7 +610,7 @@ order by Total_Collection desc</CommandText>
           </Border>
         </Style>
       </Body>
-      <Width>12.79504in</Width>
+      <Width>10.53462in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

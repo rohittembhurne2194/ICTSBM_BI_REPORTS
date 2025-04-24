@@ -309,8 +309,8 @@ order by um.userName</CommandText>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.07792in</Top>
-            <Left>8.00442in</Left>
+            <Top>0.0875in</Top>
+            <Left>6.619in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -676,7 +676,7 @@ order by um.userName</CommandText>
             <Top>2.17375in</Top>
             <Left>0.09041in</Left>
             <Height>4.15625in</Height>
-            <Width>11.7279in</Width>
+            <Width>10.51957in</Width>
             <ZIndex>1</ZIndex>
             <ToolTip>="Employee wise collection with Garbage Type..."</ToolTip>
             <Style>
@@ -1730,7 +1730,7 @@ order by um.userName</CommandText>
             <Top>6.83271in</Top>
             <Left>0.09041in</Left>
             <Height>3.79167in</Height>
-            <Width>11.7279in</Width>
+            <Width>10.51957in</Width>
             <ZIndex>6</ZIndex>
             <Style>
               <Border>
@@ -1750,7 +1750,7 @@ order by um.userName</CommandText>
           <BackgroundColor>#eef5f9</BackgroundColor>
         </Style>
       </Body>
-      <Width>12.44667in</Width>
+      <Width>10.8425in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

@@ -7,6 +7,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>="Data Source=" &amp; Parameters!DBSource.Value +";Initial Catalog=" &amp; Parameters!DBName.Value</ConnectString>
+        <Prompt>Specify a user name and password for data source DataSource1:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>d2b3a5e4-8389-4b95-a606-e9687a0d8d2a</rd:DataSourceID>
@@ -174,8 +175,8 @@ group by lm.AreaId
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.07792in</Top>
-            <Left>7.91692in</Left>
+            <Top>0.32792in</Top>
+            <Left>6.5315in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -206,10 +207,10 @@ group by lm.AreaId
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.07792in</Top>
-            <Left>0.0441in</Left>
+            <Top>0.32792in</Top>
+            <Left>0.3566in</Left>
             <Height>0.28264in</Height>
-            <Width>6.91743in</Width>
+            <Width>3.36535in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -565,9 +566,9 @@ group by lm.AreaId
               </Style>
             </ChartNoDataMessage>
             <DataSetName>DataSet1</DataSetName>
-            <Top>0.59667in</Top>
-            <Height>5.48541in</Height>
-            <Width>11.29539in</Width>
+            <Top>1.305in</Top>
+            <Height>4.53749in</Height>
+            <Width>10.10789in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -586,7 +587,7 @@ group by lm.AreaId
           </Border>
         </Style>
       </Body>
-      <Width>11.34747in</Width>
+      <Width>10.40997in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

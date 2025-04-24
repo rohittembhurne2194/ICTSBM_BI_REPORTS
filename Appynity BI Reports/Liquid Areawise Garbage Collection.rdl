@@ -162,7 +162,7 @@ group by gc.AreaId
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.66692in</Left>
+            <Left>6.07317in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -198,7 +198,7 @@ group by gc.AreaId
             <Top>0.07792in</Top>
             <Left>0.0441in</Left>
             <Height>0.28264in</Height>
-            <Width>6.91743in</Width>
+            <Width>3.55285in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -525,10 +525,10 @@ group by gc.AreaId
               </Style>
             </ChartNoDataMessage>
             <DataSetName>DataSet1</DataSetName>
-            <Top>0.43in</Top>
+            <Top>1.04458in</Top>
             <Left>0.0441in</Left>
-            <Height>5.11041in</Height>
-            <Width>11.25129in</Width>
+            <Height>4.25624in</Height>
+            <Width>9.99087in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -547,7 +547,7 @@ group by gc.AreaId
           </Border>
         </Style>
       </Body>
-      <Width>11.34249in</Width>
+      <Width>10.23832in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

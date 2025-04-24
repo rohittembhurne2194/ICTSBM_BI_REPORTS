@@ -261,7 +261,7 @@ FROM (
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>7.87942in</Left>
+            <Left>6.50442in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -297,7 +297,7 @@ FROM (
             <Top>0.07792in</Top>
             <Left>0.0441in</Left>
             <Height>0.28264in</Height>
-            <Width>6.91743in</Width>
+            <Width>3.60493in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -314,16 +314,16 @@ FROM (
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.44791in</Width>
+                  <Width>2.30208in</Width>
                 </TablixColumn>
                 <TablixColumn>
                   <Width>1in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>1.17361in</Width>
+                  <Width>1.10069in</Width>
                 </TablixColumn>
                 <TablixColumn>
-                  <Width>7.58436in</Width>
+                  <Width>6.33436in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
@@ -1195,7 +1195,7 @@ FROM (
             <Top>0.94667in</Top>
             <Left>0.0675in</Left>
             <Height>0.84376in</Height>
-            <Width>12.20588in</Width>
+            <Width>10.73713in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -1209,7 +1209,7 @@ FROM (
             <Value>SegregatedGarbage</Value>
             <Sizing>FitProportional</Sizing>
             <Top>0.63833in</Top>
-            <Left>2.57653in</Left>
+            <Left>1.95153in</Left>
             <Height>0.18056in</Height>
             <Width>1.42014in</Width>
             <ZIndex>3</ZIndex>
@@ -1224,7 +1224,7 @@ FROM (
             <Value>mixedgarbage</Value>
             <Sizing>FitProportional</Sizing>
             <Top>0.63833in</Top>
-            <Left>4.24458in</Left>
+            <Left>3.61958in</Left>
             <Height>0.15278in</Height>
             <Width>1.11806in</Width>
             <ZIndex>4</ZIndex>
@@ -1239,7 +1239,7 @@ FROM (
             <Value>notreceviedgarbahe</Value>
             <Sizing>FitProportional</Sizing>
             <Top>0.6175in</Top>
-            <Left>5.61333in</Left>
+            <Left>4.98833in</Left>
             <Height>0.18056in</Height>
             <Width>1.42014in</Width>
             <ZIndex>5</ZIndex>
@@ -1254,7 +1254,7 @@ FROM (
             <Value>NotSpecifiedGarbage</Value>
             <Sizing>FitProportional</Sizing>
             <Top>0.62792in</Top>
-            <Left>7.3425in</Left>
+            <Left>6.7175in</Left>
             <Height>0.18056in</Height>
             <Width>1.42014in</Width>
             <ZIndex>6</ZIndex>
@@ -1269,7 +1269,7 @@ FROM (
             <Value>NotScan</Value>
             <Sizing>FitProportional</Sizing>
             <Top>0.62792in</Top>
-            <Left>9.08208in</Left>
+            <Left>8.45708in</Left>
             <Height>0.18056in</Height>
             <Width>1.57292in</Width>
             <ZIndex>7</ZIndex>
@@ -1287,7 +1287,7 @@ FROM (
           </Border>
         </Style>
       </Body>
-      <Width>12.27338in</Width>
+      <Width>11.0963in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>

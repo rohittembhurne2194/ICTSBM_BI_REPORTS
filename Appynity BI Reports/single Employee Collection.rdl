@@ -16,6 +16,7 @@
       <ConnectionProperties>
         <DataProvider>SQL</DataProvider>
         <ConnectString>Data Source=103.241.147.8;Initial Catalog=LIVEAdvanceDevSwachhBharatMain</ConnectString>
+        <Prompt>Specify a user name and password for data source Appconnection:</Prompt>
       </ConnectionProperties>
       <rd:SecurityType>DataBase</rd:SecurityType>
       <rd:DataSourceID>10eed1ac-d5a7-4294-8f4c-1756710224ec</rd:DataSourceID>
@@ -194,8 +195,8 @@ from UserMaster where EmployeeType Is Null</CommandText>
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
-            <Top>0.07792in</Top>
-            <Left>7.92942in</Left>
+            <Top>0.07087in</Top>
+            <Left>6.83567in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -553,7 +554,7 @@ from UserMaster where EmployeeType Is Null</CommandText>
             <Top>0.41612in</Top>
             <Left>0.0441in</Left>
             <Height>4.99583in</Height>
-            <Width>11.64921in</Width>
+            <Width>10.68046in</Width>
             <ZIndex>1</ZIndex>
             <ToolTip>="Datewise Garbage Collection by Employee.."</ToolTip>
             <Style>
@@ -855,14 +856,14 @@ from UserMaster where EmployeeType Is Null</CommandText>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>10.35418in</Height>
+        <Height>7.47918in</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>11.97791in</Width>
+      <Width>11.06124in</Width>
       <Page>
         <PageFooter>
           <Height>0.0125in</Height>

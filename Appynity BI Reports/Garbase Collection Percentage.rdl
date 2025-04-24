@@ -175,7 +175,7 @@ order by Total_Collection desc</CommandText>
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.10351in</Top>
-            <Left>8.07525in</Left>
+            <Left>6.05442in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -211,7 +211,7 @@ order by Total_Collection desc</CommandText>
             <Top>0.07792in</Top>
             <Left>0.0441in</Left>
             <Height>0.28264in</Height>
-            <Width>5.51118in</Width>
+            <Width>3.0841in</Width>
             <ZIndex>1</ZIndex>
             <Style>
               <Border>
@@ -612,8 +612,8 @@ order by Total_Collection desc</CommandText>
             <DataSetName>Employee_Percentage</DataSetName>
             <Top>0.68835in</Top>
             <Left>0.0441in</Left>
-            <Height>8.375in</Height>
-            <Width>12.44087in</Width>
+            <Height>6.4375in</Height>
+            <Width>10.88879in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -625,14 +625,14 @@ order by Total_Collection desc</CommandText>
             </Style>
           </Chart>
         </ReportItems>
-        <Height>10.86543in</Height>
+        <Height>9.63626in</Height>
         <Style>
           <Border>
             <Style>None</Style>
           </Border>
         </Style>
       </Body>
-      <Width>12.80546in</Width>
+      <Width>11.23254in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>
