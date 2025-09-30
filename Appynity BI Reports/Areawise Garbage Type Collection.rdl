@@ -248,7 +248,7 @@ HAVING
             </Paragraphs>
             <rd:DefaultName>Textbox44</rd:DefaultName>
             <Top>0.07792in</Top>
-            <Left>6.91692in</Left>
+            <Left>9.02108in</Left>
             <Height>0.25705in</Height>
             <Width>3.37847in</Width>
             <Style>
@@ -569,7 +569,6 @@ HAVING
                         <FontWeight>Bold</FontWeight>
                       </Style>
                     </ChartAxisTitle>
-                    <Interval>1</Interval>
                     <ChartMajorGridLines>
                       <Enabled>False</Enabled>
                       <Style>
@@ -605,6 +604,7 @@ HAVING
                     <CrossAt>NaN</CrossAt>
                     <Minimum>NaN</Minimum>
                     <Maximum>NaN</Maximum>
+                    <Angle>90</Angle>
                     <ChartAxisScaleBreak>
                       <Style />
                     </ChartAxisScaleBreak>
@@ -829,7 +829,7 @@ HAVING
             <DataSetName>DataSet1</DataSetName>
             <Top>0.59667in</Top>
             <Height>5.48541in</Height>
-            <Width>10.69122in</Width>
+            <Width>12.39955in</Width>
             <ZIndex>2</ZIndex>
             <Style>
               <Border>
@@ -848,7 +848,7 @@ HAVING
           </Border>
         </Style>
       </Body>
-      <Width>11.34747in</Width>
+      <Width>12.6183in</Width>
       <Page>
         <PageFooter>
           <Height>0.01042in</Height>
